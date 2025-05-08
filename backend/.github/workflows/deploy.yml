@@ -1,0 +1,40 @@
+name: CI/CD Pipeline for Python Server
+
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest 
+
+    steps:
+     
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      # 2. Python 환경 설정 및 의존성 설치 (CI 단계)
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create .ssh directory
+        run: mkdir -p ~/.ssh
+
+      - name: Add SSH private key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa  # GitHub Secrets에서 비공개 키 가져오기
+          chmod 600 ~/.ssh/id_rsa  # 비공개 키 권한 설정
+      - name: Add server to known_hosts
+        run: ssh-keyscan -H 220.72.101.33 >> ~/.ssh/known_hosts  # 로컬 서버의 SSH 키를 known_hosts에 추가
+
+      - name: Deploy to Local Server
+        run: ssh -i ~/.ssh/id_rsa MeotJH@220.72.101.33 'C:/quant_bot_deploy/deploy.bat'

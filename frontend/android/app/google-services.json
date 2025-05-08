@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875318012979",
+    "project_id": "quant-bot-c9c4b",
+    "storage_bucket": "quant-bot-c9c4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875318012979:android:cc986b1b1e157eeb918746",
+        "android_client_info": {
+          "package_name": "com.example.quant_bot_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDffx3P_zFBIm6sLnYVs8s8hvnmWOoiAS4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
