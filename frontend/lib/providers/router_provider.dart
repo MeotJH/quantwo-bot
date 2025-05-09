@@ -47,6 +47,8 @@ class RouteNotifier extends Notifier<GoRouter> {
   static const String signUpPath = '/sign-up';
   static const String signUpCompletePath = '/sign-up-complete';
   static const String _strategySelectPath = '/quant-form/strategy';
+  static const String dualMomentumInternationalPath =
+      '/quant-form/quant/dual-momentum/international';
   Widget _buildWithToken(
       BuildContext context, NotifierProviderRef<GoRouter> ref) {
     return FutureBuilder<String?>(

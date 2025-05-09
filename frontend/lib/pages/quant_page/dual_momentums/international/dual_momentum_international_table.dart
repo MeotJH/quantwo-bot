@@ -45,7 +45,7 @@ class DualMomentumInternationalTable extends StatelessWidget {
             TableRow(children: [
               _buildTableHeader('현금보유 수익률'),
               _buildTableHeader('코스피(EWY)  보유 수익률'),
-              const SizedBox(width: 10),
+              _buildTableHeader('한달 듀얼모멘텀 수익률'),
             ]),
             TableRow(children: [
               _buildTableCell(
@@ -54,7 +54,9 @@ class DualMomentumInternationalTable extends StatelessWidget {
               _buildTableCell(
                 '${summary.ewyHoldReturn.toStringAsFixed(2)}%',
               ),
-              const SizedBox(width: 10),
+              _buildTableCell(
+                '${summary.todayBestProfit.toStringAsFixed(2)}%',
+              ),
             ]),
           ],
         ),

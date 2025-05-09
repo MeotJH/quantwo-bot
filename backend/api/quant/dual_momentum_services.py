@@ -130,7 +130,6 @@ class DualMomentumBacktest:
         """백테스트 실행"""
         capital = self.config.initial_capital
         results = []
-        
         for date in pd.date_range(start=self.start_date, end=self.end_date, freq='M'):
             if date - timedelta(days=self.config.lookback_months * 30) < self.df.index[0]:
                 continue
@@ -143,6 +142,7 @@ class DualMomentumBacktest:
                 capital = result['capital']
 
         results_df = pd.DataFrame(results)
+        
         return {
             "data": results_df.to_dict('records'),
             "summary": self._generate_summary(results_df)
@@ -165,13 +165,18 @@ class DualMomentumBacktest:
         final_ewy = float(results_df['ewy_hold'].iloc[-1])
         final_best_etf = results_df['best_etf'].iloc[-1]
 
+        check_date = datetime.today()
+        ticker_profit_by_date, _ = self._calculate_returns(check_date)
+        today_best_profit = float(ticker_profit_by_date.max())
+
         return {
             "initial_capital": self.config.initial_capital,
             "final_capital": final_capital,
             "total_return": float((final_capital / self.config.initial_capital - 1) * 100),
             "cash_hold_return": float((final_cash / self.config.initial_capital - 1) * 100),
             "ewy_hold_return": float((final_ewy / self.config.initial_capital - 1) * 100),
-            "final_best_etf" : final_best_etf
+            "final_best_etf" : final_best_etf,
+            "today_best_profit" : today_best_profit,
         }
 
 def run_dual_momentum_backtest(

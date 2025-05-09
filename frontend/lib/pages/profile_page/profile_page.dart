@@ -8,6 +8,7 @@ import 'package:quant_bot_flutter/pages/loading_pages/profile_info_skeleton.dart
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
 import 'package:quant_bot_flutter/providers/profile_provider.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart';
+import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:quant_bot_flutter/services/webpush_service.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -326,6 +327,6 @@ class ProfilePage extends ConsumerWidget {
     QuantType.TREND_FOLLOW: (stock) =>
         '/quant-form/quant/trend-follow/${stock.ticker}',
     QuantType.DUAL_MOMENTUM_INTL: (_) =>
-        '/quant-form/quant/dual-momentum/international',
+        RouteNotifier.dualMomentumInternationalPath,
   };
 }

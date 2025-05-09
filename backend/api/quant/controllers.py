@@ -52,6 +52,7 @@ summary_model = api.model('Summary', {
     'cash_hold_return': fields.Float,
     'ewy_hold_return': fields.Float,
     'final_best_etf' : fields.String,
+    'today_best_profit' : fields.Float,
 })
 
 # 전체 응답을 위한 모델

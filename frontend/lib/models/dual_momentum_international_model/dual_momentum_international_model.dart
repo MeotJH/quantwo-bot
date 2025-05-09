@@ -38,6 +38,7 @@ class Summary with _$Summary {
     @JsonKey(name: 'cash_hold_return') required double cashHoldReturn,
     @JsonKey(name: 'ewy_hold_return') required double ewyHoldReturn,
     @JsonKey(name: 'final_best_etf') required String finalBestEtf,
+    @JsonKey(name: 'today_best_profit') required double todayBestProfit,
   }) = _Summary;
 
   factory Summary.fromJson(Map<String, dynamic> json) =>
