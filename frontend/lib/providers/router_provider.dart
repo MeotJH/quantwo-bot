@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quant_bot_flutter/components/top_marquee_banner.dart';
 import 'package:quant_bot_flutter/constants/router_routes.dart';
 import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/pages/auth_pages/login_page.dart';
@@ -137,8 +138,13 @@ class _ScaffoldWithNavBarState extends ConsumerState<ScaffoldWithNavBar> {
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(bottomNavIndexProvider);
     return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: isLoginPage()
+      body: Column(
+        children: [
+          if (!isMinimalLayoutPage()) const TopMarqueeBanner(), // <-- 공통 마키 위치
+          Expanded(child: widget.child),
+        ],
+      ),
+      bottomNavigationBar: isMinimalLayoutPage()
           ? null // 로그인 페이지 일떄는 BottomNavigationBar를 숨김
           : BottomNavigationBar(
               currentIndex: selectedIndex,
@@ -176,7 +182,7 @@ class _ScaffoldWithNavBarState extends ConsumerState<ScaffoldWithNavBar> {
     );
   }
 
-  bool isLoginPage() {
+  bool isMinimalLayoutPage() {
     final path = widget.state.fullPath;
     bool hideBottomNav = path == RouteNotifier.loginPath ||
         path == RouteNotifier.signUpPath ||
