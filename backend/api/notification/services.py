@@ -48,6 +48,7 @@ class NotificationService:
 
         if notification:
             notification.notification_keys = subscription_json
+            notification.enabled = True
         else:
             notification = NotificationEntity(
                 notification_keys=subscription_json,

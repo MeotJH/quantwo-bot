@@ -9,10 +9,10 @@ class UserModel with _$UserModel {
     includeIfNull: false,
     explicitToJson: true,
   )
-  factory UserModel({
-    required String email,
-    required String userName,
-  }) = _UserModel;
+  factory UserModel(
+      {required String email,
+      required String userName,
+      @Default(false) bool notification}) = _UserModel;
 
   factory UserModel.fromJson(Map<String, Object?> json) =>
       _$UserModelFromJson(json);

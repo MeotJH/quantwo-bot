@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/models/profile_stock_model/profile_stock_model.dart';
+import 'package:quant_bot_flutter/models/user_model/user_model.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
 import 'package:quant_bot_flutter/services/stock_service.dart';
@@ -101,39 +102,40 @@ class ProfileStocksNotifier extends AsyncNotifier<List<ProfileStockModel>> {
   }
 }
 
-final profileInfoProvider = FutureProvider<Widget>((ref) async {
-  Future<Widget> buildProfileInfo(
-      AuthStorageNotifier authStorageNotifier) async {
-    final user = await authStorageNotifier.findUserByAuth();
+final profileInfoNotifier =
+    AsyncNotifierProvider<ProfileInfoNotifier, UserModel>(
+        ProfileInfoNotifier.new);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      color: Colors.white,
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: CustomColors.gray40,
-            child: const Icon(Icons.person, size: 40, color: Colors.white),
-          ),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(user.userName,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
-              Text(user.email,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey)),
-            ],
-          ),
-        ],
-      ),
-    );
+class ProfileInfoNotifier extends AsyncNotifier<UserModel> {
+  @override
+  Future<UserModel> build() async {
+    final authStorage = ref.read(authStorageProvider.notifier);
+    return await authStorage.findUserByAuth();
   }
 
-  final authStorageNotifier = ref.read(authStorageProvider.notifier);
-  return buildProfileInfo(authStorageNotifier);
-});
+  // 필요 시 수동으로 재조회 가능
+  Future<void> refreshProfile() async {
+    state = const AsyncLoading();
+    try {
+      final authStorage = ref.read(authStorageProvider.notifier);
+      final user = await authStorage.findUserByAuth();
+      state = AsyncValue.data(user);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  /// ✅ notification 값을 변경하는 메서드
+  Future<void> toggleNotification(bool enabled) async {
+    final currentUser = state.value;
+    if (currentUser == null) return;
+
+    // 1. 서버 업데이트 (필요 시)
+    final updatedUser = currentUser.copyWith(notification: enabled);
+
+    // 2. 상태 갱신
+    state = AsyncValue.data(updatedUser);
+  }
+}
 
 final lightSwitchProvider = StateProvider<bool>((ref) => true);

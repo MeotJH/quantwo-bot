@@ -18,7 +18,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileStocks = ref.watch(profileStocksProvider);
-    final profileInfo = ref.watch(profileInfoProvider);
+    final profileInfo = ref.watch(profileInfoNotifier);
     final isLight = ref.watch(lightSwitchProvider);
     final dio = ref.read(dioProvider);
 
@@ -33,11 +33,37 @@ class ProfilePage extends ConsumerWidget {
         child: Column(
           children: [
             profileInfo.when(
-              data: (widget) => Container(
+              data: (user) => Container(
                 color: Colors.white,
                 child: Row(
                   children: [
-                    widget,
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: CustomColors.gray40,
+                            child: const Icon(Icons.person,
+                                size: 40, color: Colors.white),
+                          ),
+                          const SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(user.userName,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              Text(user.email,
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.grey)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     const Spacer(),
                     Row(
                       children: [
@@ -49,14 +75,15 @@ class ProfilePage extends ConsumerWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 0),
                           child: Switch(
-                            value: isLight,
+                            value: user.notification,
                             activeColor: CustomColors.clearBlue100,
-                            onChanged: (bool isOn) async {
-                              ref.read(lightSwitchProvider.notifier).state =
-                                  isOn;
+                            onChanged: (bool value) async {
+                              ref
+                                  .read(profileInfoNotifier.notifier)
+                                  .toggleNotification(value);
                               WebPushService webPushService =
                                   WebPushService(dio: dio);
-                              if (!isOn) {
+                              if (!value) {
                                 webPushService.togglePush(isToggle: false);
                                 return;
                               }
@@ -317,7 +344,7 @@ class ProfilePage extends ConsumerWidget {
                               color: stock.notification
                                   ? CustomColors.brightYellow100
                                   : CustomColors.gray50,
-                              size: 16,
+                              size: 20,
                             ),
                             onPressed: () {
                               ref

@@ -7,7 +7,7 @@ part of 'dual_momentum_international_provider.dart';
 // **************************************************************************
 
 String _$dualMomentumInternationalFamilyHash() =>
-    r'7dd56cc3969e72c58292a1e9c2218bb06a8864c7';
+    r'1065c26e0fe5950bd737a26e652f678cf5ac2a93';
 
 /// Copied from Dart SDK
 class _SystemHash {
