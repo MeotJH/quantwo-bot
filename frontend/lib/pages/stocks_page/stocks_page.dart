@@ -40,7 +40,37 @@ class _StockListPageState extends ConsumerState<StockListPage> {
             ),
           ],
         ),
-        actions: [switchAuthUi(authStorageProfider).requireValue],
+        actions: [
+          authStorageProfider.when(
+              data: (data) {
+                return data == null
+                    ? IconButton(
+                        icon: const Icon(Icons.login),
+                        onPressed: () async {
+                          context.go(RouteNotifier.loginPath);
+                        },
+                      )
+                    : IconButton(
+                        icon: const Icon(Icons.logout),
+                        onPressed: () async {
+                          await showQuantBotDialog(
+                            context: context,
+                            title: '로그아웃',
+                            content: '로그아웃 하시겠습니까?',
+                            isAlert: false,
+                            setPositiveAction: () async {
+                              await ref
+                                  .read(authStorageProvider.notifier)
+                                  .logout();
+                              if (mounted) context.go(RouteNotifier.loginPath);
+                            },
+                          );
+                        },
+                      );
+              },
+              error: (e, _) => const Text('세션 정보 가져오기 실패'),
+              loading: () => const Center(child: CircularProgressIndicator())),
+        ],
       ),
       body: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -61,8 +91,9 @@ class _StockListPageState extends ConsumerState<StockListPage> {
                           return InkWell(
                             onTap: () async {
                               //final item = await CustomDialogDropDown.showCustomDialog(context);
-                              if (context.mounted)
+                              if (mounted) {
                                 context.push('/quants/TF/${stock.ticker}');
+                              }
                             },
                             child: Container(
                               color: Colors.white,
