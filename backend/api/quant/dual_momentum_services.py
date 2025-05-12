@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 from dataclasses import asdict, dataclass
 from logging import getLogger
 
-from api.quant.model import QuantData, RebalancingRecommendation
+from api.quant.domain.model import QuantData, RebalancingRecommendation
 from api.quant.services import QuantService
 
 logger = getLogger(__name__)

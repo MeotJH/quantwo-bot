@@ -95,18 +95,17 @@ class _TrendFollowQuantTableState extends State<TrendFollowQuantTable>
   }
 
   String _buildQuantHeaderCellData(QuantStockModel model) {
-    print('this is money $model');
-    final previouseClose = double.parse(model.previousClose);
+    final currentPrice = double.parse(model.currentPrice);
     final lastCrossTrendFollow = double.parse(model.lastCrossTrendFollow);
-    final profit = previouseClose - lastCrossTrendFollow;
+    final profit = currentPrice - lastCrossTrendFollow;
     return profit > 0 ? '예상 수익' : '예상 방어 손실';
   }
 
   Widget _buildTrendFollowCell({required QuantStockModel model}) {
-    final previouseClose = double.parse(model.previousClose);
+    final currentPrice = double.parse(model.currentPrice);
     final lastCrossTrendFollow = double.parse(model.lastCrossTrendFollow);
-    final profit = previouseClose - lastCrossTrendFollow;
-    final profitPercent = (profit / previouseClose) * 100;
+    final profit = currentPrice - lastCrossTrendFollow;
+    final profitPercent = (profit / currentPrice) * 100;
     final color = profit > 0 ? CustomColors.error : CustomColors.clearBlue120;
     return ScaleTransition(
       scale: Tween<double>(begin: 1.0, end: 1.2).animate(CurvedAnimation(

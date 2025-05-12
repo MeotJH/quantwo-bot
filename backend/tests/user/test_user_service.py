@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch, Mock, create_autospec
 from api.user.services import update_user_fcm_token
 from api.user.entities import User
-from api.quant.entities import Quant
+from api.quant.domain.entities import Quant
 from api import db
 
 @pytest.fixture

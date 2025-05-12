@@ -1,4 +1,4 @@
-from api.quant.entities import Quant
+from api.quant.domain.entities import Quant
 from api import db
 
 class QuantRepository:

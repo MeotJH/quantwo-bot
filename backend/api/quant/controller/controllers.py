@@ -1,4 +1,4 @@
-from api.quant.model import QuantData
+from api.quant.domain.model import QuantData
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, fields
 from flask import request

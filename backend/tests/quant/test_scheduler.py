@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from api.quant.scheduler import QuantScheduler
+from api.scheduler.scheduler import QuantScheduler
 from apscheduler.triggers.cron import CronTrigger
 from pytz import timezone
 

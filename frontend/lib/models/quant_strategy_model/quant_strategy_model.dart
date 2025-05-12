@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/providers/step_form_provider.dart';
 
 class QuantStrategyModel {
@@ -24,19 +25,19 @@ class QuantStrategyModel {
     switch (type) {
       case StrategyType.defensive:
         return [
-          const QuantStrategyModel(
+          QuantStrategyModel(
             name: '추세추종 전략',
             description: '주식의 추세를 따라가는 안정적인 전략',
-            type: 'TF',
+            type: QuantType.TREND_FOLLOW.code,
             profitDescription: '연 수익률 15~20%',
             riskDescription: '최대 손실률 10%',
             icon: Icons.show_chart,
             route: '/quant-form/quant/trend-follow/description',
           ),
-          const QuantStrategyModel(
+          QuantStrategyModel(
             name: '국제 ETF 듀얼모멘텀',
             description: '미국, 유럽, 일본, 한국에 투자하는 듀얼모멘텀 전략',
-            type: 'DM1',
+            type: QuantType.DUAL_MOMENTUM_INTL.code,
             profitDescription: '연 수익률 6~8%',
             riskDescription: '최대 손실률 3%',
             icon: Icons.show_chart,

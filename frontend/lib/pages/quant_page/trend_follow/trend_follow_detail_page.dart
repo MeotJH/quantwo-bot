@@ -9,6 +9,7 @@ import 'package:quant_bot_flutter/components/custom_button.dart';
 import 'package:quant_bot_flutter/components/custom_dialog.dart';
 import 'package:quant_bot_flutter/components/line_chart.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
+import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/core/utils.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
@@ -211,8 +212,9 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
       final initialTrendFollow =
           double.parse(recentStockOne.lastCrossTrendFollow);
 
-      await loadingNotifier.runWithLoading(() async => await notifier
-          .addStockToProfile(ticker, 'TF', initialPrice, initialTrendFollow));
+      await loadingNotifier.runWithLoading(() async =>
+          await notifier.addStockToProfile(ticker, QuantType.TREND_FOLLOW.code,
+              initialPrice, initialTrendFollow));
 
       _showSuccessToast('퀀트 알림이 성공적으로 설정되었습니다.');
     } catch (e) {

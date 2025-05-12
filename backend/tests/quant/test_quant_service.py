@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from unittest.mock import Mock, patch
 from api.quant.services import QuantService
-from api.quant.entities import Quant
+from api.quant.domain.entities import Quant
 from api.user.entities import User
 
 

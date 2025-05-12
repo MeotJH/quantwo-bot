@@ -42,9 +42,9 @@ def create_app():
         authorizations=authorizations,
         security="user_token",
         doc="/swagger",
-        title="template-flask",
+        title="quantwo-bot-flask",
         version="1.0",
-        description="Flask-Restx를 이용한 백엔드 API",
+        description="QuantwoBot API",
         prefix='/api/v1',
     )
     
@@ -76,7 +76,7 @@ def create_app():
     # register controllers
     from api.server_status import controllers
     from api.stock import controllers
-    from api.quant import controllers
+    from api.quant.controller import controllers
     from api.user import controllers
     from api.notification import controllers
 
@@ -86,10 +86,10 @@ def create_app():
     #db.init_app(app)
     #migrate.init_app(app, db)
 
-    from api.quant.entities import Quant
+    from api.quant.domain.entities import Quant
     from api.user.entities import User
 
-    from api.quant.scheduler import QuantScheduler
+    from api.scheduler.quant_scheduler import QuantScheduler
     quant_scheduler = QuantScheduler(app)  # app 인스턴스를 전달
 
     with app.app_context():

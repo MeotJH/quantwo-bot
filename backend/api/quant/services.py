@@ -5,20 +5,21 @@ from flask import current_app
 
 from api.notification.models import Notification
 from api.notification.services import NotificationService
-from api.quant.model import QuantData
+from api.quant.domain.model import QuantData
 import yfinance as yf
 from flask_jwt_extended import get_jwt_identity
 
 from api import db
-from api.quant.entities import Quant
+from api.quant.domain.entities import Quant
 from api.user.entities import User
 from api.notification.entities import NotificationEntity
+from api.quant.domain.quant_type import QuantType
 from exceptions import AlreadyExistsException, BadRequestException
 from util.logging_util import logger
 from util.transactional_util import transaction_scope
 import uuid
 
-from api.quant.profit import calculate_profit
+from api.quant.domain.profit import calculate_profit
 
 
 class QuantService:
@@ -154,22 +155,27 @@ class QuantService:
 
     def check_and_notify(self):
         try:
-            logger.info("로그가 호출되었습니다!!!!!")
-            notification_enalbed = NotificationEntity.query.filter_by(enabled=True).all()
-            quants = Quant.query.filter_by(notification=True).all()
-            logger.info(f"{len(quants)}개의 알림이 있는 항목을 찾았습니다")
-            
-            for quant in quants:
-                stock_data = QuantService._get_stock_use_yfinance(
-                    quant.stock, period='1y', trend_follow_days=75
-                )['stock_data']
-                today_stock = stock_data.iloc[-1]
-                
-                logger.info(f"today_stock: {today_stock}")
-                if self._should_notify(quant, today_stock):
-                    with transaction_scope():
-                        self._update_stock(quant, today_stock)
-                        self._send_notification(quant)
+            logger.info("check_and_notify scheduling 시작중...")
+            notification_enabled = NotificationEntity.query.filter_by(enabled=True).all()
+            notification_enabled_set = {n.user_uuid for n in notification_enabled}
+            quants = Quant.query.filter_by(notification=True).all()            
+            filtered_quants = [quant for quant in quants if quant.user_id in notification_enabled_set]
+
+            logger.info(f"{len(filtered_quants)}개의 알림이 있는 항목을 찾았습니다")
+            for quant in filtered_quants:
+
+                if quant.quant_type == QuantType.TREND_FOLLOW.value:
+
+                    stock_data = QuantService._get_stock_use_yfinance(
+                        quant.stock, period='1y', trend_follow_days=75
+                    )['stock_data']
+                    today_stock = stock_data.iloc[-1]
+                    
+                    logger.info(f"today_stock: {today_stock}")
+                    if self._should_notify(quant, today_stock):
+                        with transaction_scope():
+                            self._update_stock(quant, today_stock)
+                            self._send_notification(quant)
                         
         except Exception as e:
             logger.error(f"Error in check_and_notify: {str(e)}")
