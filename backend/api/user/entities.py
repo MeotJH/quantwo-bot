@@ -15,7 +15,8 @@ class User(db.Model):
     quants = db.relationship('Quant', backref='user', lazy=True)
 
     # Notification과의 1:N 관계 설정
-    notification = db.relationship("NotificationEntity", uselist=False, back_populates="user")
+    quants = db.relationship('Quant', backref='user', lazy=True)
+    #notification = db.relationship("NotificationEntity", uselist=False, back_populates="user")
 
     def __repr__(self):
         return f'<User {self.username}>'

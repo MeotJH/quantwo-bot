@@ -6,7 +6,6 @@ from dataclasses import asdict, dataclass
 from logging import getLogger
 
 from api.quant.domain.model import QuantData, RebalancingRecommendation
-from api.quant.services import QuantService
 
 logger = getLogger(__name__)
 
@@ -221,15 +220,3 @@ def get_todays_dual_momentum(saved_symbol: str, etf_symbols: List[str], savings_
         cash_return=cash_return,
         should_rebalance=should_rebalance
     )
-
-def save_dual_momentum(type: str):
-    momentum = get_todays_dual_momentum('cash', ['SPY', 'FEZ', 'EWJ', 'EWY'], 3.0)
-    logger.info(f'this is momentum: {asdict(momentum)}')
-    quant_data = QuantData(
-        stock=momentum.recommendation,
-        quant_type=type,
-        initial_price= momentum.best_return,
-        initial_status=momentum.recommendation,
-        initial_trend_follow=0.0,
-    )
-    return QuantService.register_quant_by_stock(momentum.recommendation, quant_data)

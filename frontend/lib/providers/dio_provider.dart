@@ -15,7 +15,7 @@ class DioNotifier extends Notifier<Dio> {
     final isLocalEnvironment =
         (dotenv.env['ENVIROMENT']?.toLowerCase() ?? 'LOCAL') ==
             'LOCAL'.toLowerCase();
-    print('am i local? $isLocalEnvironment');
+    log('am i local? $isLocalEnvironment');
     if (!isLocalEnvironment) {
       return 'https://quantwo-bot.com/api/v1';
     }

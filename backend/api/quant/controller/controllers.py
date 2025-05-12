@@ -4,7 +4,7 @@ from flask_restx import Resource, fields
 from flask import request
 from api import quant_api as api
 from api.quant.services import QuantService
-from api.quant.dual_momentum_services import run_dual_momentum_backtest, save_dual_momentum
+from api.quant.dual_momentum_services import run_dual_momentum_backtest
 from .response_models import trend_follows_model, trend_follows_register_response_model, quants_model, quant_by_user_model, quant_data_model
 
 @api.route('/trend_follow/<string:stock_id>', strict_slashes=False)
@@ -99,7 +99,7 @@ class DualMomentum(Resource):
        #quant_data = QuantData(**api.payload)
 
         type = api.payload['type']
-        return save_dual_momentum(type)
+        return QuantService.save_dual_momentum(type)
 
 @api.route('/', strict_slashes=False)
 class Quants(Resource):

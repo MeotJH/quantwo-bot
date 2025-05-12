@@ -1,5 +1,6 @@
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
+from api.quant.domain.quant_type import QuantType
 from api.quant.services import QuantService
 import logging
 from apscheduler.schedulers.base import SchedulerNotRunningError
@@ -24,8 +25,15 @@ class QuantScheduler:
         if not self.scheduler.running:
             # 한국 시간 밤 10:30과 11:30에 실행
             self.scheduler.add_job(
-                self._run_check_and_notify, 
+                self._run_check_and_notify_trend_follow, 
                 trigger=CronTrigger(hour='22', minute=30),
+                #trigger=IntervalTrigger(seconds=10),
+                timezone=timezone('Asia/Seoul')
+            )
+
+            self.scheduler.add_job(
+                self._run_check_and_notify_dualmomentum_international, 
+                trigger=CronTrigger(day=1, hour=9, minute=00),
                 #trigger=IntervalTrigger(seconds=10),
                 timezone=timezone('Asia/Seoul')
             )
@@ -34,9 +42,14 @@ class QuantScheduler:
         else:
             logger.info("Quant Scheduler is already running")
 
-    def _run_check_and_notify(self):
+    def _run_check_and_notify_trend_follow(self):
         with self.app.app_context():
-            self.quant_service.check_and_notify()
+            self.quant_service.check_and_notify(QuantType.TREND_FOLLOW.value)
+
+    def _run_check_and_notify_dualmomentum_international(self):
+        with self.app.app_context():
+            self.quant_service.check_and_notify(QuantType.DUAL_MOMENTUM_INTERNATIONAL.value)
+
 
     def shutdown(self):
         if self.scheduler.running:

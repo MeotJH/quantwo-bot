@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from numbers import Number
 import traceback
 
@@ -11,15 +12,18 @@ from flask_jwt_extended import get_jwt_identity
 
 from api import db
 from api.quant.domain.entities import Quant
+from api.quant.dual_momentum_services import get_todays_dual_momentum
 from api.user.entities import User
 from api.notification.entities import NotificationEntity
 from api.quant.domain.quant_type import QuantType
+from api.quant.domain.notification_strategy import NotificationStrategy
 from exceptions import AlreadyExistsException, BadRequestException
 from util.logging_util import logger
 from util.transactional_util import transaction_scope
 import uuid
 
 from api.quant.domain.profit import calculate_profit
+from sqlalchemy.orm import joinedload
 
 
 class QuantService:
@@ -153,19 +157,21 @@ class QuantService:
         db.session.commit()
         return quant.to_dict()
 
-    def check_and_notify(self):
+    def check_and_notify(self, notify_quant_type):
         try:
             logger.info("check_and_notify scheduling 시작중...")
             notification_enabled = NotificationEntity.query.filter_by(enabled=True).all()
-            notification_enabled_set = {n.user_uuid for n in notification_enabled}
-            quants = Quant.query.filter_by(notification=True).all()            
+            notification_enabled_set = {n.user_id for n in notification_enabled}
+            quants = Quant.query.options(joinedload(Quant.user)).filter_by(notification=True,quant_type=notify_quant_type).all()  
+
+                      
             filtered_quants = [quant for quant in quants if quant.user_id in notification_enabled_set]
-
+            filtered_mail_from_quant_entity = {n.user.email for n in filtered_quants}
             logger.info(f"{len(filtered_quants)}개의 알림이 있는 항목을 찾았습니다")
+            logger.info(f"mail 보낼 유저 타겟 ::{filtered_mail_from_quant_entity}")
             for quant in filtered_quants:
-
-                if quant.quant_type == QuantType.TREND_FOLLOW.value:
-
+                
+                if notify_quant_type == QuantType.TREND_FOLLOW.value:
                     stock_data = QuantService._get_stock_use_yfinance(
                         quant.stock, period='1y', trend_follow_days=75
                     )['stock_data']
@@ -176,10 +182,14 @@ class QuantService:
                         with transaction_scope():
                             self._update_stock(quant, today_stock)
                             self._send_notification(quant)
+                
+                NotificationStrategy.calculate_profit(quant=quant,stock={})
                         
         except Exception as e:
             logger.error(f"Error in check_and_notify: {str(e)}")
             logger.error(traceback.format_exc())
+        finally:
+            logger.info(f"check_and_notify {notify_quant_type} scheduling 종료 ")
     
     def _update_stock(self, quant:Quant, today_stock:dict):
         quant.current_status = 'BUY' if today_stock['Close'] > today_stock["Trend_Follow"] else 'SELL'
@@ -213,8 +223,21 @@ class QuantService:
     def _create_notification(self, quant):
         logger.info(f'this is quant.user.email: {quant.user.email}')
         return Notification(
-            title=f"퀀투봇 [{quant.quant_type}]",
+            title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
             body=f"{quant.stock}의 상태가 변경되었습니다. 확인해주세요.",
             user_mail=quant.user.email
         )
+    
+    @staticmethod
+    def save_dual_momentum(type: str):
+        momentum = get_todays_dual_momentum('cash', ['SPY', 'FEZ', 'EWJ', 'EWY'], 3.0)
+        logger.info(f'this is momentum: {asdict(momentum)}')
+        quant_data = QuantData(
+            stock=momentum.recommendation,
+            quant_type=type,
+            initial_price= momentum.best_return,
+            initial_status=momentum.recommendation,
+            initial_trend_follow=0.0,
+        )
+        return QuantService.register_quant_by_stock(momentum.recommendation, quant_data)
 
