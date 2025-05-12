@@ -190,31 +190,4 @@ class _StockListPageState extends ConsumerState<StockListPage> {
           )),
     );
   }
-
-  AsyncValue<IconButton> switchAuthUi(AsyncValue<String?> authStorageProfider) {
-    return authStorageProfider.whenData((value) {
-      return value == null
-          ? IconButton(
-              icon: const Icon(Icons.login),
-              onPressed: () async {
-                context.go(RouteNotifier.loginPath);
-              },
-            )
-          : IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () async {
-                await showQuantBotDialog(
-                  context: context,
-                  title: '로그아웃',
-                  content: '로그아웃 하시겠습니까?',
-                  isAlert: false,
-                  setPositiveAction: () async {
-                    await ref.read(authStorageProvider.notifier).logout();
-                    if (mounted) context.go(RouteNotifier.loginPath);
-                  },
-                );
-              },
-            );
-    });
-  }
 }
