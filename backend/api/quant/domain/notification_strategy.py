@@ -4,18 +4,70 @@ from api.notification.models import Notification
 from api.notification.services import NotificationService
 from api.quant.domain.entities import Quant
 from api.quant.domain.quant_type import QuantType
+from api.quant.domain.trend_follow import TrendFollow
 from api.quant.dual_momentum_services import get_todays_dual_momentum
+from util.logging_util import logger
+from util.transactional_util import transaction_scope
 
 class NotificationStrategy:
 
     @classmethod
-    def _calculate_trend_follow_strategy(cls,quant: Quant, stock: dict):
-        # Implement your profit calculation logic here
-        return None
+    def _calculate_trend_follow_strategy(cls,quant: Quant):
+        """
+        추세추종 전략 알림로직
+        """
+        stock_data = TrendFollow._get_stock_use_yfinance(
+                        quant.stock, period='1y', trend_follow_days=75
+                    )['stock_data']
+        today_stock = stock_data.iloc[-1]
+
+        logger.info(f"today_stock: {today_stock}")
+        if cls._should_notify(quant, today_stock):
+            with transaction_scope():
+                quant.current_status = 'BUY' if today_stock['Close'] > today_stock["Trend_Follow"] else 'SELL'
+
+                logger.info(f'this is quant.user.email: {quant.user.email}')
+                notification = Notification(
+                    title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
+                    body=f"{quant.stock}의 상태가 변경되었습니다. 확인해주세요.",
+                    user_mail=quant.user.email
+                )
+
+                NotificationService().send_notification(notification)
+    
+    @classmethod
+    def _should_notify(cls, quant: Quant, today_stock: dict) -> bool:
+        logger.info("Quant Scheduler started")
+
+        if not quant.notification:
+            return False
+
+        try:
+            close = today_stock['Close']
+            trend = today_stock['Trend_Follow']
+        except KeyError:
+            logger.warning("today_stock 데이터에 필드가 부족합니다.")
+            return False
+
+        diff_ratio = abs(close - trend) / trend
+        if diff_ratio < 0.01:
+            logger.info("변동폭이 작아 알림 생략")
+            return False
+
+        current_status = 'BUY' if close >= trend else 'SELL'
+
+        if current_status != quant.current_status:
+            logger.info(f"상태 변경 감지: {quant.current_status} → {current_status}")
+            return True
+
+        return False
+
 
     @classmethod
-    def _calculate_dualmomentum_intl_strategy(cls,quant: Quant, stock: dict):
-        
+    def _calculate_dualmomentum_intl_strategy(cls,quant: Quant):
+        """
+            국제 듀얼모멘텀 전략 알림로직
+        """
         momentum = get_todays_dual_momentum(saved_symbol=quant.stock
                                  ,etf_symbols=['SPY', 'FEZ', 'EWJ', 'EWY']
                                  ,savings_rate=3.0)
@@ -30,14 +82,17 @@ class NotificationStrategy:
             body=notification_content,
             user_mail=quant.user.email
         )
-        print(f'notification content :::::: {notification_content}')
-        #NotificationService().send_notification(notification)
+        logger.info(f'notification content :::::: {notification_content}')
+        NotificationService().send_notification(notification)
     
     @classmethod
-    def calculate_profit(cls, quant: Quant, stock: dict):
+    def calculate_strategy(cls, quant: Quant):
+        """
+            전략별 분기하는 함수
+        """
         try:
             strategy_func = cls.strategy_calculators[quant.quant_type]
-            return strategy_func(quant, stock)
+            return strategy_func(quant)
         except KeyError:
             raise ValueError(f"Unsupported quant type: {quant.quant_type}")
 

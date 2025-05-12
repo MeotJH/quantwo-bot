@@ -38,7 +38,7 @@ class QuantScheduler:
                 timezone=timezone('Asia/Seoul')
             )
             self.scheduler.start()
-            logger.info("Quant Scheduler started, will run daily at 10:30 PM and 11:30 PM KST")
+            logger.info("Quant Scheduler started, will run daily at 10:30 PM and 11:30 PM KST, and Month of 1")
         else:
             logger.info("Quant Scheduler is already running")
 
