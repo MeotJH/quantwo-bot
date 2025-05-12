@@ -27,12 +27,6 @@ class TrendFollow(Resource):
         stock = self.quant_service.register_quant_by_stock(stock_id, quant_data)
         return stock
     
-    @jwt_required()
-    @api.marshal_with(trend_follows_register_response_model)
-    def delete(self, stock_id):
-        deleted_response = self.quant_service.delete_quant_by_id(stock_id)
-        return deleted_response, 200
-    
 
 # 개별 거래 기록을 위한 모델
 trade_record_model = api.model('TradeRecord', {
@@ -118,6 +112,20 @@ class Quants(Resource):
     def get(self):
         quants = self.quant_service.find_quants_by_user()
         return {'quants': quants}
+
+
+@api.route('/<string:quant_id>', strict_slashes=False)
+class QuantNotification(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+        self.quant_service = QuantService()
+
+    @jwt_required()
+    @api.marshal_with(trend_follows_register_response_model)
+    def delete(self, quant_id):
+        """ 🔹 ID로 퀀트를 삭제 """
+        deleted_response = self.quant_service.delete_quant_by_id(quant_id)
+        return deleted_response, 200
 
 @api.route('/<string:quant_id>/notification', strict_slashes=False)
 class QuantNotification(Resource):

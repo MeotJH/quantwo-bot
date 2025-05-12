@@ -82,6 +82,23 @@ class ProfileStocksNotifier extends AsyncNotifier<List<ProfileStockModel>> {
       return updatedStocks;
     });
   }
+
+  Future<void> deleteQuant(ProfileStockModel model) async {
+    // 알림 상태 토글 시도
+    final success = await _stockService.deleteQuant(model.id);
+
+    // 성공하지 않은 경우 에러 상태로 변경
+    if (!success) {
+      // state = const AsyncValue.data(value)
+      return; // 여기서 함수가 종료되어 이후 코드가 실행되지 않음
+    }
+
+    // 상태를 직접 수정하는 대신 provider 자체를 재빌드
+    // optimistic update (즉시 반영)
+    final current = state.value ?? [];
+    state = AsyncValue.data([...current.where((e) => e.id != model.id)]);
+    ref.invalidateSelf();
+  }
 }
 
 final profileInfoProvider = FutureProvider<Widget>((ref) async {

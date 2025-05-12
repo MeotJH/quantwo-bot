@@ -59,7 +59,6 @@ class AuthStorageNotifier extends AutoDisposeAsyncNotifier<String?> {
   @override
   Future<String?> build() async {
     await _ensurePrefsInitialized();
-
     return getToken();
   }
 

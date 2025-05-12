@@ -46,7 +46,7 @@ Future<dynamic> showQuantBotDialog({
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: CustomColors.clearBlue120,
+                          backgroundColor: CustomColors.clearBlue100,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

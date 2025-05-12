@@ -122,7 +122,7 @@ class _DualMomentumInternationalState
     }
 
     try {
-      loadingNotifier
+      await loadingNotifier
           .runWithLoading(() async => await notifier.saveDualMomentum());
       CustomToast.show(message: '퀀트 알림이 성공적으로 설정되었습니다.');
     } catch (e) {

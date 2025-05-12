@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/models/dual_momentum_international_model/dual_momentum_international_model.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
+import 'package:quant_bot_flutter/providers/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dual_momentum_international_provider.g.dart';
@@ -61,6 +62,8 @@ class DualMomentumInternationalFamily
       });
 
       if (response.statusCode == 200) {
+        //퀀트 추가된 후 프로필 퀀트 리스트 상태변경
+        ref.invalidate(profileStocksProvider);
         return true;
       }
       return false;

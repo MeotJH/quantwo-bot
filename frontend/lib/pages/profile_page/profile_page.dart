@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quant_bot_flutter/components/custom_dialog.dart';
 import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/models/profile_stock_model/profile_stock_model.dart';
@@ -286,21 +287,47 @@ class ProfilePage extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      IconButton(
-                        icon: Icon(
-                          Icons.notifications,
-                          color: stock.notification
-                              ? CustomColors.brightYellow120
-                              : CustomColors.gray50,
-                          size: 32,
-                        ),
-                        onPressed: () {
-                          ref
-                              .read(profileStocksProvider.notifier)
-                              .toggleNotification(stock);
-                        },
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      Column(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.delete_forever,
+                              color: CustomColors.error,
+                              size: 16,
+                            ),
+                            onPressed: () async {
+                              await showQuantBotDialog(
+                                context: context,
+                                title: '퀀트 삭제',
+                                content: '삭제 하시겠습니까?',
+                                isAlert: false,
+                                setPositiveAction: () async {
+                                  ref
+                                      .read(profileStocksProvider.notifier)
+                                      .deleteQuant(stock);
+                                },
+                              );
+                            },
+                            constraints: const BoxConstraints(),
+                            //padding: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.notifications,
+                              color: stock.notification
+                                  ? CustomColors.brightYellow100
+                                  : CustomColors.gray50,
+                              size: 16,
+                            ),
+                            onPressed: () {
+                              ref
+                                  .read(profileStocksProvider.notifier)
+                                  .toggleNotification(stock);
+                            },
+                            constraints: const BoxConstraints(),
+                            //padding: const EdgeInsets.symmetric(vertical: 10),
+                          ),
+                        ],
                       ),
                     ],
                   ),

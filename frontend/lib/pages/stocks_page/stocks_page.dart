@@ -7,6 +7,7 @@ import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart
 import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/stocks_page_search_bar.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
+import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:quant_bot_flutter/providers/stocks_provider.dart';
 
 class StockListPage extends ConsumerStatefulWidget {
@@ -20,6 +21,8 @@ class _StockListPageState extends ConsumerState<StockListPage> {
   @override
   Widget build(BuildContext context) {
     final stocks = ref.watch(stocksProvider);
+    final authStorageProfider = ref.watch(authStorageProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -37,23 +40,7 @@ class _StockListPageState extends ConsumerState<StockListPage> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await showQuantBotDialog(
-                context: context,
-                title: '로그아웃',
-                content: '로그아웃 하시겠습니까?',
-                isAlert: false,
-                setPositiveAction: () async {
-                  await ref.read(authStorageProvider.notifier).logout();
-                  if (context.mounted) context.go('/login');
-                },
-              );
-            },
-          ),
-        ],
+        actions: [switchAuthUi(authStorageProfider).requireValue],
       ),
       body: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -171,5 +158,32 @@ class _StockListPageState extends ConsumerState<StockListPage> {
             ],
           )),
     );
+  }
+
+  AsyncValue<IconButton> switchAuthUi(AsyncValue<String?> authStorageProfider) {
+    return authStorageProfider.whenData((value) {
+      return value == null
+          ? IconButton(
+              icon: const Icon(Icons.login),
+              onPressed: () async {
+                context.go(RouteNotifier.loginPath);
+              },
+            )
+          : IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () async {
+                await showQuantBotDialog(
+                  context: context,
+                  title: '로그아웃',
+                  content: '로그아웃 하시겠습니까?',
+                  isAlert: false,
+                  setPositiveAction: () async {
+                    await ref.read(authStorageProvider.notifier).logout();
+                    if (mounted) context.go(RouteNotifier.loginPath);
+                  },
+                );
+              },
+            );
+    });
   }
 }

@@ -7,8 +7,8 @@ class StockService {
 
   StockService(this.dio);
 
-  Future<void> addStockToProfile(
-      String ticker, String quantType, double initialPrice, double initialTrendFollow) async {
+  Future<void> addStockToProfile(String ticker, String quantType,
+      double initialPrice, double initialTrendFollow) async {
     final data = {
       "stock": ticker,
       "quant_type": quantType,
@@ -18,7 +18,8 @@ class StockService {
     };
 
     try {
-      final response = await dio.post('/quants/trend_follow/$ticker', data: data);
+      final response =
+          await dio.post('/quants/trend_follow/$ticker', data: data);
 
       if (response.statusCode == 200) {
         print('주식이 프로필에 추가되었습니다.');
@@ -42,6 +43,24 @@ class StockService {
       } else {
         CustomToast.show(message: '서버와의 연결이 원활하지 않습니다.', isWarn: true);
         throw Exception('알림 상태 변경 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('예외 발생: $e');
+      return false; // 예외 발생 시 false 반환
+    }
+  }
+
+  Future<bool> deleteQuant(String id) async {
+    try {
+      final response = await dio.delete('/quants/$id');
+      log('delete quants statusCode: ${response.statusCode}');
+      // 상태 코드가 200일 때만 성공으로 간주합니다.
+      if (response.statusCode == 200) {
+        CustomToast.show(message: '성공적으로 삭제되었습니다.', isWarn: true);
+        return true; // 성공 시 true 반환
+      } else {
+        CustomToast.show(message: '서버와의 연결이 원활하지 않습니다.', isWarn: true);
+        throw Exception('삭제 실패: ${response.statusCode}');
       }
     } catch (e) {
       print('예외 발생: $e');
