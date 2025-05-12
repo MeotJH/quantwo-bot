@@ -21,6 +21,7 @@ user_sign_up_model = api.model('UserSignUpModel', {
 user_response_model = api.model('UserResponseModel', {
     'userName': name_field,
     'email': email_field,
+    'notification' : fields.Boolean(title='notification'),
 })
 
 @api.route('/sign-up', strict_slashes=False)
@@ -72,6 +73,7 @@ class Users(Resource):
     def get(self):
         user = get_jwt_identity()
         find_user = find_user_by_email(user)
+        print(f'this is find user::: {find_user}' )
         return find_user
     
     @jwt_required()

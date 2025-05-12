@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from exceptions import BadRequestException, UnauthorizedException, UserAlreadyExistException
 from flask_jwt_extended import create_access_token, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 
 def save_user(user):
     try:
@@ -39,8 +40,8 @@ def find_user(user):
     return response_user
 
 def find_user_by_email(email):
-    db_user = User.query.filter_by(email=email).first()
-    return db_user.to_dict()
+        db_user = User.query.options(joinedload(User.notification)).filter_by(email=email).first()
+        return db_user.to_dict()
 
 def update_user_fcm_token(newToken):
     email = get_jwt_identity()

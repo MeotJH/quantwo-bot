@@ -51,7 +51,8 @@ class NotificationService:
         else:
             notification = NotificationEntity(
                 notification_keys=subscription_json,
-                user_id=user.uuid
+                user_id=user.uuid,
+                enabled=True
             )
             db.session.add(notification)
 
@@ -79,13 +80,6 @@ class NotificationService:
             db.session.rollback()
             raise BadRequestException(f'{e}', 400)
 
-        
-
-
-
-
-
-        
 
     def _get_user_key(self, email: str) -> str:
         user = User.query.filter_by(email=email).first()

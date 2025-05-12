@@ -12,6 +12,7 @@ from flask_jwt_extended import get_jwt_identity
 from api import db
 from api.quant.entities import Quant
 from api.user.entities import User
+from api.notification.entities import NotificationEntity
 from exceptions import AlreadyExistsException, BadRequestException
 from util.logging_util import logger
 from util.transactional_util import transaction_scope
@@ -154,6 +155,7 @@ class QuantService:
     def check_and_notify(self):
         try:
             logger.info("로그가 호출되었습니다!!!!!")
+            notification_enalbed = NotificationEntity.query.filter_by(enabled=True).all()
             quants = Quant.query.filter_by(notification=True).all()
             logger.info(f"{len(quants)}개의 알림이 있는 항목을 찾았습니다")
             
