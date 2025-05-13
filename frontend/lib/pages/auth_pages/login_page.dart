@@ -7,6 +7,9 @@ import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'dart:html' as html;
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -137,19 +140,31 @@ class LoginScreen extends ConsumerWidget {
   }
 
   Widget _buildNaverLoginButton() {
-    return ElevatedButton(
-      onPressed: () {
-        CustomToast.show(message: '해당 기능은 준비중입니다.', isWarn: true);
-      },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: const Color(0xFF03C75A),
-        minimumSize: const Size(double.infinity, 50),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+    return SizedBox(
+      width: double.infinity,
+      height: 45,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF03C75A), // 배경색
+              borderRadius: BorderRadius.circular(8), // 둥근 모서리 optional
+            ),
+          ), // 배경색 레이어
+          InkWell(
+            onTap: () {
+              //launchNaverLogin();
+              //launchNaverOAuthPopup();
+              //CustomToast.show(message: '해당 기능은 준비중입니다.', isWarn: true);
+            },
+            child: Image.asset(
+              'assets/images/naver_login_button.png',
+              fit: BoxFit.contain, // 이미지가 배경색 위에 올라감
+            ),
+          ),
+        ],
       ),
-      child: const Text('네이버로 로그인'),
     );
   }
 
@@ -205,6 +220,27 @@ class LoginScreen extends ConsumerWidget {
         'Apple로 로그인',
         style: TextStyle(color: Colors.black),
       ),
+    );
+  }
+
+  Future<void> launchNaverLogin() async {
+    const oauthUrl = 'http://localhost:8080/api/v1/auth/oauth/naver';
+
+    if (await canLaunchUrl(Uri.parse(oauthUrl))) {
+      await launchUrl(
+        Uri.parse(oauthUrl),
+        mode: LaunchMode.externalApplication, // 외부 브라우저 또는 앱으로
+      );
+    } else {
+      throw 'Could not launch $oauthUrl';
+    }
+  }
+
+  void launchNaverOAuthPopup() {
+    html.window.open(
+      'http://localhost:8080/api/v1/auth/oauth/naver',
+      'NaverLogin',
+      'width=500,height=600',
     );
   }
 }
