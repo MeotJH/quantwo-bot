@@ -19,7 +19,7 @@ class _StocksPageSearchBarState extends ConsumerState<StocksPageSearchBar> {
     final stocksNotifier = ref.watch(stocksProvider.notifier);
     return TextField(
       decoration: InputDecoration(
-        hintText: 'Search : 주식을 \'영문으로\'검색해주세요.',
+        hintText: 'Search : 주식을 \'영문\'으로 검색해주세요.',
         prefixIcon: const Icon(Icons.search),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
