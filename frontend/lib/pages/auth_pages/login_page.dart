@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/custom_password_field.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
+import 'package:quant_bot_flutter/constants/api_constants.dart';
+import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
 import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
@@ -224,7 +226,7 @@ class LoginScreen extends ConsumerWidget {
   }
 
   Future<void> launchNaverLogin() async {
-    const oauthUrl = 'http://localhost:8080/api/v1/auth/oauth/naver';
+    final oauthUrl = BACKEND_WITH_ENVIROMENT + ApiUrl.oauthNaver;
 
     if (await canLaunchUrl(Uri.parse(oauthUrl))) {
       await launchUrl(
@@ -238,7 +240,7 @@ class LoginScreen extends ConsumerWidget {
 
   void launchNaverOAuthPopup() {
     html.window.open(
-      'http://localhost:8080/api/v1/auth/oauth/naver',
+      BACKEND_WITH_ENVIROMENT + ApiUrl.oauthNaver,
       'NaverLogin',
       'width=500,height=600',
     );

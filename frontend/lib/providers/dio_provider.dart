@@ -10,14 +10,14 @@ import 'dart:developer';
 class DioNotifier extends Notifier<Dio> {
   late String apiUrl;
   late Dio _dio;
-
+  final defaultUrl = 'http://127.0.0.1:8080/api/v1';
   String resolveApiBaseUrl() {
     final isLocalEnvironment =
         (dotenv.env['ENVIROMENT']?.toLowerCase() ?? 'LOCAL') ==
             'LOCAL'.toLowerCase();
     log('am i local? $isLocalEnvironment');
     if (!isLocalEnvironment) {
-      return 'https://quantwo-bot.com/api/v1';
+      return dotenv.env['PROD_URL'] ?? defaultUrl;
     }
 
     return kIsWeb
