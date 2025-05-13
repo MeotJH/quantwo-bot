@@ -16,4 +16,4 @@ class NotificationEntity(db.Model):
     enabled = db.Column(db.Boolean, default=False)  # 새로운 컬럼 추가
 
     #user entity와의 관계
-    #user = db.relationship("User", back_populates="notification")
+    user = db.relationship("User", back_populates="notification")

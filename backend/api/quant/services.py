@@ -55,14 +55,9 @@ class QuantService:
             user_id=user.uuid
         )
         
-
-        try:
+        with transaction_scope():
             db.session.add(new_quant)
-            db.session.commit()
             return new_quant.to_dict()
-        except Exception as e:
-            db.session.rollback()
-            raise BadRequestException(f'{e}', 400)
 
     @staticmethod
     def find_quants_by_user():
@@ -105,18 +100,22 @@ class QuantService:
         quant = Quant.query.filter_by(uuid=uuid.UUID(quant_id)).first()
         if quant is None:
             raise BadRequestException('퀀트를 찾을 수 없습니다.', 400)
-        quant.notification = not quant.notification
-        db.session.commit()
-        return quant.to_dict()
+        
+        with transaction_scope():
+            quant.notification = not quant.notification
+        #db.session.commit()
+            return quant.to_dict()
 
     @staticmethod
     def delete_quant_by_id(quant_id):
         quant = Quant.query.filter_by(uuid=uuid.UUID(quant_id)).first()
         if quant is None:
             raise BadRequestException('퀀트를 찾을 수 없습니다.', 400)
-        db.session.delete(quant)
-        db.session.commit()
-        return quant.to_dict()
+        
+        with transaction_scope():
+            db.session.delete(quant)
+            #db.session.commit()
+            return quant.to_dict()
 
     def check_and_notify(self, notify_quant_type):
         try:

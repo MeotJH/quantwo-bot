@@ -68,9 +68,11 @@ class NotificationStrategy:
         """
             국제 듀얼모멘텀 전략 알림로직
         """
-        momentum = get_todays_dual_momentum(saved_symbol=quant.stock
+        momentum = get_todays_dual_momentum(
+                                saved_symbol=quant.stock
                                  ,etf_symbols=['SPY', 'FEZ', 'EWJ', 'EWY']
-                                 ,savings_rate=3.0)
+                                 ,savings_rate=3.0
+                                 )
         
         if momentum.should_rebalance:
             notification_content = f'이달의 듀얼모멘텀 결과: {momentum.recommendation}가 상대적으로 강세입니다.'
