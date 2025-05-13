@@ -50,10 +50,15 @@ class StocksNotifier extends AutoDisposeAsyncNotifier<List<StockModel>> {
       return;
     }
 
-    final List<StockModel> searchedStocks = firstFetchStocks
-        .where(
-            (stock) => stock.ticker.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    final lowerQuery = query.toLowerCase();
+
+    //model 의 ticker와 name이 같은게 있으면 return
+    final List<StockModel> searchedStocks = firstFetchStocks.where((stock) {
+      final tickerMatch = stock.ticker.toLowerCase().contains(lowerQuery);
+      final nameMatch = stock.name.toLowerCase().contains(lowerQuery);
+      return tickerMatch || nameMatch;
+    }).toList();
+
     state = AsyncValue.data(searchedStocks);
   }
 }

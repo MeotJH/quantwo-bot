@@ -19,7 +19,7 @@ class _TrendFollowSearchBarState extends ConsumerState<TrendFollowSearchBar> {
     final stocksNotifier = ref.watch(stocksProvider.notifier);
     return TextField(
       decoration: InputDecoration(
-        hintText: 'Search : Ticker 를 검색해주세요. 예) AAPL',
+        hintText: 'Search : 주식을 검색해주세요.',
         prefixIcon: const Icon(Icons.search),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
