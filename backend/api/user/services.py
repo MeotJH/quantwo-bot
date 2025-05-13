@@ -8,15 +8,20 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 
 def save_user(user):
+    """
+    유저 저장 함수
+    """
     try:
         id = uuid4()
-        password_hash = generate_password_hash(user['password'])
+        password_hash = generate_password_hash(user['password']) \
+                        if user.get('password') and user.get('provider') in [None, 'self'] else None
 
         new_user = User(uuid=id,
                         username=user['userName'],
                         email=user['email'],
                         password=password_hash,
-                        app_token=user.get('appToken', '')
+                        app_token=user.get('appToken', None),
+                        provider= user.get('provider','self')
                         )
         db.session.add(new_user)
         db.session.commit()
