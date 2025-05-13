@@ -2,6 +2,7 @@ import os
 import json
 
 from flask import Flask
+from flask_caching import Cache
 from flask_cors import CORS
 from flask_restx import Api
 from werkzeug.utils import import_string
@@ -28,8 +29,12 @@ authorizations = {
         "description": "JWT for user",
     },
 }
+#orm 전역변수
 db = SQLAlchemy()
+#flask migrate db 형상관리 전역변수
 migrate = Migrate()
+#flask-cache 전역변수
+cache = Cache()
 
 
 def create_app():
@@ -105,5 +110,11 @@ def create_app():
 
     import atexit
     atexit.register(quant_scheduler.shutdown)
+
+
+    # SimpleCache: 메모리 기반, 서버 재시작 시 캐시 초기화됨
+    app.config["CACHE_TYPE"] = "SimpleCache"
+    app.config["CACHE_DEFAULT_TIMEOUT"] = 300  # 5분
+    cache.init_app(app)
 
     return app

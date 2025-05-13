@@ -15,6 +15,8 @@ env/quant-bot-c9c4b-firebase-adminsdk-c83hh-2474897efe.json
 /pyvenv.cfg
 /var
 /venv
+#sqlite 인스턴스
+/instance
 
 
 
