@@ -41,7 +41,7 @@ def find_stocks():
         print(f"Error parsing stock data: {e}")
         return []
 
-    print(f'가져온건 이거여 {stocks[0]}')
+    print(f'stock selected example array[0] :::::::: {stocks[0]}')
     sorted_objects = sorted(stocks, key=lambda x: float(x.market_cap) if x.market_cap else 0.0, reverse=True)
     return sorted_objects
 
