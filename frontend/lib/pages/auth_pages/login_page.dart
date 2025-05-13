@@ -23,6 +23,7 @@ class LoginScreen extends ConsumerWidget {
           icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () {
             context.go(RouteNotifier.stockListPath);
+            ref.invalidate(authFormProvider);
           },
         ),
       ),
@@ -137,7 +138,9 @@ class LoginScreen extends ConsumerWidget {
 
   Widget _buildNaverLoginButton() {
     return ElevatedButton(
-      onPressed: null,
+      onPressed: () {
+        CustomToast.show(message: '해당 기능은 준비중입니다.', isWarn: true);
+      },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: const Color(0xFF03C75A),
@@ -163,26 +166,23 @@ class LoginScreen extends ConsumerWidget {
             style: TextStyle(color: Colors.grey),
           ),
         ),
-        const Text('|', style: TextStyle(color: Colors.grey)),
-        TextButton(
-          onPressed: () async {
-            // WebPushService webPushService = WebPushService();
-            // await webPushService.unsubscribeAllPush();
-            // await webPushService.subscribeToPush();
-            CustomToast.show(message: '해당 기능은 준비중입니다.', isWarn: true);
-          },
-          child: const Text(
-            '이메일 찾기',
-            style: TextStyle(color: Colors.grey),
-          ),
-        ),
+        // const Text('|', style: TextStyle(color: Colors.grey)),
+        // TextButton(
+        //   onPressed: () async {
+        //     CustomToast.show(message: '해당 기능은 준비중입니다.', isWarn: true);
+        //   },
+        //   child: const Text(
+        //     '이메일 찾기',
+        //     style: TextStyle(color: Colors.grey),
+        //   ),
+        // ),
         const Text('|', style: TextStyle(color: Colors.grey)),
         TextButton(
           onPressed: () {
             CustomToast.show(message: '해당 기능은 준비중입니다.', isWarn: true);
           },
           child: const Text(
-            '비밀번호 찾기',
+            '비밀번호 초기화',
             style: TextStyle(color: Colors.grey),
           ),
         ),

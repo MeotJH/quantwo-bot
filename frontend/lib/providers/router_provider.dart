@@ -50,6 +50,8 @@ class RouteNotifier extends Notifier<GoRouter> {
   static const String _strategySelectPath = '/quant-form/strategy';
   static const String dualMomentumInternationalPath =
       '/quant-form/quant/dual-momentum/international';
+
+  // 프로필 페이지 갈때 토큰 검증 함수
   Widget _buildWithToken(
       BuildContext context, NotifierProviderRef<GoRouter> ref) {
     return FutureBuilder<String?>(
@@ -59,10 +61,10 @@ class RouteNotifier extends Notifier<GoRouter> {
           return const CircularProgressIndicator();
         }
 
+        //에러있거나 데이터 없거나 널이면 로그인페이지로 간다.
         if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            //여기
-            GoRouter.of(context).go('/login');
+            GoRouter.of(context).go(loginPath);
 
             ref.read(bottomNavIndexProvider.notifier).state = 0;
           });

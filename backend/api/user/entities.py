@@ -14,7 +14,7 @@ class User(db.Model):
     # Quant와의 1:N 관계 설정 (backref로 양방향 액세스 가능)
     quants = db.relationship('Quant', backref='user', lazy=True)
 
-    # Notification과의 1:N 관계 설정
+    # Notification과의 1:1 관계 설정
     notification = db.relationship("NotificationEntity", uselist=False, back_populates="user")
 
     def __repr__(self):
@@ -26,5 +26,5 @@ class User(db.Model):
             'userName': self.username,  # username을 userName으로 변경하여 반환
             'email': self.email,
             'mobile': self.mobile,
-            'notification' : self.notification.enabled,
+            'notification' : getattr(self.notification, 'enabled', False),
         }

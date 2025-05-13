@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
 import 'package:quant_bot_flutter/models/profile_stock_model/profile_stock_model.dart';
 import 'package:quant_bot_flutter/models/user_model/user_model.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
 import 'package:quant_bot_flutter/services/stock_service.dart';
-// import 'package:quant_bot_flutter/providers/dio_provider.dart';
 
 final profileStocksProvider =
     AsyncNotifierProvider<ProfileStocksNotifier, List<ProfileStockModel>>(
@@ -91,7 +88,7 @@ class ProfileStocksNotifier extends AsyncNotifier<List<ProfileStockModel>> {
     // 성공하지 않은 경우 에러 상태로 변경
     if (!success) {
       // state = const AsyncValue.data(value)
-      return; // 여기서 함수가 종료되어 이후 코드가 실행되지 않음
+      return;
     }
 
     // 상태를 직접 수정하는 대신 provider 자체를 재빌드
@@ -138,4 +135,5 @@ class ProfileInfoNotifier extends AsyncNotifier<UserModel> {
   }
 }
 
+//간단한 프로바이더 사용 예시 전원 on/off 불린 provider
 final lightSwitchProvider = StateProvider<bool>((ref) => true);

@@ -19,7 +19,6 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileStocks = ref.watch(profileStocksProvider);
     final profileInfo = ref.watch(profileInfoNotifier);
-    final isLight = ref.watch(lightSwitchProvider);
     final dio = ref.read(dioProvider);
 
     return Scaffold(
