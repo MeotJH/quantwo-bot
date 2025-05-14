@@ -31,7 +31,7 @@ self.addEventListener('notificationclick', function(event) {\
 FROM nginx:1.25
 
 # Flutter 빌드 결과물 복사
-COPY --from=builder /app/build/web/ /usr/share/nginx/html/
+COPY --from=builder /app/build/web/ /usr/share/nginx/html/web
 
 # 필요하면 nginx 설정 덮어쓰기
 COPY nginx.conf /etc/nginx/nginx.conf
