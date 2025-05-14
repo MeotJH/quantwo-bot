@@ -2,6 +2,7 @@ from api.quant.domain.model import QuantData
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, fields
 from flask import request
+from api import cache
 from api import quant_api as api
 from api.quant.services import QuantService
 from api.quant.dual_momentum_services import run_dual_momentum_backtest
@@ -71,6 +72,7 @@ class DualMomentum(Resource):
         'savings_rate': {'description': '저축률 (%)', 'type': 'number', 'default': 3.0}
     })
     @api.marshal_with(backtest_response_model)
+    @cache.cached(timeout=86400)
     def get(self):
         # 두 가지 방식 모두 처리
         etf_symbols = []

@@ -240,7 +240,7 @@ class ProfilePage extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
-                                '현재상태 → ${stock.currentStatus.toUpperCase()}',
+                                '저장시 포지션 → ${stock.currentStatus.toUpperCase()}',
                                 style: TextStyle(
                                   color: stock.currentStatus == 'SELL'
                                       ? CustomColors.clearBlue120

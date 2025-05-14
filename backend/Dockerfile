@@ -1,5 +1,5 @@
 # Python 베이스
-FROM python: 3.10.11
+FROM python:3.10.11
 
 # 작업 디렉토리
 WORKDIR /app
