@@ -10,7 +10,7 @@ import 'dart:developer';
 class DioNotifier extends Notifier<Dio> {
   late String apiUrl;
   late Dio _dio;
-  final defaultUrl = 'http://127.0.0.1:8080/api/v1';
+  final defaultUrl = 'https://d9f3eplsx2grg.cloudfront.net/api/v1';
   String resolveApiBaseUrl() {
     final isLocalEnvironment =
         (dotenv.env['ENVIROMENT']?.toLowerCase() ?? 'LOCAL') ==
@@ -21,7 +21,7 @@ class DioNotifier extends Notifier<Dio> {
     }
 
     return kIsWeb
-        ? 'http://127.0.0.1:8080/api/v1'
+        ? 'https://d9f3eplsx2grg.cloudfront.net/api/v1'
         : 'http://10.0.2.2:8080/api/v1';
   }
 

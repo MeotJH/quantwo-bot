@@ -27,14 +27,14 @@ self.addEventListener('notificationclick', function(event) {\
 });" >> ./build/web/flutter_service_worker.js
 
 
-# # 2단계: Nginx로 서빙
-# FROM nginx:1.25
+# 2단계: Nginx로 서빙
+FROM nginx:1.25
 
-# # Flutter 빌드 결과물 복사
-# COPY --from=builder /app/build/web/ /usr/share/nginx/html/
+# Flutter 빌드 결과물 복사
+COPY --from=builder /app/build/web/ /usr/share/nginx/html/web
 
-# # 필요하면 nginx 설정 덮어쓰기
-# # COPY ../nginx/nginx.conf /etc/nginx/nginx.conf
+# 필요하면 nginx 설정 덮어쓰기
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

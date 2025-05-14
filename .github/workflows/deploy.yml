@@ -1,0 +1,68 @@
+name: Deploy to S3 and Lightsail
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'assets/**'
+
+jobs:
+  frontend-deploy:
+    name: Build and Deploy Frontend to S3
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.5'  # 원하는 버전 지정 가능
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Flutter dependencies
+        run: |
+          cd frontend
+          flutter pub get
+
+      - name: Run Frontend Deploy Script
+        run: |
+          cd frontend
+          chmod +x deploy.sh
+          ./deploy.sh
+        
+
+  backend-deploy:
+    name: SSH and Restart Backend on Lightsail
+    needs: frontend-deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Debug SSH user and host
+        run: |
+          echo "User: ${{ secrets.LIGHTSAIL_USER }}"
+          echo "Host: ${{ secrets.LIGHTSAIL_HOST }}"
+
+      - name: SSH to Lightsail and Deploy Backend
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USER }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            cd /home/ec2-user/quantwo-bot/backend
+            git pull origin main
+            docker-compose down
+            docker-compose up --build -d
