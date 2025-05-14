@@ -9,7 +9,7 @@ RUN flutter pub get
 # Flutter 빌드
 RUN flutter build web --web-renderer canvaskit
 
-# flutter_service_worker.js 수정
+# flutter_service_worker.js 수정 웹앱알림 보내기 위한 구문
 RUN echo "self.addEventListener('push', function(event) {\
   const data = event.data.json();\
   const img_url = '/Icon-512.png';\
