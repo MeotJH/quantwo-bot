@@ -33,7 +33,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     _startAnimation();
     ref.read(stocksProvider.future);
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 1),
       () {
         if (mounted) {
           context.push('/main');
