@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:quant_bot_flutter/components/custom_toast.dart';
+import 'package:quant_bot_flutter/constants/api_constants.dart';
+import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:riverpod/riverpod.dart';
 import 'dart:developer';
@@ -10,19 +11,16 @@ import 'dart:developer';
 class DioNotifier extends Notifier<Dio> {
   late String apiUrl;
   late Dio _dio;
-  final defaultUrl = 'https://d9f3eplsx2grg.cloudfront.net/api/v1';
+  static const appLocalUri = 'http://10.0.2.2:8080/api/v1';
   String resolveApiBaseUrl() {
-    final isLocalEnvironment =
-        (dotenv.env['ENVIROMENT']?.toLowerCase() ?? 'LOCAL') ==
-            'LOCAL'.toLowerCase();
-    log('am i local? $isLocalEnvironment');
-    if (!isLocalEnvironment) {
-      return dotenv.env['PROD_URL'] ?? defaultUrl;
+    log('which env ::: ${Enviroment.env}');
+    //환경이 로컬이 아니면 api서버에 요청
+    if (Enviroment.env == 'PROD') {
+      return ApiUrl.prodUri;
     }
 
-    return kIsWeb
-        ? 'https://d9f3eplsx2grg.cloudfront.net/api/v1'
-        : 'http://10.0.2.2:8080/api/v1';
+    //로컬인데 web이면 웹로컬 앱이면 앱로컬
+    return kIsWeb ? ApiUrl.webLocalUri : appLocalUri;
   }
 
   @override

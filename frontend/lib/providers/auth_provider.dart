@@ -112,7 +112,7 @@ class AuthStorageNotifier extends AutoDisposeAsyncNotifier<String?> {
     if (_user != null) return _user!;
 
     final dio = ref.read(dioProvider);
-    final response = await dio.get(ApiUrl.findUserByAuth);
+    final response = await dio.get(ApiEndpoints.findUserByAuth);
 
     if (response.statusCode != ApiStatus.success) {
       throw Exception();
@@ -154,7 +154,7 @@ class AuthProvider extends AutoDisposeFamilyAsyncNotifier<void, UserAuthModel> {
       ref.read(dioProvider.notifier).addAuth(token: token);
     }
 
-    final response = await dio.post(ApiUrl.signIn, data: model.toJson());
+    final response = await dio.post(ApiEndpoints.signIn, data: model.toJson());
 
     if (response.statusCode != ApiStatus.success) {
       throw Exception();

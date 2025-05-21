@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -21,8 +22,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "assets/.env");
-  log('ENVIROMENT: ${dotenv.env['ENVIROMENT']}');
+  log('ENVIROMENT: ${Enviroment.env}');
 
   setPathUrlStrategy();
 

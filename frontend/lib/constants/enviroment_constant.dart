@@ -1,9 +1,10 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:quant_bot_flutter/constants/api_constants.dart';
 
-final env = dotenv.env['ENVIROMENT'];
+class Enviroment {
+  static const _environment = String.fromEnvironment('ENVIRONMENT');
+  static final env =
+      (_environment == null || _environment.isEmpty) ? 'LOCAL' : _environment;
+  static final serverUri = env == 'PROD' ? ApiUrl.prodUri : ApiUrl.webLocalUri;
+}
+
 // ignore: non_constant_identifier_names
-final BACKEND_WITH_ENVIROMENT = ({
-      'LOCAL': dotenv.env['DEV_URL'],
-      'PROD': dotenv.env['PROD_URL'],
-    }[env] ??
-    'http://localhost:8080/api/v1');

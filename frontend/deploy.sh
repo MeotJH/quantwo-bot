@@ -1,4 +1,4 @@
-flutter build web --web-renderer canvaskit &&
+flutter build web --web-renderer canvaskit  --dart-define=ENVIROMENT=PROD &&
 
 # 서비스 워커 파일 넣어야 알림처리 가능해서 넣은 로직
 CUSTOM_CODE=$(cat <<EOF
