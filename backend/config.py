@@ -30,13 +30,12 @@ class BaseConfig(object):
     print(f'os.getenv("SQLALCHEMY_DATABASE_URI"):{os.getenv("SQLALCHEMY_DATABASE_URI")}')
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 
-        # 환경값 가져오기
+    # 환경값 가져오기
     env = os.getenv('ENVIRONMENT', 'LOCAL').upper()
-
     # 환경에 따른 URL 매핑
     BACKEND_URI = {
-        'LOCAL': os.getenv('DEV_URI'),
-        'PROD': os.getenv('PROD_URI'),
+        'LOCAL': 'http://localhost:8080/api/v1',
+        'PROD': 'https://d9f3eplsx2grg.cloudfront.net/api/v1',
     }.get(env, 'http://localhost:8080/api/v1')
 
 
