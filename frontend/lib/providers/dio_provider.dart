@@ -13,9 +13,9 @@ class DioNotifier extends Notifier<Dio> {
   late Dio _dio;
   static const appLocalUri = 'http://10.0.2.2:8080/api/v1';
   String resolveApiBaseUrl() {
-    log('which env ::: ${Enviroment.env}');
+    log('which env ::: ${Environment.env}');
     //환경이 로컬이 아니면 api서버에 요청
-    if (Enviroment.env == 'PROD') {
+    if (Environment.env == 'PROD') {
       return ApiUrl.prodUri;
     }
 
