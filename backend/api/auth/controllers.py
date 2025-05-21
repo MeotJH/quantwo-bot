@@ -4,6 +4,7 @@ from flask_restx import Resource
 from api.auth import auth_api as api
 from api.auth.service import login_or_register_with_naver
 from config import BaseConfig 
+from wsgi import app
 
 NAVER_CLIENT_ID = 'NAVER_CLIENT_ID'
 NAVER_CLIENT_SECRET = 'NAVER_CLIENT_SECRET'
@@ -21,7 +22,7 @@ class OauthNaver(Resource):
             f"&state=random_state_string"
         )
 
-        print(f'url :::::>{url}')
+        app.logger.info(f'url :::> {url}')
         return redirect(url)
 
 @api.route('/oauth/callback/naver', strict_slashes=False)
