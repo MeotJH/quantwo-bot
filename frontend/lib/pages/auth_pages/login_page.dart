@@ -226,7 +226,7 @@ class LoginScreen extends ConsumerWidget {
   }
 
   Future<void> launchNaverLogin() async {
-    final oauthUrl = Enviroment.serverUri + ApiEndpoints.oauthNaver;
+    final oauthUrl = Environment.serverUri + ApiEndpoints.oauthNaver;
 
     if (await canLaunchUrl(Uri.parse(oauthUrl))) {
       await launchUrl(
@@ -240,7 +240,7 @@ class LoginScreen extends ConsumerWidget {
 
   void launchNaverOAuthPopup() {
     html.window.open(
-      Enviroment.serverUri + ApiEndpoints.oauthNaver,
+      Environment.serverUri + ApiEndpoints.oauthNaver,
       'NaverLogin',
       'width=500,height=600',
     );
