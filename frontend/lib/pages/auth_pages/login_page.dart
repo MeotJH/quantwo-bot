@@ -156,7 +156,7 @@ class LoginScreen extends ConsumerWidget {
           ), // 배경색 레이어
           InkWell(
             onTap: () {
-              //launchNaverLogin();
+              launchNaverLogin();
               //launchNaverOAuthPopup();
               //CustomToast.show(message: '해당 기능은 준비중입니다.', isWarn: true);
             },

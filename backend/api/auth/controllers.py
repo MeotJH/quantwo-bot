@@ -17,9 +17,11 @@ class OauthNaver(Resource):
             f"https://nid.naver.com/oauth2.0/authorize"
             f"?response_type=code"
             f"&client_id={os.getenv(NAVER_CLIENT_ID)}"
-            f"&redirect_uri={BaseConfig.BACKEND_URI}/api/v1/auth/oauth/callback/naver"
+            f"&redirect_uri={BaseConfig.BACKEND_URI}/auth/oauth/callback/naver"
             f"&state=random_state_string"
         )
+
+        print(f'url :::::>{url}')
         return redirect(url)
 
 @api.route('/oauth/callback/naver', strict_slashes=False)
