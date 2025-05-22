@@ -50,4 +50,9 @@ class DevConfig(BaseConfig):
     BASE_URL = "https://localhost"
 
 
-config_by_name = dict(local="config.LocalConfig", dev="config.DevConfig")
+# Flask Prod Configuration
+class ProdConfig(BaseConfig):
+    BASE_URL = "https://localhost"
+
+
+config_by_name = dict(LOCAL="config.LocalConfig", PROD="config.DevConfig")
