@@ -22,7 +22,6 @@ class OauthNaver(Resource):
             f"&state=random_state_string"
         )
 
-        app.logger.info(f'url :::> {url}')
         return redirect(url)
 
 @api.route('/oauth/callback/naver', strict_slashes=False)
