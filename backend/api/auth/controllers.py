@@ -3,8 +3,7 @@ from flask import redirect, request
 from flask_restx import Resource
 from api.auth import auth_api as api
 from api.auth.service import login_or_register_with_naver
-from config import BaseConfig 
-from wsgi import app
+from config import BaseConfig
 
 NAVER_CLIENT_ID = 'NAVER_CLIENT_ID'
 NAVER_CLIENT_SECRET = 'NAVER_CLIENT_SECRET'
