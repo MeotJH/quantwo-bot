@@ -7,7 +7,7 @@ from flask_cors import CORS
 from flask_restx import Api
 from werkzeug.utils import import_string
 from flask_jwt_extended import JWTManager
-
+from dotenv import load_dotenv
 from api.common import jwt
 from api.server_status import server_status_api
 from api.stock import stock_api
@@ -38,6 +38,7 @@ cache = Cache()
 
 
 def create_app():
+    load_dotenv()
     app = Flask(__name__)
     # for zappa health check;
     app.add_url_rule("/", endpoint="ping", view_func=lambda: "Pong!")
