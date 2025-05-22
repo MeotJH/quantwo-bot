@@ -35,7 +35,7 @@ class BaseConfig(object):
     # 환경에 따른 URL 매핑
     BACKEND_URI = {
         'LOCAL': 'http://localhost:8080/api/v1',
-        'PROD': 'https://d9f3eplsx2grg.cloudfront.net/api/v1',
+        'PROD': 'https://quantwo-bot.com/api/v1',
     }.get(env, 'http://localhost:8080/api/v1')
 
 
