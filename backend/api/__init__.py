@@ -38,11 +38,10 @@ cache = Cache()
 
 
 def create_app():
-    load_dotenv()
     app = Flask(__name__)
     # for zappa health check;
     app.add_url_rule("/", endpoint="ping", view_func=lambda: "Pong!")
-
+    load_dotenv()
     # app.wsgi_app = ProxyFix(app.wsgi_app)
     api = Api(
         app,
