@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
+import 'package:quant_bot_flutter/common/custom_exception.dart';
+import 'package:quant_bot_flutter/providers/auth_provider.dart';
+import 'package:quant_bot_flutter/providers/dio_provider.dart';
+import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:quant_bot_flutter/providers/stocks_provider.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
@@ -30,16 +34,20 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _startAnimation();
-    ref.read(stocksProvider.future);
-    Future.delayed(
-      const Duration(seconds: 1),
-      () {
-        if (mounted) {
-          context.push('/main');
-        }
-      },
-    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _startAnimation();
+      ref.read(stocksProvider.future);
+      await tokenLinstener(uri: Uri.base, ref: ref);
+      Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          if (mounted) {
+            context.go(RouteNotifier.stockListPath);
+          }
+        },
+      );
+    });
   }
 
   @override
@@ -61,5 +69,21 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         ),
       ),
     );
+  }
+
+  Future<void> tokenLinstener(
+      {required Uri uri, required WidgetRef ref}) async {
+    final token = uri.queryParameters['token'];
+
+    if (token == null) {
+      return;
+    }
+
+    try {
+      ref.read(dioProvider.notifier).addAuth(token: token);
+      await ref.read(authStorageProvider.notifier).saveToken(token: token);
+    } on CustomException catch (e) {
+      e.showToastMessage();
+    }
   }
 }

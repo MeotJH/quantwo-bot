@@ -21,21 +21,6 @@ class StockListPage extends ConsumerStatefulWidget {
 }
 
 class _StockListPageState extends ConsumerState<StockListPage> {
-  bool _handledToken = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // 1번만 실행하게 하기위해 작성한 로직
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!_handledToken) {
-        _handledToken = true;
-        tokenHandler(uri: Uri.base, ref: ref);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final stocks = ref.watch(stocksProvider);
@@ -219,7 +204,6 @@ class _StockListPageState extends ConsumerState<StockListPage> {
       ref.read(dioProvider.notifier).addAuth(token: token);
       await ref.read(authStorageProvider.notifier).saveToken(token: token);
       CustomToast.show(message: '로그인 완료!', isWarn: true);
-      removeQueryString();
     } on CustomException catch (e) {
       e.showToastMessage();
     }

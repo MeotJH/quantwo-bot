@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -230,14 +231,18 @@ class LoginScreen extends ConsumerWidget {
     final currentUri = '${currentLoca.protocol}//${currentLoca.host}';
     final oauthUrl =
         '${Environment.serverUri}${ApiEndpoints.oauthNaver}?redirect_uri=$currentUri';
-
-    if (await canLaunchUrl(Uri.parse(oauthUrl))) {
-      await launchUrl(
-        Uri.parse(oauthUrl),
-        mode: LaunchMode.externalApplication, // 외부 브라우저 또는 앱으로
-      );
+    if (kIsWeb) {
+      // ✅ 현재 탭에서 리다이렉트
+      // ignore: avoid_web_libraries_in_flutter
+      html.window.location.href = oauthUrl;
     } else {
-      throw 'Could not launch $oauthUrl';
+      // ✅ 모바일/데스크탑은 외부 브라우저
+      if (await canLaunchUrl(Uri.parse(oauthUrl))) {
+        await launchUrl(Uri.parse(oauthUrl),
+            mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch $oauthUrl';
+      }
     }
   }
 
