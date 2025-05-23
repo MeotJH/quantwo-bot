@@ -136,9 +136,24 @@ class ScaffoldWithNavBar extends ConsumerStatefulWidget {
 final bottomNavIndexProvider = StateProvider<int>((ref) => 0);
 
 class _ScaffoldWithNavBarState extends ConsumerState<ScaffoldWithNavBar> {
+  int pathToNavIndex(String path) {
+    if (path.startsWith(RouteNotifier._profilePath)) return 2;
+    if (path.startsWith(RouteNotifier._strategySelectPath)) return 1;
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final path = widget.state.fullPath ?? RouteNotifier.stockListPath;
     final selectedIndex = ref.watch(bottomNavIndexProvider);
+
+    // 상태 변경은 build 밖에서 실행 (프레임 이후 안전하게)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final targetIndex = pathToNavIndex(path);
+      if (ref.read(bottomNavIndexProvider) != targetIndex) {
+        ref.read(bottomNavIndexProvider.notifier).state = targetIndex;
+      }
+    });
     return Scaffold(
       body: Column(
         children: [
