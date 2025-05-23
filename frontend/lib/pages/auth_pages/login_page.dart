@@ -5,7 +5,7 @@ import 'package:quant_bot_flutter/components/custom_password_field.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/constants/api_constants.dart';
 import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
@@ -226,7 +226,10 @@ class LoginScreen extends ConsumerWidget {
   }
 
   Future<void> launchNaverLogin() async {
-    final oauthUrl = Environment.serverUri + ApiEndpoints.oauthNaver;
+    final currentLoca = html.window.location;
+    final currentUri = '${currentLoca.protocol}//${currentLoca.host}';
+    final oauthUrl =
+        '${Environment.serverUri}${ApiEndpoints.oauthNaver}?redirect_uri=$currentUri';
 
     if (await canLaunchUrl(Uri.parse(oauthUrl))) {
       await launchUrl(

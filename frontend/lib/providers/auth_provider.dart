@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quant_bot_flutter/common/custom_exception.dart';
+import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/constants/api_constants.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_response_model.dart';
@@ -62,10 +64,26 @@ class AuthStorageNotifier extends AutoDisposeAsyncNotifier<String?> {
     return getToken();
   }
 
-  Future<void> saveToken(String token) async {
+  Future<void> saveToken({required String token}) async {
     await _ensurePrefsInitialized();
+    bool valid = await verifyToken(token: token);
+    if (!valid) {
+      throw CustomException('토큰이 유효하지 않습니다.');
+    }
     await _prefs.setString(tokenKey, token);
     state = AsyncValue.data(token);
+  }
+
+  Future<bool> verifyToken({required String token}) async {
+    final dio = ref.read(dioProvider);
+    try {
+      final response = await dio.get(
+        '/auth/me',
+      );
+      return response.statusCode == 200 && response.data['valid'] == true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<String?> _loadToken() async {
@@ -146,7 +164,7 @@ final authProvider = AsyncNotifierProvider.autoDispose
 
 class AuthProvider extends AutoDisposeFamilyAsyncNotifier<void, UserAuthModel> {
   @override
-  Future<void> build(UserAuthModel model) async {
+  Future<void> build(UserAuthModel arg) async {
     final token = await ref.read(authStorageProvider.future);
     final dio = ref.read(dioProvider);
 
@@ -154,7 +172,7 @@ class AuthProvider extends AutoDisposeFamilyAsyncNotifier<void, UserAuthModel> {
       ref.read(dioProvider.notifier).addAuth(token: token);
     }
 
-    final response = await dio.post(ApiEndpoints.signIn, data: model.toJson());
+    final response = await dio.post(ApiEndpoints.signIn, data: arg.toJson());
 
     if (response.statusCode != ApiStatus.success) {
       throw Exception();
@@ -166,10 +184,9 @@ class AuthProvider extends AutoDisposeFamilyAsyncNotifier<void, UserAuthModel> {
     ref
         .read(dioProvider.notifier)
         .addAuth(token: userAuthResponseModel.authorization);
-
     ref
         .read(authStorageProvider.notifier)
-        .saveToken(userAuthResponseModel.authorization);
+        .saveToken(token: userAuthResponseModel.authorization);
   }
 }
 

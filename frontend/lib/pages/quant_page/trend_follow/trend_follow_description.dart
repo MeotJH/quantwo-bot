@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/custom_button.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
 
 class TrendFollowDescription extends StatelessWidget {
   const TrendFollowDescription({super.key});

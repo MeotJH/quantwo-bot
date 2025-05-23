@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
 
 class CustomToast {

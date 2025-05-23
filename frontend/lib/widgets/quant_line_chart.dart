@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
 
 class DualMomenTumLineChart extends StatelessWidget {
   final List<Map<String, dynamic>> firstChartData;

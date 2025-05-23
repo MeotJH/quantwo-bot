@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/providers/stocks_provider.dart';
 
 class StocksPageSearchBar extends ConsumerStatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/providers/step_form_provider.dart';
 import 'package:quant_bot_flutter/models/quant_strategy_model/quant_strategy_model.dart';
 

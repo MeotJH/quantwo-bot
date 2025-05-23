@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/top_marquee_banner.dart';
 import 'package:quant_bot_flutter/constants/router_routes.dart';
-import 'package:quant_bot_flutter/core/colors.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/pages/auth_pages/login_page.dart';
 import 'package:quant_bot_flutter/pages/auth_pages/sign_up_complete_screen.dart';
 import 'package:quant_bot_flutter/pages/auth_pages/sign_up_screen.dart';

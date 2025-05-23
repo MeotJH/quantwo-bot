@@ -11,7 +11,7 @@ NAVER_CLIENT_ID = 'NAVER_CLIENT_ID'
 NAVER_CLIENT_SECRET = 'NAVER_CLIENT_SECRET'
 def login_or_register_with_naver(code: string, state: string):
     """
-    네이버 간편로그인으로 가입or로그인처리
+    네이버 간편로그인으로 가입or로그인처리 후 fe와 통신위한 jwt리턴한다.
     """
     # Access token 요청
     token_res = requests.get("https://nid.naver.com/oauth2.0/token", params={
