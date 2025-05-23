@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/common/custom_exception.dart';
+import 'package:quant_bot_flutter/common/remove_query_string.dart';
 import 'package:quant_bot_flutter/components/custom_dialog.dart';
-import 'package:quant_bot_flutter/components/custom_dialog_dropdown.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
@@ -219,6 +219,7 @@ class _StockListPageState extends ConsumerState<StockListPage> {
       ref.read(dioProvider.notifier).addAuth(token: token);
       await ref.read(authStorageProvider.notifier).saveToken(token: token);
       CustomToast.show(message: '로그인 완료!', isWarn: true);
+      removeQueryString();
     } on CustomException catch (e) {
       e.showToastMessage();
     }
