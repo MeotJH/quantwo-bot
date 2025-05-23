@@ -204,7 +204,6 @@ class _StockListPageState extends ConsumerState<StockListPage> {
       ref.read(dioProvider.notifier).addAuth(token: token);
       await ref.read(authStorageProvider.notifier).saveToken(token: token);
       CustomToast.show(message: '로그인 완료!', isWarn: true);
-      if (mounted) context.go(RouteNotifier.stockListPath);
     } on CustomException catch (e) {
       e.showToastMessage();
     }
