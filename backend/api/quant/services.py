@@ -1,11 +1,5 @@
 from dataclasses import asdict
-from numbers import Number
 import traceback
-
-from flask import current_app
-
-from api.notification.models import Notification
-from api.notification.services import NotificationService
 from api.quant.domain.model import QuantData
 from flask_jwt_extended import get_jwt_identity
 
@@ -15,7 +9,6 @@ from api.quant.domain.trend_follow import TrendFollow
 from api.quant.dual_momentum_services import get_todays_dual_momentum
 from api.user.entities import User
 from api.notification.entities import NotificationEntity
-from api.quant.domain.quant_type import QuantType
 from api.quant.domain.notification_strategy import NotificationStrategy
 from exceptions import AlreadyExistsException, BadRequestException
 from util.logging_util import logger
@@ -27,6 +20,9 @@ from sqlalchemy.orm import joinedload
 
 
 class QuantService:
+
+    internationals = ['SPY', 'FEZ', 'EWJ', 'EWY']
+
     @staticmethod
     def find_stock_by_id(item_id, period='1y', trend_follow_days=75):
         return TrendFollow.find_stock_by_id(item_id, period=period, trend_follow_days=trend_follow_days)
@@ -148,7 +144,7 @@ class QuantService:
     
     @staticmethod
     def save_dual_momentum(type: str):
-        momentum = get_todays_dual_momentum('cash', ['SPY', 'FEZ', 'EWJ', 'EWY'], 3.0)
+        momentum = get_todays_dual_momentum('cash', QuantService.internationals, 3.0)
         logger.info(f'this is momentum: {asdict(momentum)}')
         quant_data = QuantData(
             stock=momentum.recommendation,

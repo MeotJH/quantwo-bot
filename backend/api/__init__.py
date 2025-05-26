@@ -96,6 +96,7 @@ def create_app():
 
     from api.quant.domain.entities import Quant
     from api.user.entities import User
+    from api.stock.domain.entities import Stocks
 
     from api.scheduler.quant_scheduler import QuantScheduler
     quant_scheduler = QuantScheduler(app)  # app 인스턴스를 전달
