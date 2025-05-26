@@ -59,7 +59,7 @@ def find_crypto_currency():
         should_insert = True
     else:
         # 3. insert_date가 24시간 이상 지났는지 확인
-        now = datetime.now(timezone.utc)
+        now = datetime.now()
         if now - stock.insert_date > timedelta(hours=24):
             should_insert = True
     # 조건 확인후 True면 insert

@@ -3,16 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart';
-import 'package:quant_bot_flutter/providers/stocks_provider.dart';
+import 'package:quant_bot_flutter/providers/stock_providers/crypto_currency_provider.dart';
 
-class UsStockList extends ConsumerWidget {
-  const UsStockList({
+class CryptoCurrencyList extends ConsumerWidget {
+  const CryptoCurrencyList({
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stockData = ref.watch(stocksProvider);
+    final stockData = ref.watch(cryptoCurrencyProvider);
 
     return Expanded(
       child: stockData.when(
@@ -46,7 +46,7 @@ class UsStockList extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              stock.ticker,
+                              stock.ticker.toUpperCase(),
                               style: const TextStyle(
                                 color: Color(0xFF222222),
                                 fontSize: 16,
