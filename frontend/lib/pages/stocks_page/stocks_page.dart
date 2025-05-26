@@ -3,10 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/common/custom_exception.dart';
-import 'package:quant_bot_flutter/common/remove_query_string.dart';
 import 'package:quant_bot_flutter/components/custom_dialog.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/crypto_currency_list.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/stocks_page_search_bar.dart';
@@ -14,8 +12,7 @@ import 'package:quant_bot_flutter/pages/stocks_page/us_stock_list.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
-import 'package:quant_bot_flutter/providers/stock_providers/stock_tab_provier.dart';
-import 'package:quant_bot_flutter/providers/stock_providers/stocks_provider.dart';
+import 'package:quant_bot_flutter/providers/stock_providers/stock_tab_provider.dart';
 
 class StockListPage extends ConsumerStatefulWidget {
   const StockListPage({super.key});
@@ -24,6 +21,8 @@ class StockListPage extends ConsumerStatefulWidget {
   ConsumerState<StockListPage> createState() => _StockListPageState();
 }
 
+//TODO 페이지 _tabController 외부로 Controller이 밖에 나와있어서 결합도 리팩토링
+//TODO stock바뀔때 애니메이션 넣기
 class _StockListPageState extends ConsumerState<StockListPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
@@ -117,7 +116,7 @@ class _StockListPageState extends ConsumerState<StockListPage>
         color: const Color(0xFFF0F0F0),
         child: Column(
           children: [
-            StocksPageSearchBar(0),
+            const StocksPageSearchBar(),
             const SizedBox(
               height: 8,
             ),

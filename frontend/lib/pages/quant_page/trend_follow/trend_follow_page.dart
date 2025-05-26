@@ -34,7 +34,7 @@ class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
           color: const Color(0xFFF0F0F0),
           child: Column(
             children: [
-              const StocksPageSearchBar(0),
+              const StocksPageSearchBar(),
               const SizedBox(
                 height: 8,
               ),

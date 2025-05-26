@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/providers/stock_providers/crypto_currency_provider.dart';
-import 'package:quant_bot_flutter/providers/stock_providers/stock_tab_provier.dart';
+import 'package:quant_bot_flutter/providers/stock_providers/stock_tab_provider.dart';
 import 'package:quant_bot_flutter/providers/stock_providers/stocks_provider.dart';
 
 class StocksPageSearchBar extends ConsumerStatefulWidget {
-  final int tabIndex;
-  const StocksPageSearchBar(this.tabIndex, {super.key});
+  const StocksPageSearchBar({super.key});
 
   @override
   ConsumerState<StocksPageSearchBar> createState() =>
