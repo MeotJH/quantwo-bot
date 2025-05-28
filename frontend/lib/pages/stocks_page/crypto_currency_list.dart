@@ -44,24 +44,15 @@ class CryptoCurrencyList extends ConsumerWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Image.network(
-                                stock.url,
-                                height: 15,
-                                width: 15,
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                stock.ticker.toUpperCase(),
-                                style: const TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            stock.ticker.toUpperCase(),
+                            style: const TextStyle(
+                              color: Color(0xFF222222),
+                              fontSize: 16,
+                            ),
                           ),
                           SizedBox(
                             width: 200,

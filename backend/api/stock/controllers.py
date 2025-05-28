@@ -25,13 +25,14 @@ stocks_model = api.model('StocksModel', {
     'stocks': fields.List(fields.Nested(stock_model), required=True, description='stock 목록'),
 })
 
-
 @api.route('/', strict_slashes=False)
 class Stocks(Resource):
 
     @api.marshal_with(stocks_model)
-    @cache.cached(timeout=86400)
     def get(self):
+        """
+        주식리스트 정보를 가져온다.
+        """
         # item_id가 없을 경우 모든 stocks를 반환
         stocks = find_stocks()
         stocks_dict_list = [asdict(stock) for stock in stocks]
@@ -43,6 +44,11 @@ class CryptoCurrency(Resource):
     @api.marshal_with(stocks_model)
     @cache.cached(timeout=86400)
     def get(self):
+
+        """
+        암호화폐리스트 정보를 가져온다.
+        """
+
         # item_id가 없을 경우 모든 stocks를 반환
         crypto_list = find_crypto_currency()
         #stocks_dict_list = [asdict(stock) for stock in crypto]
