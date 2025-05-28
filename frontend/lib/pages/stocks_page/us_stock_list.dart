@@ -23,7 +23,7 @@ class UsStockList extends ConsumerWidget {
             return InkWell(
               onTap: () {
                 if (context.mounted) {
-                  context.push('/quants/TF/${stock.ticker}');
+                  context.push('/quants/trend-follow/us/${stock.ticker}');
                 }
               },
               child: Container(

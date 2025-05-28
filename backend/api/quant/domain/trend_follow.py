@@ -5,6 +5,7 @@ class TrendFollow():
 
     @staticmethod
     def find_stock_by_id(item_id, period='1y', trend_follow_days=75):
+        print(f'item_id :::::: {item_id}')
         yfinance = TrendFollow._get_stock_use_yfinance(item_id, period, trend_follow_days)
         # 마지막 교차점의 이동평균 값 가져오기
         last_cross_trend_follow = TrendFollow._find_last_cross_trend_follow(stock_data=yfinance['stock_data'])

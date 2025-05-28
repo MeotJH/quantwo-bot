@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_model.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
 import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_model.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
 import 'package:quant_bot_flutter/providers/profile_provider.dart';
@@ -9,19 +10,20 @@ import 'package:quant_bot_flutter/services/trend_follow_service.dart';
 
 //변수 받아서 get 요청하는 notifier 예제
 final trendFollowProvider = AsyncNotifierProvider.autoDispose
-    .family<TrendFollowNotifier, TrendFollowModel, String>(
+    .family<TrendFollowNotifier, TrendFollowModel, TrendFollowArgs>(
   TrendFollowNotifier.new,
 );
 
 class TrendFollowNotifier
-    extends AutoDisposeFamilyAsyncNotifier<TrendFollowModel, String> {
+    extends AutoDisposeFamilyAsyncNotifier<TrendFollowModel, TrendFollowArgs> {
   late final StockService _stockService;
   @override
-  Future<TrendFollowModel> build(String arg) async {
+  Future<TrendFollowModel> build(TrendFollowArgs arg) async {
     final dio = ref.read(dioProvider);
     _stockService = StockService(ref.read(dioProvider));
     try {
-      final response = await dio.get('/quants/trend_follow/$arg');
+      final response =
+          await dio.get('/quants/trend-follow/${arg.assetType}/${arg.ticker}');
 
       if (response.statusCode != 200) {
         return TrendFollowModel(

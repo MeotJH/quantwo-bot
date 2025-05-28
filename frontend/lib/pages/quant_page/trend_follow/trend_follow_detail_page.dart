@@ -13,6 +13,7 @@ import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/common/utils.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
 import 'package:quant_bot_flutter/pages/comm/quant_bot_detail_page_header.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_detail_page_loading.dart';
 import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_quant_table.dart';
@@ -22,9 +23,9 @@ import 'package:quant_bot_flutter/providers/quant_provider.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
 
 class TrendFollowDetailPage extends ConsumerStatefulWidget {
-  final String ticker;
+  final TrendFollowArgs tfargs;
 
-  const TrendFollowDetailPage({super.key, required this.ticker});
+  const TrendFollowDetailPage({super.key, required this.tfargs});
 
   @override
   ConsumerState<TrendFollowDetailPage> createState() =>
@@ -35,8 +36,13 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
-    final trendFollow = ref.watch(trendFollowProvider(widget.ticker));
-    final ticker = widget.ticker;
+    final trendFollow = ref.watch(
+      trendFollowProvider(
+        TrendFollowArgs(
+            ticker: widget.tfargs.ticker, assetType: widget.tfargs.assetType),
+      ),
+    );
+    final ticker = widget.tfargs.ticker;
     return Scaffold(
       appBar: const QuantBotDetailPageHeader(
         title: '추세추종 전략 저장',
@@ -180,7 +186,12 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
             padding: const EdgeInsets.all(8.0),
             child: CustomButton(
               text: '퀀트 알림 설정',
-              onPressed: () => _handleQuantAlertSetting(widget.ticker, context),
+              onPressed: () => _handleQuantAlertSetting(
+                  TrendFollowArgs(
+                    ticker: widget.tfargs.ticker,
+                    assetType: widget.tfargs.assetType,
+                  ),
+                  context),
               textColor: Colors.white,
               backgroundColor: CustomColors.clearBlue120,
             ),
@@ -191,7 +202,7 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
   }
 
   Future<void> _handleQuantAlertSetting(
-      String ticker, BuildContext context) async {
+      TrendFollowArgs args, BuildContext context) async {
     final loadingNotifier = ref.read(loadingProvider.notifier);
     final auth = await ref.read(authStorageProvider.future);
     if (auth == null) {
@@ -201,11 +212,10 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
       context.push(RouteNotifier.loginPath);
       return;
     }
-    final notifier = ref.read(trendFollowProvider(ticker).notifier);
+    final notifier = ref.read(trendFollowProvider(args).notifier);
     try {
       isLoading = true;
-      final trendFollowData =
-          await ref.read(trendFollowProvider(ticker).future);
+      final trendFollowData = await ref.read(trendFollowProvider(args).future);
       final recentStockOne = trendFollowData.recentStockOne;
 
       final initialPrice = double.parse(recentStockOne.currentPrice);
@@ -213,8 +223,8 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
           double.parse(recentStockOne.lastCrossTrendFollow);
 
       await loadingNotifier.runWithLoading(() async =>
-          await notifier.addStockToProfile(ticker, QuantType.TREND_FOLLOW.code,
-              initialPrice, initialTrendFollow));
+          await notifier.addStockToProfile(args.ticker,
+              QuantType.TREND_FOLLOW.code, initialPrice, initialTrendFollow));
 
       _showSuccessToast('퀀트 알림이 성공적으로 설정되었습니다.');
     } catch (e) {

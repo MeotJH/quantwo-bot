@@ -19,7 +19,7 @@ class StockService {
 
     try {
       final response =
-          await dio.post('/quants/trend_follow/$ticker', data: data);
+          await dio.post('/quants/trend-follow/us/$ticker', data: data);
 
       if (response.statusCode == 200) {
         print('주식이 프로필에 추가되었습니다.');

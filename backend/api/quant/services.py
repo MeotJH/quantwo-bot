@@ -24,8 +24,10 @@ class QuantService:
     internationals = ['SPY', 'FEZ', 'EWJ', 'EWY']
 
     @staticmethod
-    def find_stock_by_id(item_id, period='1y', trend_follow_days=75):
-        return TrendFollow.find_stock_by_id(item_id, period=period, trend_follow_days=trend_follow_days)
+    def find_stock_by_id(asset_type,stock_id, period='1y', trend_follow_days=75):
+        if asset_type == 'crypto':
+            stock_id = f'{stock_id}-USD'
+        return TrendFollow.find_stock_by_id(stock_id, period=period, trend_follow_days=trend_follow_days)
 
     @staticmethod
     def register_quant_by_stock(stock: str, quant_data: QuantData):

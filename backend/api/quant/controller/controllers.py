@@ -8,16 +8,16 @@ from api.quant.services import QuantService
 from api.quant.dual_momentum_services import run_dual_momentum_backtest
 from .response_models import trend_follows_model, trend_follows_register_response_model, quants_model, quant_by_user_model, quant_data_model
 
-@api.route('/trend_follow/<string:stock_id>', strict_slashes=False)
+@api.route('/trend-follow/<string:asset_type>/<string:stock_id>', strict_slashes=False)
 class TrendFollow(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
         self.quant_service = QuantService()
 
-    @api.doc(params={'stock_id': 'AAPL'})
+    @api.doc(params={'stock_id': 'aapl', 'asset_type': 'us'})
     @api.marshal_with(trend_follows_model)
-    def get(self, stock_id=None):
-        stock = self.quant_service.find_stock_by_id(stock_id)
+    def get(self, asset_type=None, stock_id=None):
+        stock = self.quant_service.find_stock_by_id(asset_type=asset_type,stock_id=stock_id.upper())
         return { 'stock_history': stock['stock_history'] , 'stock_info': stock['stock_info']}
 
     @jwt_required()

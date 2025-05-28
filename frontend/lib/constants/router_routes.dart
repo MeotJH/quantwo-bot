@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
 import 'package:quant_bot_flutter/pages/quant_page/dual_momentums/international/dual_momentum_international.dart';
 import 'package:quant_bot_flutter/pages/quant_page/dual_momentums/international/dual_momentum_international_description.dart';
 import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_description.dart';
@@ -32,7 +33,10 @@ List<GoRoute> quantTypeRoutes = [
   GoRoute(
     path: _trendFollowDetailPath,
     builder: (context, state) => TrendFollowDetailPage(
-      ticker: state.pathParameters['ticker']!,
+      tfargs: TrendFollowArgs(
+        ticker: state.pathParameters['ticker']!,
+        assetType: 'us',
+      ),
     ),
   ),
   GoRoute(

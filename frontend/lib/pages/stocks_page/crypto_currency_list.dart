@@ -23,7 +23,7 @@ class CryptoCurrencyList extends ConsumerWidget {
             return InkWell(
               onTap: () {
                 if (context.mounted) {
-                  context.push('/quants/TF/${stock.ticker}');
+                  context.push('/quants/trend-follow/crypto/${stock.ticker}');
                 }
               },
               child: Container(
@@ -41,6 +41,11 @@ class CryptoCurrencyList extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Image.network(
+                      //   stock.url,
+                      //   width: 15,
+                      //   height: 15,
+                      // ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
