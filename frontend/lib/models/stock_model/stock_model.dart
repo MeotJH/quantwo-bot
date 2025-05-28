@@ -23,6 +23,7 @@ class StockModel with _$StockModel {
     @Default('') String industry,
     @Default('') String check,
     @Default('') String sector,
+    @Default('') String url,
   }) = _StockModel;
   factory StockModel.fromJson({required Map<String, dynamic> stock}) {
     return StockModel(
@@ -37,6 +38,7 @@ class StockModel with _$StockModel {
       ipoYear: stock['ipo_year']?.toString() ?? '',
       industry: stock['industry']?.toString() ?? '',
       sector: stock['sector']?.toString() ?? '',
+      url: stock['url']?.toString() ?? '',
     );
   }
 }

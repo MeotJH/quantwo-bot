@@ -20,6 +20,7 @@ _$StockModelImpl _$$StockModelImplFromJson(Map<String, dynamic> json) =>
       industry: json['industry'] as String? ?? '',
       check: json['check'] as String? ?? '',
       sector: json['sector'] as String? ?? '',
+      url: json['url'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$StockModelImplToJson(_$StockModelImpl instance) =>
@@ -36,4 +37,5 @@ Map<String, dynamic> _$$StockModelImplToJson(_$StockModelImpl instance) =>
       'industry': instance.industry,
       'check': instance.check,
       'sector': instance.sector,
+      'url': instance.url,
     };

@@ -32,7 +32,7 @@ class _StockListPageState extends ConsumerState<StockListPage>
     super.initState();
     final currentIndex = ref.read(tabIndexProvider); // 초기값
     _tabController =
-        TabController(length: 3, vsync: this, initialIndex: currentIndex);
+        TabController(length: 2, vsync: this, initialIndex: currentIndex);
 
     _tabController.addListener(() {
       // index가 변경될 때 provider에 반영
@@ -129,7 +129,6 @@ class _StockListPageState extends ConsumerState<StockListPage>
                 ],
               ),
             )
-            //UsStockList()
           ],
         ),
       ),

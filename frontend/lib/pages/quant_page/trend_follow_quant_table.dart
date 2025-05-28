@@ -95,7 +95,6 @@ class _TrendFollowQuantTableState extends State<TrendFollowQuantTable>
   }
 
   String _buildQuantHeaderCellData(QuantStockModel model) {
-    print('this is money $model');
     final previouseClose = double.parse(model.previousClose);
     final lastCrossTrendFollow = double.parse(model.lastCrossTrendFollow);
     final profit = previouseClose - lastCrossTrendFollow;

@@ -28,6 +28,7 @@ mixin _$StockModel {
   String get industry => throw _privateConstructorUsedError;
   String get check => throw _privateConstructorUsedError;
   String get sector => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $StockModelCopyWith<StockModel> get copyWith =>
@@ -52,7 +53,8 @@ abstract class $StockModelCopyWith<$Res> {
       String ipoYear,
       String industry,
       String check,
-      String sector});
+      String sector,
+      String url});
 }
 
 /// @nodoc
@@ -80,6 +82,7 @@ class _$StockModelCopyWithImpl<$Res, $Val extends StockModel>
     Object? industry = null,
     Object? check = null,
     Object? sector = null,
+    Object? url = null,
   }) {
     return _then(_value.copyWith(
       ticker: null == ticker
@@ -130,6 +133,10 @@ class _$StockModelCopyWithImpl<$Res, $Val extends StockModel>
           ? _value.sector
           : sector // ignore: cast_nullable_to_non_nullable
               as String,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -154,7 +161,8 @@ abstract class _$$StockModelImplCopyWith<$Res>
       String ipoYear,
       String industry,
       String check,
-      String sector});
+      String sector,
+      String url});
 }
 
 /// @nodoc
@@ -180,6 +188,7 @@ class __$$StockModelImplCopyWithImpl<$Res>
     Object? industry = null,
     Object? check = null,
     Object? sector = null,
+    Object? url = null,
   }) {
     return _then(_$StockModelImpl(
       ticker: null == ticker
@@ -230,6 +239,10 @@ class __$$StockModelImplCopyWithImpl<$Res>
           ? _value.sector
           : sector // ignore: cast_nullable_to_non_nullable
               as String,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -251,7 +264,8 @@ class _$StockModelImpl implements _StockModel {
       this.ipoYear = '',
       this.industry = '',
       this.check = '',
-      this.sector = ''});
+      this.sector = '',
+      this.url = ''});
 
   @override
   @JsonKey()
@@ -289,10 +303,13 @@ class _$StockModelImpl implements _StockModel {
   @override
   @JsonKey()
   final String sector;
+  @override
+  @JsonKey()
+  final String url;
 
   @override
   String toString() {
-    return 'StockModel(ticker: $ticker, name: $name, lastsale: $lastsale, netchange: $netchange, pctchange: $pctchange, volume: $volume, marketCap: $marketCap, country: $country, ipoYear: $ipoYear, industry: $industry, check: $check, sector: $sector)';
+    return 'StockModel(ticker: $ticker, name: $name, lastsale: $lastsale, netchange: $netchange, pctchange: $pctchange, volume: $volume, marketCap: $marketCap, country: $country, ipoYear: $ipoYear, industry: $industry, check: $check, sector: $sector, url: $url)';
   }
 
   @override
@@ -316,7 +333,8 @@ class _$StockModelImpl implements _StockModel {
             (identical(other.industry, industry) ||
                 other.industry == industry) &&
             (identical(other.check, check) || other.check == check) &&
-            (identical(other.sector, sector) || other.sector == sector));
+            (identical(other.sector, sector) || other.sector == sector) &&
+            (identical(other.url, url) || other.url == url));
   }
 
   @override
@@ -333,7 +351,8 @@ class _$StockModelImpl implements _StockModel {
       ipoYear,
       industry,
       check,
-      sector);
+      sector,
+      url);
 
   @JsonKey(ignore: true)
   @override
@@ -355,7 +374,8 @@ abstract class _StockModel implements StockModel {
       final String ipoYear,
       final String industry,
       final String check,
-      final String sector}) = _$StockModelImpl;
+      final String sector,
+      final String url}) = _$StockModelImpl;
 
   @override
   String get ticker;
@@ -381,6 +401,8 @@ abstract class _StockModel implements StockModel {
   String get check;
   @override
   String get sector;
+  @override
+  String get url;
   @override
   @JsonKey(ignore: true)
   _$$StockModelImplCopyWith<_$StockModelImpl> get copyWith =>

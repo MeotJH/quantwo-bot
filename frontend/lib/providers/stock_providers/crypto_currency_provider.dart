@@ -28,7 +28,7 @@ class CryptoCurrencyNotifier
       }
 
       final List<dynamic> stocksJson = response.data['stocks'] as List<dynamic>;
-      print('stocksJson ${stocksJson}');
+
       final List<StockModel> stocks = stocksJson.map((stock) {
         return StockModel.fromJson(stock: stock);
       }).toList();
