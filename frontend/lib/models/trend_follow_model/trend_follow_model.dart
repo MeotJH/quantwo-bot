@@ -6,9 +6,10 @@ class TrendFollowModel {
   final List<Map<String, double>> secondLineChart;
   final List<QuantModel> models;
   final QuantStockModel recentStockOne;
-  TrendFollowModel(
-      {required this.firstLineChart,
-      required this.secondLineChart,
-      required this.models,
-      required this.recentStockOne});
+  TrendFollowModel({
+    required this.firstLineChart,
+    required this.secondLineChart,
+    required this.models,
+    required this.recentStockOne,
+  });
 }

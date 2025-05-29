@@ -18,3 +18,8 @@ class RebalancingRecommendation:
     cash_return: float
     should_rebalance: bool
     error: Optional[str] = None
+
+@dataclass
+class TrendFollowRequestDTO:
+    asset_type: str
+    ticker: str

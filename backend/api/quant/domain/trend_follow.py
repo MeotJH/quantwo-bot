@@ -1,35 +1,42 @@
 import yfinance
 
+from api.quant.domain.model import TrendFollowRequestDTO
+
 
 class TrendFollow():
 
     @staticmethod
-    def find_stock_by_id(item_id, period='1y', trend_follow_days=75):
-        print(f'item_id :::::: {item_id}')
-        yfinance = TrendFollow._get_stock_use_yfinance(item_id, period, trend_follow_days)
+    def find_stock_by_id(dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
+        print(f'item_id :::::: {dto.ticker}')
+        finance_result = TrendFollow._get_stock_use_yfinance(dto, period, trend_follow_days)
         # 마지막 교차점의 이동평균 값 가져오기
-        last_cross_trend_follow = TrendFollow._find_last_cross_trend_follow(stock_data=yfinance['stock_data'])
-        yfinance['stock_info']['lastCrossTrendFollow'] = last_cross_trend_follow
+        last_cross_trend_follow = TrendFollow._find_last_cross_trend_follow(stock_data=finance_result['stock_data'])
+        finance_result['stock_info']['lastCrossTrendFollow'] = last_cross_trend_follow
 
-        stock_data = yfinance['stock_data'].sort_index(ascending=False)
+        stock_data = finance_result['stock_data'].sort_index(ascending=False)
         stock_data = stock_data.dropna(subset=['Trend_Follow'])
         # 결과를 딕셔너리 형태로 변환하여 반환
         stocks_dict = stock_data.reset_index().to_dict(orient='records')
         for stock in stocks_dict:
             stock['Date'] = stock['Date'].strftime('%Y-%m-%d')
 
-        return {'stock_history' : stocks_dict, 'stock_info': yfinance['stock_info']}
+        return {'stock_history' : stocks_dict, 'stock_info': finance_result['stock_info']}
     
     @staticmethod
-    def _get_stock_use_yfinance(item_id, period='1y', trend_follow_days=75):
+    def _get_stock_use_yfinance(dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
+        #asset_type에 따른 api값 달라짐으로
+        #TODO api값에 따라서 달라지지 않게 wrapping 필요함 response를 infrastucture를 만들어서 closeprice로 통일 등..
+        #close_price =  'Close' if dto.asset_type == 'US' else 'regularMarketPreviousClose'
+
          # 주식 데이터를 최근 period간 가져옴
-        print(f"this is tickername :::: {item_id}")
-        stock_data = yfinance.Ticker(item_id).history(period=period)
+        print(f"this is tickername :::: {dto.ticker}")
+        stock_data = yfinance.Ticker(dto.ticker).history(period=period)
         # 75일 이동평균선 계산
         stock_data['Trend_Follow'] = stock_data['Close'].rolling(window=trend_follow_days).mean()
 
         print(f"{stock_data['Trend_Follow']} :::: <<<<")
-        return {"stock_data": stock_data, "stock_info": yfinance.Ticker(item_id).info}
+        return {"stock_data": stock_data, "stock_info": yfinance.Ticker(dto.ticker).info}
+    
 
     @staticmethod
     def _find_last_cross_trend_follow(stock_data: dict):

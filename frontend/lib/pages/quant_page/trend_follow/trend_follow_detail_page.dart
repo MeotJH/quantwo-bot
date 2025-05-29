@@ -66,7 +66,7 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                recentOne.shortName,
+                                recentOne.shortName ?? 'N/A',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -218,9 +218,8 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
       final trendFollowData = await ref.read(trendFollowProvider(args).future);
       final recentStockOne = trendFollowData.recentStockOne;
 
-      final initialPrice = double.parse(recentStockOne.currentPrice);
-      final initialTrendFollow =
-          double.parse(recentStockOne.lastCrossTrendFollow);
+      final initialPrice = recentStockOne.currentPrice ?? 0.0;
+      final initialTrendFollow = recentStockOne.lastCrossTrendFollow ?? 0.0;
 
       await loadingNotifier.runWithLoading(() async =>
           await notifier.addStockToProfile(args.ticker,
@@ -243,19 +242,19 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
   }
 
   String _calNetChange(QuantStockModel recentStockOne) {
-    final double netChange = double.parse(recentStockOne.currentPrice) -
-        double.parse(recentStockOne.previousClose);
+    final double netChange = (recentStockOne.currentPrice ?? 0.0) -
+        (recentStockOne.previousClose ?? 0.0);
 
     final strNetChange = netChange.toStringAsFixed(2);
     final strNetChangePercent =
-        (netChange / double.parse(recentStockOne.previousClose) * 100)
+        (netChange / (recentStockOne.previousClose ?? 0.0) * 100)
             .toStringAsFixed(2);
     return '\$$strNetChange ($strNetChangePercent%)';
   }
 
   Color _getNetChangeColor(QuantStockModel recentStockOne) {
-    final double netChange = double.parse(recentStockOne.currentPrice) -
-        double.parse(recentStockOne.previousClose);
+    final double netChange = (recentStockOne.currentPrice ?? 0.0) -
+        (recentStockOne.previousClose ?? 0.0);
     return netChange > 0 ? CustomColors.error : CustomColors.clearBlue100;
   }
 }

@@ -1,4 +1,4 @@
-from api.quant.domain.model import QuantData
+from api.quant.domain.model import QuantData, TrendFollowRequestDTO
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, fields
 from flask import request
@@ -17,7 +17,11 @@ class TrendFollow(Resource):
     @api.doc(params={'stock_id': 'aapl', 'asset_type': 'us'})
     @api.marshal_with(trend_follows_model)
     def get(self, asset_type=None, stock_id=None):
-        stock = self.quant_service.find_stock_by_id(asset_type=asset_type,stock_id=stock_id.upper())
+        dto =  TrendFollowRequestDTO(
+            asset_type=asset_type.upper(),
+            ticker=stock_id.upper()
+        )
+        stock = self.quant_service.find_stock_by_id(dto)
         return { 'stock_history': stock['stock_history'] , 'stock_info': stock['stock_info']}
 
     @jwt_required()

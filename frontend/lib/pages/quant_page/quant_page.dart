@@ -64,7 +64,7 @@ class _QuantPageState extends ConsumerState<QuantPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          recentOne.shortName,
+                          recentOne.shortName ?? 'N/A',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -152,19 +152,19 @@ class _QuantPageState extends ConsumerState<QuantPage> {
   }
 
   String _calNetChange(QuantStockModel recentStockOne) {
-    final double netChange = double.parse(recentStockOne.currentPrice) -
-        double.parse(recentStockOne.previousClose);
+    final double netChange = (recentStockOne.currentPrice ?? 0.0) -
+        (recentStockOne.previousClose ?? 0.0);
 
     final strNetChange = netChange.toStringAsFixed(2);
     final strNetChangePercent =
-        (netChange / double.parse(recentStockOne.previousClose) * 100)
+        (netChange / (recentStockOne.previousClose ?? 0.0) * 100)
             .toStringAsFixed(2);
     return '\$$strNetChange ($strNetChangePercent%)';
   }
 
   Color _getNetChangeColor(QuantStockModel recentStockOne) {
-    final double netChange = double.parse(recentStockOne.currentPrice) -
-        double.parse(recentStockOne.previousClose);
+    final double netChange = (recentStockOne.currentPrice ?? 0.0) -
+        (recentStockOne.previousClose ?? 0.0);
     return netChange > 0 ? CustomColors.error : CustomColors.clearBlue100;
   }
 }

@@ -35,12 +35,10 @@ class TrendFollowNotifier
 
       final List stockHistory = response.data['stock_history'];
       final Map<String, dynamic> stockInfo = response.data['stock_info'];
-
       List<QuantModel> models =
           stockHistory.map((e) => QuantModel.fromJson(stock: e)).toList();
       final QuantStockModel quantStockModel =
-          QuantStockModel.fromJson(json: stockInfo);
-
+          QuantStockModel.fromJson(stockInfo);
       return TrendFollowService(models: models, recentStockOne: quantStockModel)
           .generateTrendFollows();
     } catch (e) {

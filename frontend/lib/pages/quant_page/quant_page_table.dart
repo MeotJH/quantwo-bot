@@ -23,8 +23,8 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 세 번째 데이터 행
         TableRow(children: [
-          _buildTableCell(recentStockOne.trailingPE),
-          _buildTableCell(recentStockOne.trailingEps),
+          _buildTableCell((recentStockOne.trailingPE ?? 0.0).toString()),
+          _buildTableCell((recentStockOne.trailingEps ?? 0.0).toString()),
           _buildTableCell(_getEvEbitda(recentStockOne).toStringAsFixed(2)),
         ]),
         // 첫 번째 행: 제목들
@@ -37,7 +37,7 @@ class QuantPageTable extends StatelessWidget {
         TableRow(children: [
           _buildTableCell('\$${recentStockOne.previousClose}'),
           _buildTableCell('\$${recentStockOne.open}'),
-          _buildTableCell(recentStockOne.volume),
+          _buildTableCell((recentStockOne.volume ?? 0.0).toString()),
         ]),
         // 두 번째 행: 제목들
         TableRow(children: [
@@ -58,9 +58,8 @@ class QuantPageTable extends StatelessWidget {
   }
 
   double _getEvEbitda(QuantStockModel recentStockOne) {
-    final enterpriseValue =
-        double.tryParse(recentStockOne.enterpriseValue) ?? 0.0;
-    final ebitda = double.tryParse(recentStockOne.ebitda) ?? 0.0;
+    final enterpriseValue = recentStockOne.enterpriseValue ?? 0.0;
+    final ebitda = recentStockOne.ebitda ?? 0.0;
     return enterpriseValue / ebitda;
   }
 

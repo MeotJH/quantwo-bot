@@ -3,15 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'quant_model.freezed.dart';
 part 'quant_model.g.dart';
 
-///  {Date: 2023-10-02,
-///  Open: 170.3483142712696,
-/// High: 173.4126357064522,
-/// Low: 170.05978216988254,
-/// Close: 172.8654327392578,
-///  Volume: 52164500,
-///  Dividends: 0.0,
-/// Stock Splits: 0.0,
-/// Trend_Follow: nan},
 @freezed
 class QuantModel with _$QuantModel {
   @JsonSerializable(

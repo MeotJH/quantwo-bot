@@ -1,6 +1,6 @@
 from dataclasses import asdict
 import traceback
-from api.quant.domain.model import QuantData
+from api.quant.domain.model import QuantData, TrendFollowRequestDTO
 from flask_jwt_extended import get_jwt_identity
 
 from api import db
@@ -24,10 +24,10 @@ class QuantService:
     internationals = ['SPY', 'FEZ', 'EWJ', 'EWY']
 
     @staticmethod
-    def find_stock_by_id(asset_type,stock_id, period='1y', trend_follow_days=75):
-        if asset_type == 'crypto':
-            stock_id = f'{stock_id}-USD'
-        return TrendFollow.find_stock_by_id(stock_id, period=period, trend_follow_days=trend_follow_days)
+    def find_stock_by_id(dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
+        if dto.asset_type == 'CRYPTO':
+            dto.ticker = f'{dto.ticker}-USD'
+        return TrendFollow.find_stock_by_id(dto=dto, period=period, trend_follow_days=trend_follow_days)
 
     @staticmethod
     def register_quant_by_stock(stock: str, quant_data: QuantData):
