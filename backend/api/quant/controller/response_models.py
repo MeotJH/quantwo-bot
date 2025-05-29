@@ -14,20 +14,20 @@ trend_follow_model = api.model('TrendFollowModel', {
 })
 
 stock_info_model = api.model('StockInfoModel', {
-    'shortName': fields.String(title='stock name'),
-    'currentPrice': fields.String(title='Current Price'),
-    'previousClose': fields.String(title='Previous Close'),
-    'open': fields.String(title='Open'),
-    'volume': fields.String(title='Volume'),
-    'dayHigh': fields.String(title='stock High'),
-    'dayLow': fields.String(title='stock Low'),
-    'trailingPE': fields.String(title='per'),
-    'fiftyTwoWeekHigh': fields.String(title='52High'),
-    'fiftyTwoWeekLow': fields.String(title='52Low'),
-    'trailingEps': fields.String(title='trailingEps'),
-    'enterpriseValue': fields.String(title='Enterprise Value'),
-    'ebitda' : fields.String(title='EBITDA'),
-    'lastCrossTrendFollow': fields.String(title='Last Cross Trend Follow'),
+    'shortName': fields.String(title='Stock Name'),
+    'currentPrice': fields.Float(title='Current Price'),
+    'previousClose': fields.Float(title='Previous Close'),
+    'open': fields.Float(title='Open'),
+    'volume': fields.Float(title='Volume'),
+    'dayHigh': fields.Float(title='Day High'),
+    'dayLow': fields.Float(title='Day Low'),
+    'trailingPE': fields.Float(title='PER'),
+    'fiftyTwoWeekHigh': fields.Float(title='52-Week High'),
+    'fiftyTwoWeekLow': fields.Float(title='52-Week Low'),
+    'trailingEps': fields.Float(title='Trailing EPS'),
+    'enterpriseValue': fields.Float(title='Enterprise Value'),
+    'ebitda': fields.Float(title='EBITDA'),
+    'lastCrossTrendFollow': fields.Float(title='Last Cross Trend Follow'),
 })
 
 trend_follows_model = api.model('TrendFollowsModel', {

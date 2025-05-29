@@ -17,12 +17,16 @@ class TrendFollow(Resource):
     @api.doc(params={'stock_id': 'aapl', 'asset_type': 'us'})
     @api.marshal_with(trend_follows_model)
     def get(self, asset_type=None, stock_id=None):
+        """
+        asset_type과 stock_id를 받아
+        trend_follow 정보를 리턴해준다.
+        """
         dto =  TrendFollowRequestDTO(
             asset_type=asset_type.upper(),
             ticker=stock_id.upper()
         )
-        stock = self.quant_service.find_stock_by_id(dto)
-        return { 'stock_history': stock['stock_history'] , 'stock_info': stock['stock_info']}
+        #응답값 예시 response = {'stok_history' : List , 'stock_info': dict }
+        return self.quant_service.find_stock_by_id(dto)
 
     @jwt_required()
     @api.expect(quant_data_model)

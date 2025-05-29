@@ -1,6 +1,7 @@
 import yfinance
 
 from api.quant.domain.model import TrendFollowRequestDTO
+from api.quant.domain.stock_info_wrapper import DataSource, StockInfoWrapper
 
 
 class TrendFollow():
@@ -20,6 +21,7 @@ class TrendFollow():
         for stock in stocks_dict:
             stock['Date'] = stock['Date'].strftime('%Y-%m-%d')
 
+        
         return {'stock_history' : stocks_dict, 'stock_info': finance_result['stock_info']}
     
     @staticmethod
@@ -35,7 +37,13 @@ class TrendFollow():
         stock_data['Trend_Follow'] = stock_data['Close'].rolling(window=trend_follow_days).mean()
 
         print(f"{stock_data['Trend_Follow']} :::: <<<<")
-        return {"stock_data": stock_data, "stock_info": yfinance.Ticker(dto.ticker).info}
+        stock_info_model = StockInfoWrapper.from_source(source=DataSource.YAHOO.value
+                                ,category=dto.asset_type
+                                , raw_data=yfinance.Ticker(dto.ticker).info
+                                )
+        
+        print(f'stock_info_model.__dict__ :::: {stock_info_model.__dict__}')
+        return {"stock_data": stock_data, "stock_info": stock_info_model.__dict__}
     
 
     @staticmethod
