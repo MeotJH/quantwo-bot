@@ -10,6 +10,7 @@ import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
 import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_detail_page_loading.dart';
+import 'package:quant_bot_flutter/pages/quant_page/crypto_quant_page_table.dart';
 import 'package:quant_bot_flutter/pages/quant_page/quant_page_table.dart';
 import 'package:quant_bot_flutter/providers/quant_provider.dart';
 
@@ -31,7 +32,8 @@ class _QuantPageState extends ConsumerState<QuantPage> {
             ticker: widget.tfArgs.ticker, assetType: widget.tfArgs.assetType),
       ),
     );
-    final ticker = widget.tfArgs.ticker;
+    final String assetType = widget.tfArgs.assetType;
+    final String ticker = widget.tfArgs.ticker;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -134,7 +136,10 @@ class _QuantPageState extends ConsumerState<QuantPage> {
               child: trendFollow.when(
                 data: (data) {
                   final recentStockData = data.recentStockOne;
-                  return QuantPageTable(recentStockOne: recentStockData);
+
+                  return assetType == 'us'
+                      ? QuantPageTable(recentStockOne: recentStockData)
+                      : CryptoQuantPageTable(recentStockOne: recentStockData);
                 },
                 error: (error, stack) {
                   return Text('Error: $error');

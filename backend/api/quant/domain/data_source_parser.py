@@ -27,10 +27,10 @@ def from_yahoo_crypto(data: dict) -> dict:
         volume=data.get("volume", 0.0),
         dayHigh=data.get("dayHigh", 0.0),
         dayLow=data.get("dayLow", 0.0),
-        trailingPE=0.0,
+        trailingPE=data.get("regularMarketChangePercent", 0.0),
         fiftyTwoWeekHigh=data.get("fiftyTwoWeekHigh", 0.0),
         fiftyTwoWeekLow=data.get("fiftyTwoWeekLow", 0.0),
-        trailingEps=0.0,
+        trailingEps=data.get("circulatingSupply", 0.0),
         enterpriseValue=data.get("marketCap", 0.0),
-        ebitda=0.0,
+        ebitda=data.get("regularMarketVolume", 0.0),
     )

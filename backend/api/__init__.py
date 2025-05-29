@@ -54,7 +54,7 @@ def create_app():
         prefix='/api/v1',
     )
     
-    config_name = os.getenv("ENVIRONMENT", "local")
+    config_name = os.getenv("ENVIRONMENT", "LOCAL")
     print(f"config_env:{config_name}")
     config_object = import_string(config_by_name[config_name])()
     app.config.from_object(config_object)

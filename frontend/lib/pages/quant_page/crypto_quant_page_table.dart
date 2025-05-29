@@ -3,13 +3,23 @@ import 'package:intl/intl.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
 
-class QuantPageTable extends StatelessWidget {
+class CryptoQuantPageTable extends StatelessWidget {
   final QuantStockModel recentStockOne;
-  const QuantPageTable({super.key, required this.recentStockOne});
+  const CryptoQuantPageTable({super.key, required this.recentStockOne});
+
+  String formatSmart(double value) {
+    if (value % 1 == 0) {
+      // 정수라면 소수점 없이
+      return NumberFormat('#,###').format(value);
+    } else {
+      // 소수점이 있다면 둘째 자리까지
+      return NumberFormat('#,###.##').format(value);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat('#,###');
+    final formatter = NumberFormat('#,###.00');
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(1),
@@ -19,15 +29,18 @@ class QuantPageTable extends StatelessWidget {
       },
       children: [
         TableRow(children: [
-          _buildTableHeader('PER'),
-          _buildTableHeader('EPS'),
-          _buildTableHeader('EV/EBITDA'),
+          _buildTableHeader('변동률 (24h)'),
+          _buildTableHeader('순환공급량'),
+          _buildTableHeader('24시간 거래량'),
         ]),
         // 세 번째 데이터 행
         TableRow(children: [
-          _buildTableCell((recentStockOne.trailingPE ?? 0.0).toString()),
-          _buildTableCell((recentStockOne.trailingEps ?? 0.0).toString()),
-          _buildTableCell(_getEvEbitda(recentStockOne).toStringAsFixed(2)),
+          _buildTableCell(
+            '${(recentStockOne.trailingPE ?? 0.0).toStringAsFixed(2)}%',
+          ),
+          _buildTableCell(
+              '\$${formatSmart(recentStockOne.trailingEps ?? 0.0)}'),
+          _buildTableCell('\$${formatSmart(recentStockOne.ebitda ?? 0.0)}'),
         ]),
         // 첫 번째 행: 제목들
         TableRow(children: [
@@ -37,33 +50,28 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 첫 번째 데이터 행
         TableRow(children: [
-          _buildTableCell('\$${recentStockOne.previousClose}'),
-          _buildTableCell('\$${recentStockOne.open}'),
-          _buildTableCell(formatter.format(recentStockOne.volume ?? 0.0)),
+          _buildTableCell(
+              '\$${(formatSmart(recentStockOne.previousClose ?? 0.0))}'),
+          _buildTableCell('\$${formatSmart(recentStockOne.open ?? 0.0)}'),
+          _buildTableCell('\$${formatSmart(recentStockOne.volume ?? 0.0)}'),
         ]),
         // 두 번째 행: 제목들
         TableRow(children: [
           _buildTableHeader('최고가'),
           _buildTableHeader('최저가'),
-          _buildTableHeader('기업가치(EV)'),
+          _buildTableHeader('시가총액'),
         ]),
         // 두 번째 데이터 행
         TableRow(children: [
-          _buildTableCell('\$${recentStockOne.dayHigh}',
+          _buildTableCell('\$${formatSmart(recentStockOne.dayHigh ?? 00)}',
               color: CustomColors.joyOrange100),
-          _buildTableCell('\$${recentStockOne.dayLow}',
+          _buildTableCell('\$${formatSmart(recentStockOne.dayLow ?? 00)}',
               color: CustomColors.clearBlue100),
           _buildTableCell(
-              '\$${formatter.format(recentStockOne.enterpriseValue)}'),
+              '\$${formatSmart(recentStockOne.enterpriseValue ?? 00)}'),
         ]),
       ],
     );
-  }
-
-  double _getEvEbitda(QuantStockModel recentStockOne) {
-    final enterpriseValue = recentStockOne.enterpriseValue ?? 0.0;
-    final ebitda = recentStockOne.ebitda ?? 0.0;
-    return enterpriseValue / ebitda;
   }
 
   // 테이블 헤더 스타일링 함수
