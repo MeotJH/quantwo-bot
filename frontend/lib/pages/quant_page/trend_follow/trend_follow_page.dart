@@ -5,7 +5,7 @@ import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/stocks_page_search_bar.dart';
 import 'package:quant_bot_flutter/providers/step_form_provider.dart';
-import 'package:quant_bot_flutter/providers/stocks_provider.dart';
+import 'package:quant_bot_flutter/providers/stock_providers/stocks_provider.dart';
 
 class TrendFollowPage extends ConsumerStatefulWidget {
   const TrendFollowPage({super.key});

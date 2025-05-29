@@ -29,6 +29,7 @@ class QuantLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final adjustment = (maxYValue <= 5 && minYValue <= 5) ? 0 : 20.0;
     return Column(
       children: [
         Expanded(
@@ -127,8 +128,8 @@ class QuantLineChart extends StatelessWidget {
                 show: false,
               ),
               gridData: const FlGridData(show: false),
-              maxY: maxYValue + 20,
-              minY: minYValue - 20,
+              maxY: maxYValue + adjustment,
+              minY: minYValue - adjustment,
             ),
           ),
         ),

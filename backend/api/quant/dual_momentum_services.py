@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Any
 from dataclasses import asdict, dataclass
 from logging import getLogger
-
+from api import cache
 from api.quant.domain.model import QuantData, RebalancingRecommendation
 
 logger = getLogger(__name__)
@@ -187,6 +187,7 @@ def run_dual_momentum_backtest(
     backtest = DualMomentumBacktest(etf_symbols, duration, str(savings_rate))
     return backtest.run_backtest()
 
+@cache.cached(timeout=86400)
 def get_todays_dual_momentum(saved_symbol: str, etf_symbols: List[str], savings_rate: float = 3.0) -> RebalancingRecommendation:
     """
     매월 1일 리밸런싱 추천

@@ -23,20 +23,22 @@ class StockModel with _$StockModel {
     @Default('') String industry,
     @Default('') String check,
     @Default('') String sector,
+    @Default('') String url,
   }) = _StockModel;
   factory StockModel.fromJson({required Map<String, dynamic> stock}) {
     return StockModel(
-      ticker: stock['symbol'] as String,
-      name: stock['name'] as String,
-      lastsale: stock['lastsale'] as String,
-      netchange: stock['netchange'] as String,
-      pctchange: stock['pctchange'] as String,
-      volume: stock['volume'] as String,
-      marketCap: stock['market_cap'] as String,
-      country: stock['country'] as String,
-      ipoYear: stock['ipo_year'] as String,
-      industry: stock['industry'] as String,
-      sector: stock['sector'] as String,
+      ticker: stock['symbol']?.toString() ?? '',
+      name: stock['name']?.toString() ?? '',
+      lastsale: stock['lastsale']?.toString() ?? '',
+      netchange: stock['netchange']?.toString() ?? '',
+      pctchange: stock['pctchange']?.toString() ?? '',
+      volume: stock['volume']?.toString() ?? '',
+      marketCap: stock['market_cap']?.toString() ?? '',
+      country: stock['country']?.toString() ?? '',
+      ipoYear: stock['ipo_year']?.toString() ?? '',
+      industry: stock['industry']?.toString() ?? '',
+      sector: stock['sector']?.toString() ?? '',
+      url: stock['url']?.toString() ?? '',
     );
   }
 }

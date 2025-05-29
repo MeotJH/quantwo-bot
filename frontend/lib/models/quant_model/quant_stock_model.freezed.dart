@@ -20,20 +20,20 @@ QuantStockModel _$QuantStockModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$QuantStockModel {
-  String get shortName => throw _privateConstructorUsedError;
-  String get currentPrice => throw _privateConstructorUsedError;
-  String get previousClose => throw _privateConstructorUsedError;
-  String get open => throw _privateConstructorUsedError;
-  String get volume => throw _privateConstructorUsedError;
-  String get dayHigh => throw _privateConstructorUsedError;
-  String get dayLow => throw _privateConstructorUsedError;
-  String get trailingPE => throw _privateConstructorUsedError;
-  String get fiftyTwoWeekHigh => throw _privateConstructorUsedError;
-  String get fiftyTwoWeekLow => throw _privateConstructorUsedError;
-  String get trailingEps => throw _privateConstructorUsedError;
-  String get enterpriseValue => throw _privateConstructorUsedError;
-  String get ebitda => throw _privateConstructorUsedError;
-  String get lastCrossTrendFollow => throw _privateConstructorUsedError;
+  String? get shortName => throw _privateConstructorUsedError;
+  double? get currentPrice => throw _privateConstructorUsedError;
+  double? get previousClose => throw _privateConstructorUsedError;
+  double? get open => throw _privateConstructorUsedError;
+  double? get volume => throw _privateConstructorUsedError;
+  double? get dayHigh => throw _privateConstructorUsedError;
+  double? get dayLow => throw _privateConstructorUsedError;
+  double? get trailingPE => throw _privateConstructorUsedError;
+  double? get fiftyTwoWeekHigh => throw _privateConstructorUsedError;
+  double? get fiftyTwoWeekLow => throw _privateConstructorUsedError;
+  double? get trailingEps => throw _privateConstructorUsedError;
+  double? get enterpriseValue => throw _privateConstructorUsedError;
+  double? get ebitda => throw _privateConstructorUsedError;
+  double? get lastCrossTrendFollow => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,20 +48,20 @@ abstract class $QuantStockModelCopyWith<$Res> {
       _$QuantStockModelCopyWithImpl<$Res, QuantStockModel>;
   @useResult
   $Res call(
-      {String shortName,
-      String currentPrice,
-      String previousClose,
-      String open,
-      String volume,
-      String dayHigh,
-      String dayLow,
-      String trailingPE,
-      String fiftyTwoWeekHigh,
-      String fiftyTwoWeekLow,
-      String trailingEps,
-      String enterpriseValue,
-      String ebitda,
-      String lastCrossTrendFollow});
+      {String? shortName,
+      double? currentPrice,
+      double? previousClose,
+      double? open,
+      double? volume,
+      double? dayHigh,
+      double? dayLow,
+      double? trailingPE,
+      double? fiftyTwoWeekHigh,
+      double? fiftyTwoWeekLow,
+      double? trailingEps,
+      double? enterpriseValue,
+      double? ebitda,
+      double? lastCrossTrendFollow});
 }
 
 /// @nodoc
@@ -77,78 +77,78 @@ class _$QuantStockModelCopyWithImpl<$Res, $Val extends QuantStockModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? shortName = null,
-    Object? currentPrice = null,
-    Object? previousClose = null,
-    Object? open = null,
-    Object? volume = null,
-    Object? dayHigh = null,
-    Object? dayLow = null,
-    Object? trailingPE = null,
-    Object? fiftyTwoWeekHigh = null,
-    Object? fiftyTwoWeekLow = null,
-    Object? trailingEps = null,
-    Object? enterpriseValue = null,
-    Object? ebitda = null,
-    Object? lastCrossTrendFollow = null,
+    Object? shortName = freezed,
+    Object? currentPrice = freezed,
+    Object? previousClose = freezed,
+    Object? open = freezed,
+    Object? volume = freezed,
+    Object? dayHigh = freezed,
+    Object? dayLow = freezed,
+    Object? trailingPE = freezed,
+    Object? fiftyTwoWeekHigh = freezed,
+    Object? fiftyTwoWeekLow = freezed,
+    Object? trailingEps = freezed,
+    Object? enterpriseValue = freezed,
+    Object? ebitda = freezed,
+    Object? lastCrossTrendFollow = freezed,
   }) {
     return _then(_value.copyWith(
-      shortName: null == shortName
+      shortName: freezed == shortName
           ? _value.shortName
           : shortName // ignore: cast_nullable_to_non_nullable
-              as String,
-      currentPrice: null == currentPrice
+              as String?,
+      currentPrice: freezed == currentPrice
           ? _value.currentPrice
           : currentPrice // ignore: cast_nullable_to_non_nullable
-              as String,
-      previousClose: null == previousClose
+              as double?,
+      previousClose: freezed == previousClose
           ? _value.previousClose
           : previousClose // ignore: cast_nullable_to_non_nullable
-              as String,
-      open: null == open
+              as double?,
+      open: freezed == open
           ? _value.open
           : open // ignore: cast_nullable_to_non_nullable
-              as String,
-      volume: null == volume
+              as double?,
+      volume: freezed == volume
           ? _value.volume
           : volume // ignore: cast_nullable_to_non_nullable
-              as String,
-      dayHigh: null == dayHigh
+              as double?,
+      dayHigh: freezed == dayHigh
           ? _value.dayHigh
           : dayHigh // ignore: cast_nullable_to_non_nullable
-              as String,
-      dayLow: null == dayLow
+              as double?,
+      dayLow: freezed == dayLow
           ? _value.dayLow
           : dayLow // ignore: cast_nullable_to_non_nullable
-              as String,
-      trailingPE: null == trailingPE
+              as double?,
+      trailingPE: freezed == trailingPE
           ? _value.trailingPE
           : trailingPE // ignore: cast_nullable_to_non_nullable
-              as String,
-      fiftyTwoWeekHigh: null == fiftyTwoWeekHigh
+              as double?,
+      fiftyTwoWeekHigh: freezed == fiftyTwoWeekHigh
           ? _value.fiftyTwoWeekHigh
           : fiftyTwoWeekHigh // ignore: cast_nullable_to_non_nullable
-              as String,
-      fiftyTwoWeekLow: null == fiftyTwoWeekLow
+              as double?,
+      fiftyTwoWeekLow: freezed == fiftyTwoWeekLow
           ? _value.fiftyTwoWeekLow
           : fiftyTwoWeekLow // ignore: cast_nullable_to_non_nullable
-              as String,
-      trailingEps: null == trailingEps
+              as double?,
+      trailingEps: freezed == trailingEps
           ? _value.trailingEps
           : trailingEps // ignore: cast_nullable_to_non_nullable
-              as String,
-      enterpriseValue: null == enterpriseValue
+              as double?,
+      enterpriseValue: freezed == enterpriseValue
           ? _value.enterpriseValue
           : enterpriseValue // ignore: cast_nullable_to_non_nullable
-              as String,
-      ebitda: null == ebitda
+              as double?,
+      ebitda: freezed == ebitda
           ? _value.ebitda
           : ebitda // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastCrossTrendFollow: null == lastCrossTrendFollow
+              as double?,
+      lastCrossTrendFollow: freezed == lastCrossTrendFollow
           ? _value.lastCrossTrendFollow
           : lastCrossTrendFollow // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double?,
     ) as $Val);
   }
 }
@@ -162,20 +162,20 @@ abstract class _$$QuantStockModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String shortName,
-      String currentPrice,
-      String previousClose,
-      String open,
-      String volume,
-      String dayHigh,
-      String dayLow,
-      String trailingPE,
-      String fiftyTwoWeekHigh,
-      String fiftyTwoWeekLow,
-      String trailingEps,
-      String enterpriseValue,
-      String ebitda,
-      String lastCrossTrendFollow});
+      {String? shortName,
+      double? currentPrice,
+      double? previousClose,
+      double? open,
+      double? volume,
+      double? dayHigh,
+      double? dayLow,
+      double? trailingPE,
+      double? fiftyTwoWeekHigh,
+      double? fiftyTwoWeekLow,
+      double? trailingEps,
+      double? enterpriseValue,
+      double? ebitda,
+      double? lastCrossTrendFollow});
 }
 
 /// @nodoc
@@ -189,78 +189,78 @@ class __$$QuantStockModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? shortName = null,
-    Object? currentPrice = null,
-    Object? previousClose = null,
-    Object? open = null,
-    Object? volume = null,
-    Object? dayHigh = null,
-    Object? dayLow = null,
-    Object? trailingPE = null,
-    Object? fiftyTwoWeekHigh = null,
-    Object? fiftyTwoWeekLow = null,
-    Object? trailingEps = null,
-    Object? enterpriseValue = null,
-    Object? ebitda = null,
-    Object? lastCrossTrendFollow = null,
+    Object? shortName = freezed,
+    Object? currentPrice = freezed,
+    Object? previousClose = freezed,
+    Object? open = freezed,
+    Object? volume = freezed,
+    Object? dayHigh = freezed,
+    Object? dayLow = freezed,
+    Object? trailingPE = freezed,
+    Object? fiftyTwoWeekHigh = freezed,
+    Object? fiftyTwoWeekLow = freezed,
+    Object? trailingEps = freezed,
+    Object? enterpriseValue = freezed,
+    Object? ebitda = freezed,
+    Object? lastCrossTrendFollow = freezed,
   }) {
     return _then(_$QuantStockModelImpl(
-      shortName: null == shortName
+      shortName: freezed == shortName
           ? _value.shortName
           : shortName // ignore: cast_nullable_to_non_nullable
-              as String,
-      currentPrice: null == currentPrice
+              as String?,
+      currentPrice: freezed == currentPrice
           ? _value.currentPrice
           : currentPrice // ignore: cast_nullable_to_non_nullable
-              as String,
-      previousClose: null == previousClose
+              as double?,
+      previousClose: freezed == previousClose
           ? _value.previousClose
           : previousClose // ignore: cast_nullable_to_non_nullable
-              as String,
-      open: null == open
+              as double?,
+      open: freezed == open
           ? _value.open
           : open // ignore: cast_nullable_to_non_nullable
-              as String,
-      volume: null == volume
+              as double?,
+      volume: freezed == volume
           ? _value.volume
           : volume // ignore: cast_nullable_to_non_nullable
-              as String,
-      dayHigh: null == dayHigh
+              as double?,
+      dayHigh: freezed == dayHigh
           ? _value.dayHigh
           : dayHigh // ignore: cast_nullable_to_non_nullable
-              as String,
-      dayLow: null == dayLow
+              as double?,
+      dayLow: freezed == dayLow
           ? _value.dayLow
           : dayLow // ignore: cast_nullable_to_non_nullable
-              as String,
-      trailingPE: null == trailingPE
+              as double?,
+      trailingPE: freezed == trailingPE
           ? _value.trailingPE
           : trailingPE // ignore: cast_nullable_to_non_nullable
-              as String,
-      fiftyTwoWeekHigh: null == fiftyTwoWeekHigh
+              as double?,
+      fiftyTwoWeekHigh: freezed == fiftyTwoWeekHigh
           ? _value.fiftyTwoWeekHigh
           : fiftyTwoWeekHigh // ignore: cast_nullable_to_non_nullable
-              as String,
-      fiftyTwoWeekLow: null == fiftyTwoWeekLow
+              as double?,
+      fiftyTwoWeekLow: freezed == fiftyTwoWeekLow
           ? _value.fiftyTwoWeekLow
           : fiftyTwoWeekLow // ignore: cast_nullable_to_non_nullable
-              as String,
-      trailingEps: null == trailingEps
+              as double?,
+      trailingEps: freezed == trailingEps
           ? _value.trailingEps
           : trailingEps // ignore: cast_nullable_to_non_nullable
-              as String,
-      enterpriseValue: null == enterpriseValue
+              as double?,
+      enterpriseValue: freezed == enterpriseValue
           ? _value.enterpriseValue
           : enterpriseValue // ignore: cast_nullable_to_non_nullable
-              as String,
-      ebitda: null == ebitda
+              as double?,
+      ebitda: freezed == ebitda
           ? _value.ebitda
           : ebitda // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastCrossTrendFollow: null == lastCrossTrendFollow
+              as double?,
+      lastCrossTrendFollow: freezed == lastCrossTrendFollow
           ? _value.lastCrossTrendFollow
           : lastCrossTrendFollow // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double?,
     ));
   }
 }
@@ -271,66 +271,52 @@ class __$$QuantStockModelImplCopyWithImpl<$Res>
     fieldRename: FieldRename.none, includeIfNull: false, explicitToJson: true)
 class _$QuantStockModelImpl implements _QuantStockModel {
   _$QuantStockModelImpl(
-      {this.shortName = '',
-      this.currentPrice = '',
-      this.previousClose = '',
-      this.open = '',
-      this.volume = '',
-      this.dayHigh = '',
-      this.dayLow = '',
-      this.trailingPE = '',
-      this.fiftyTwoWeekHigh = '',
-      this.fiftyTwoWeekLow = '',
-      this.trailingEps = '',
-      this.enterpriseValue = '',
-      this.ebitda = '',
-      this.lastCrossTrendFollow = ''});
+      {this.shortName,
+      this.currentPrice,
+      this.previousClose,
+      this.open,
+      this.volume,
+      this.dayHigh,
+      this.dayLow,
+      this.trailingPE,
+      this.fiftyTwoWeekHigh,
+      this.fiftyTwoWeekLow,
+      this.trailingEps,
+      this.enterpriseValue,
+      this.ebitda,
+      this.lastCrossTrendFollow});
 
   factory _$QuantStockModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$QuantStockModelImplFromJson(json);
 
   @override
-  @JsonKey()
-  final String shortName;
+  final String? shortName;
   @override
-  @JsonKey()
-  final String currentPrice;
+  final double? currentPrice;
   @override
-  @JsonKey()
-  final String previousClose;
+  final double? previousClose;
   @override
-  @JsonKey()
-  final String open;
+  final double? open;
   @override
-  @JsonKey()
-  final String volume;
+  final double? volume;
   @override
-  @JsonKey()
-  final String dayHigh;
+  final double? dayHigh;
   @override
-  @JsonKey()
-  final String dayLow;
+  final double? dayLow;
   @override
-  @JsonKey()
-  final String trailingPE;
+  final double? trailingPE;
   @override
-  @JsonKey()
-  final String fiftyTwoWeekHigh;
+  final double? fiftyTwoWeekHigh;
   @override
-  @JsonKey()
-  final String fiftyTwoWeekLow;
+  final double? fiftyTwoWeekLow;
   @override
-  @JsonKey()
-  final String trailingEps;
+  final double? trailingEps;
   @override
-  @JsonKey()
-  final String enterpriseValue;
+  final double? enterpriseValue;
   @override
-  @JsonKey()
-  final String ebitda;
+  final double? ebitda;
   @override
-  @JsonKey()
-  final String lastCrossTrendFollow;
+  final double? lastCrossTrendFollow;
 
   @override
   String toString() {
@@ -403,52 +389,52 @@ class _$QuantStockModelImpl implements _QuantStockModel {
 
 abstract class _QuantStockModel implements QuantStockModel {
   factory _QuantStockModel(
-      {final String shortName,
-      final String currentPrice,
-      final String previousClose,
-      final String open,
-      final String volume,
-      final String dayHigh,
-      final String dayLow,
-      final String trailingPE,
-      final String fiftyTwoWeekHigh,
-      final String fiftyTwoWeekLow,
-      final String trailingEps,
-      final String enterpriseValue,
-      final String ebitda,
-      final String lastCrossTrendFollow}) = _$QuantStockModelImpl;
+      {final String? shortName,
+      final double? currentPrice,
+      final double? previousClose,
+      final double? open,
+      final double? volume,
+      final double? dayHigh,
+      final double? dayLow,
+      final double? trailingPE,
+      final double? fiftyTwoWeekHigh,
+      final double? fiftyTwoWeekLow,
+      final double? trailingEps,
+      final double? enterpriseValue,
+      final double? ebitda,
+      final double? lastCrossTrendFollow}) = _$QuantStockModelImpl;
 
   factory _QuantStockModel.fromJson(Map<String, dynamic> json) =
       _$QuantStockModelImpl.fromJson;
 
   @override
-  String get shortName;
+  String? get shortName;
   @override
-  String get currentPrice;
+  double? get currentPrice;
   @override
-  String get previousClose;
+  double? get previousClose;
   @override
-  String get open;
+  double? get open;
   @override
-  String get volume;
+  double? get volume;
   @override
-  String get dayHigh;
+  double? get dayHigh;
   @override
-  String get dayLow;
+  double? get dayLow;
   @override
-  String get trailingPE;
+  double? get trailingPE;
   @override
-  String get fiftyTwoWeekHigh;
+  double? get fiftyTwoWeekHigh;
   @override
-  String get fiftyTwoWeekLow;
+  double? get fiftyTwoWeekLow;
   @override
-  String get trailingEps;
+  double? get trailingEps;
   @override
-  String get enterpriseValue;
+  double? get enterpriseValue;
   @override
-  String get ebitda;
+  double? get ebitda;
   @override
-  String get lastCrossTrendFollow;
+  double? get lastCrossTrendFollow;
   @override
   @JsonKey(ignore: true)
   _$$QuantStockModelImplCopyWith<_$QuantStockModelImpl> get copyWith =>

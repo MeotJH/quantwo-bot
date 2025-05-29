@@ -1,17 +1,21 @@
 from dataclasses import dataclass
 from api.quant.domain.entities import Quant
 from api.quant.domain.quant_type import QuantType
+from api.quant.dual_momentum_services import get_todays_dual_momentum
 
 @dataclass
 class ProfitResult:
     profit: float
     profit_percent: float
 
+#듀얼모멘텀 수익률 계산
 def calculate_dualmomentum_intl_profit(quant: Quant, stock: dict):
     # Implement your profit calculation logic here
-    return ProfitResult(profit=quant.initial_price, profit_percent=quant.initial_price)
+    momentum = get_todays_dual_momentum('cash', ['SPY', 'FEZ', 'EWJ', 'EWY'], 3.0)
+    #profit =  momentum.best_return - quant.initial_price
+    return ProfitResult(profit=momentum.best_return, profit_percent=momentum.best_return)
 
-
+#추세추종 수익률 계산
 def calculate_trend_follow_profit(quant: Quant, stock: dict):
     recent_stock = stock["stock_info"]
 

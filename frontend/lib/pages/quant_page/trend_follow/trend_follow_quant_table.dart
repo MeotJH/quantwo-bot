@@ -53,7 +53,7 @@ class _TrendFollowQuantTableState extends State<TrendFollowQuantTable>
         // 첫 번째 데이터 행
         TableRow(children: [
           _buildTableCell(
-              '\$${double.parse(recentStockOne.lastCrossTrendFollow).toStringAsFixed(2)}'),
+              '\$${(recentStockOne.lastCrossTrendFollow ?? 0.0).toStringAsFixed(2)}'),
           _buildTableCell('\$${recentStockOne.previousClose}'),
           //_buildAnimatedCell(),
           _buildTrendFollowCell(model: recentStockOne),
@@ -95,15 +95,15 @@ class _TrendFollowQuantTableState extends State<TrendFollowQuantTable>
   }
 
   String _buildQuantHeaderCellData(QuantStockModel model) {
-    final currentPrice = double.parse(model.currentPrice);
-    final lastCrossTrendFollow = double.parse(model.lastCrossTrendFollow);
+    final currentPrice = (model.currentPrice ?? 0.0);
+    final lastCrossTrendFollow = (model.lastCrossTrendFollow ?? 0.0);
     final profit = currentPrice - lastCrossTrendFollow;
     return profit > 0 ? '예상 수익' : '예상 방어 손실';
   }
 
   Widget _buildTrendFollowCell({required QuantStockModel model}) {
-    final currentPrice = double.parse(model.currentPrice);
-    final lastCrossTrendFollow = double.parse(model.lastCrossTrendFollow);
+    final currentPrice = (model.currentPrice ?? 0.0);
+    final lastCrossTrendFollow = (model.lastCrossTrendFollow ?? 0.0);
     final profit = currentPrice - lastCrossTrendFollow;
     final profitPercent = (profit / currentPrice) * 100;
     final color = profit > 0 ? CustomColors.error : CustomColors.clearBlue120;

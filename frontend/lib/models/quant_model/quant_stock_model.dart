@@ -11,21 +11,22 @@ class QuantStockModel with _$QuantStockModel {
     explicitToJson: true,
   )
   factory QuantStockModel({
-    @Default('') String shortName,
-    @Default('') String currentPrice,
-    @Default('') String previousClose,
-    @Default('') String open,
-    @Default('') String volume,
-    @Default('') String dayHigh,
-    @Default('') String dayLow,
-    @Default('') String trailingPE,
-    @Default('') String fiftyTwoWeekHigh,
-    @Default('') String fiftyTwoWeekLow,
-    @Default('') String trailingEps,
-    @Default('') String enterpriseValue,
-    @Default('') String ebitda,
-    @Default('') String lastCrossTrendFollow,
+    String? shortName,
+    double? currentPrice,
+    double? previousClose,
+    double? open,
+    double? volume,
+    double? dayHigh,
+    double? dayLow,
+    double? trailingPE,
+    double? fiftyTwoWeekHigh,
+    double? fiftyTwoWeekLow,
+    double? trailingEps,
+    double? enterpriseValue,
+    double? ebitda,
+    double? lastCrossTrendFollow,
   }) = _QuantStockModel;
-  factory QuantStockModel.fromJson({required Map<String, Object?> json}) =>
+
+  factory QuantStockModel.fromJson(Map<String, dynamic> json) =>
       _$QuantStockModelFromJson(json);
 }

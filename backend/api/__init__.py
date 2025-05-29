@@ -54,7 +54,7 @@ def create_app():
         prefix='/api/v1',
     )
     
-    config_name = os.getenv("ENVIRONMENT", "local")
+    config_name = os.getenv("ENVIRONMENT", "LOCAL")
     print(f"config_env:{config_name}")
     config_object = import_string(config_by_name[config_name])()
     app.config.from_object(config_object)
@@ -96,6 +96,7 @@ def create_app():
 
     from api.quant.domain.entities import Quant
     from api.user.entities import User
+    from api.stock.domain.entities import Stocks
 
     from api.scheduler.quant_scheduler import QuantScheduler
     quant_scheduler = QuantScheduler(app)  # app 인스턴스를 전달

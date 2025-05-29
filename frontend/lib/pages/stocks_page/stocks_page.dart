@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/common/custom_exception.dart';
-import 'package:quant_bot_flutter/common/remove_query_string.dart';
 import 'package:quant_bot_flutter/components/custom_dialog.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/pages/stocks_page/crypto_currency_list.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/stocks_page_search_bar.dart';
+import 'package:quant_bot_flutter/pages/stocks_page/us_stock_list.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
-import 'package:quant_bot_flutter/providers/stocks_provider.dart';
+import 'package:quant_bot_flutter/providers/stock_providers/stock_tab_provider.dart';
 
 class StockListPage extends ConsumerStatefulWidget {
   const StockListPage({super.key});
@@ -20,10 +21,36 @@ class StockListPage extends ConsumerStatefulWidget {
   ConsumerState<StockListPage> createState() => _StockListPageState();
 }
 
-class _StockListPageState extends ConsumerState<StockListPage> {
+//TODO 페이지 _tabController 외부로 Controller이 밖에 나와있어서 결합도 리팩토링
+//TODO stock바뀔때 애니메이션 넣기
+class _StockListPageState extends ConsumerState<StockListPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    final currentIndex = ref.read(tabIndexProvider); // 초기값
+    _tabController =
+        TabController(length: 2, vsync: this, initialIndex: currentIndex);
+
+    _tabController.addListener(() {
+      // index가 변경될 때 provider에 반영
+      if (_tabController.indexIsChanging == false) {
+        ref.read(tabIndexProvider.notifier).state = _tabController.index;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final stocks = ref.watch(stocksProvider);
+    //final stocks = ref.watch(stocksProvider);
     final authStorageProfider = ref.watch(authStorageProvider);
     return Scaffold(
       appBar: AppBar(
@@ -73,123 +100,38 @@ class _StockListPageState extends ConsumerState<StockListPage> {
               error: (e, _) => const Text('세션 정보 가져오기 실패'),
               loading: () => const Center(child: CircularProgressIndicator())),
         ],
+        bottom: TabBar(
+          labelColor: CustomColors.gray80,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorColor: CustomColors.clearBlue100,
+          controller: _tabController,
+          tabs: const [
+            Tab(text: '미국주식'),
+            Tab(text: '코인'),
+          ],
+        ),
       ),
       body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          color: const Color(0xFFF0F0F0),
-          child: Column(
-            children: [
-              const StocksPageSearchBar(),
-              const SizedBox(
-                height: 8,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        color: const Color(0xFFF0F0F0),
+        child: Column(
+          children: [
+            const StocksPageSearchBar(),
+            const SizedBox(
+              height: 8,
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: const [
+                  UsStockList(),
+                  CryptoCurrencyList(),
+                ],
               ),
-              Expanded(
-                child: stocks.when(
-                    data: (stocks) {
-                      return ListView.builder(
-                        itemCount: stocks.length,
-                        itemBuilder: (context, index) {
-                          final stock = stocks[index];
-                          return InkWell(
-                            onTap: () async {
-                              //final item = await CustomDialogDropDown.showCustomDialog(context);
-                              if (mounted) {
-                                context.push('/quants/TF/${stock.ticker}');
-                              }
-                            },
-                            child: Container(
-                              color: Colors.white,
-                              width: double.infinity,
-                              margin: const EdgeInsets.symmetric(vertical: 1),
-                              height: 90,
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 16,
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          stock.ticker,
-                                          style: const TextStyle(
-                                            color: Color(0xFF222222),
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 200,
-                                          child: Text(
-                                            stock.name,
-                                            style: TextStyle(
-                                              color: CustomColors.gray50,
-                                              fontSize: 14,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Column(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 32,
-                                          width: 100,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          decoration: ShapeDecoration(
-                                            color: stock.pctchange.contains('-')
-                                                ? CustomColors.success
-                                                : CustomColors.error,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          child: Text(
-                                            '\$${double.parse(stock.lastsale.replaceAll('\$', '')).toStringAsFixed(2)}', //상태
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    error: (error, stack) => Center(
-                          child: Container(
-                            alignment: Alignment.center,
-                            color: CustomColors.white,
-                            child: const Text(
-                              '서버에 문제가 생겼습니다. \n 개발자 도비가 금방 조치할테니 조금만 기다려주세요.',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                    loading: () => const Center(
-                          child: SkeletonLoadingList(),
-                        )),
-              ),
-            ],
-          )),
+            )
+          ],
+        ),
+      ),
     );
   }
 

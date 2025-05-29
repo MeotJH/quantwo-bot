@@ -1,4 +1,4 @@
-from api.quant.domain.model import QuantData
+from api.quant.domain.model import QuantData, TrendFollowRequestDTO
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, fields
 from flask import request
@@ -8,17 +8,25 @@ from api.quant.services import QuantService
 from api.quant.dual_momentum_services import run_dual_momentum_backtest
 from .response_models import trend_follows_model, trend_follows_register_response_model, quants_model, quant_by_user_model, quant_data_model
 
-@api.route('/trend_follow/<string:stock_id>', strict_slashes=False)
+@api.route('/trend-follow/<string:asset_type>/<string:stock_id>', strict_slashes=False)
 class TrendFollow(Resource):
     def __init__(self, api=None, *args, **kwargs):
         super().__init__(api, *args, **kwargs)
         self.quant_service = QuantService()
 
-    @api.doc(params={'stock_id': 'AAPL'})
+    @api.doc(params={'stock_id': 'aapl', 'asset_type': 'us'})
     @api.marshal_with(trend_follows_model)
-    def get(self, stock_id=None):
-        stock = self.quant_service.find_stock_by_id(stock_id)
-        return { 'stock_history': stock['stock_history'] , 'stock_info': stock['stock_info']}
+    def get(self, asset_type=None, stock_id=None):
+        """
+        asset_type과 stock_id를 받아
+        trend_follow 정보를 리턴해준다.
+        """
+        dto =  TrendFollowRequestDTO(
+            asset_type=asset_type.upper(),
+            ticker=stock_id.upper()
+        )
+        #응답값 예시 response = {'stok_history' : List , 'stock_info': dict }
+        return self.quant_service.find_stock_by_id(dto)
 
     @jwt_required()
     @api.expect(quant_data_model)

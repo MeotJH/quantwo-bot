@@ -6,22 +6,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/line_chart.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/common/utils.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_detail_page_loading.dart';
+import 'package:quant_bot_flutter/pages/quant_page/crypto_quant_page_table.dart';
 import 'package:quant_bot_flutter/pages/quant_page/quant_page_table.dart';
-import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/quant_provider.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
 
 class QuantPage extends ConsumerStatefulWidget {
-  final String ticker;
-  final String quant;
+  final TrendFollowArgs tfArgs;
 
-  const QuantPage({super.key, required this.ticker, required this.quant});
+  const QuantPage({super.key, required this.tfArgs});
 
   @override
   ConsumerState<QuantPage> createState() => _QuantPageState();
@@ -30,12 +26,23 @@ class QuantPage extends ConsumerStatefulWidget {
 class _QuantPageState extends ConsumerState<QuantPage> {
   @override
   Widget build(BuildContext context) {
-    final trendFollow = ref.watch(trendFollowProvider(widget.ticker));
-    final ticker = widget.ticker;
+    final trendFollow = ref.watch(
+      trendFollowProvider(
+        TrendFollowArgs(
+            ticker: widget.tfArgs.ticker, assetType: widget.tfArgs.assetType),
+      ),
+    );
+    final String assetType = widget.tfArgs.assetType;
+    final String ticker = widget.tfArgs.ticker;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('주식 정보',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        title: const Text(
+          '주식 정보',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -59,7 +66,7 @@ class _QuantPageState extends ConsumerState<QuantPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          recentOne.shortName,
+                          recentOne.shortName ?? 'N/A',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -129,7 +136,10 @@ class _QuantPageState extends ConsumerState<QuantPage> {
               child: trendFollow.when(
                 data: (data) {
                   final recentStockData = data.recentStockOne;
-                  return QuantPageTable(recentStockOne: recentStockData);
+
+                  return assetType == 'us'
+                      ? QuantPageTable(recentStockOne: recentStockData)
+                      : CryptoQuantPageTable(recentStockOne: recentStockData);
                 },
                 error: (error, stack) {
                   return Text('Error: $error');
@@ -146,57 +156,20 @@ class _QuantPageState extends ConsumerState<QuantPage> {
     );
   }
 
-  Future<void> _handleQuantAlertSetting(
-      String ticker, BuildContext context) async {
-    final auth = await ref.read(authStorageProvider.future);
-    if (auth == null) {
-      CustomToast.show(message: '로그인이 필요합니다.', isWarn: true);
-
-      if (!context.mounted) return;
-      context.push(RouteNotifier.loginPath);
-      return;
-    }
-    final notifier = ref.read(trendFollowProvider(ticker).notifier);
-    try {
-      final trendFollowData =
-          await ref.read(trendFollowProvider(ticker).future);
-      final recentStockOne = trendFollowData.recentStockOne;
-
-      final initialPrice = double.parse(recentStockOne.currentPrice);
-      final initialTrendFollow =
-          double.parse(recentStockOne.lastCrossTrendFollow);
-
-      await notifier.addStockToProfile(ticker, QuantType.TREND_FOLLOW.code,
-          initialPrice, initialTrendFollow);
-      _showSuccessToast('퀀트 알림이 성공적으로 설정되었습니다.');
-    } catch (e) {
-      _showErrorToast(getErrorMessage(e));
-      print('퀀트 알림 설정 오류: $e');
-    }
-  }
-
-  void _showSuccessToast(String message) {
-    CustomToast.show(message: message);
-  }
-
-  void _showErrorToast(String message) {
-    CustomToast.show(message: message, isWarn: true);
-  }
-
   String _calNetChange(QuantStockModel recentStockOne) {
-    final double netChange = double.parse(recentStockOne.currentPrice) -
-        double.parse(recentStockOne.previousClose);
+    final double netChange = (recentStockOne.currentPrice ?? 0.0) -
+        (recentStockOne.previousClose ?? 0.0);
 
     final strNetChange = netChange.toStringAsFixed(2);
     final strNetChangePercent =
-        (netChange / double.parse(recentStockOne.previousClose) * 100)
+        (netChange / (recentStockOne.previousClose ?? 0.0) * 100)
             .toStringAsFixed(2);
     return '\$$strNetChange ($strNetChangePercent%)';
   }
 
   Color _getNetChangeColor(QuantStockModel recentStockOne) {
-    final double netChange = double.parse(recentStockOne.currentPrice) -
-        double.parse(recentStockOne.previousClose);
+    final double netChange = (recentStockOne.currentPrice ?? 0.0) -
+        (recentStockOne.previousClose ?? 0.0);
     return netChange > 0 ? CustomColors.error : CustomColors.clearBlue100;
   }
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/top_marquee_banner.dart';
 import 'package:quant_bot_flutter/constants/router_routes.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
 import 'package:quant_bot_flutter/pages/auth_pages/login_page.dart';
 import 'package:quant_bot_flutter/pages/auth_pages/sign_up_complete_screen.dart';
 import 'package:quant_bot_flutter/pages/auth_pages/sign_up_screen.dart';
@@ -42,7 +43,7 @@ class RouteNotifier extends Notifier<GoRouter> {
   static const String _initialLocation = '/';
   static const String _stockListPath = '/main';
   static const String stockListPath = '/main';
-  static const String _quantPath = '/quants/:quant/:ticker';
+  static const String _quantPath = '/quants/trend-follow/:assetType/:ticker';
   static const String _profilePath = '/profile';
   static const String loginPath = '/login';
   static const String signUpPath = '/sign-up';
@@ -89,8 +90,13 @@ class RouteNotifier extends Notifier<GoRouter> {
           path: _quantPath,
           builder: (context, state) {
             final String ticker = state.pathParameters['ticker']!;
-            final String quant = state.pathParameters['quant']!;
-            return QuantPage(ticker: ticker, quant: quant);
+            final String assetType = state.pathParameters['assetType']!;
+            return QuantPage(
+              tfArgs: TrendFollowArgs(
+                ticker: ticker,
+                assetType: assetType,
+              ),
+            );
           },
         ),
         GoRoute(
