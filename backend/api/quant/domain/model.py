@@ -26,6 +26,7 @@ class TrendFollowRequestDTO:
 
 @dataclass
 class StockInfoModel:
+    longName:str
     shortName: str
     currentPrice: float
     previousClose: float

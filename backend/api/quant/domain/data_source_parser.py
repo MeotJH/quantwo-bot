@@ -3,6 +3,7 @@ from api.quant.domain.model import StockInfoModel
 
 def from_yahoo_us(data: dict) -> dict:
     return StockInfoModel(
+        longName=data.get("longName",""),
         shortName=data.get("shortName", ""),
         currentPrice=data.get("currentPrice", 0.0),
         previousClose=data.get("previousClose", 0.0),
@@ -20,6 +21,7 @@ def from_yahoo_us(data: dict) -> dict:
 
 def from_yahoo_crypto(data: dict) -> dict:
     return StockInfoModel(
+        longName=data.get("longName",""),
         shortName=data.get("shortName", ""),
         currentPrice=data.get("regularMarketPrice", 0.0),
         previousClose=data.get("previousClose", 0.0),
