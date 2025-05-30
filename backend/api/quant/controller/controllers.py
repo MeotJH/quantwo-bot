@@ -31,8 +31,13 @@ class TrendFollow(Resource):
     @jwt_required()
     @api.expect(quant_data_model)
     @api.marshal_with(trend_follows_register_response_model)
-    def post(self, stock_id):
+    def post(self, asset_type, stock_id):
         quant_data = QuantData(**api.payload)
+
+        dto =  TrendFollowRequestDTO(
+            asset_type=asset_type.upper(),
+            ticker=stock_id.upper()
+        )
         stock = self.quant_service.register_quant_by_stock(stock_id, quant_data)
         return stock
     

@@ -5,6 +5,7 @@ from flask_jwt_extended import get_jwt_identity
 
 from api import db
 from api.quant.domain.entities import Quant
+from api.quant.domain.stock_info_wrapper import AssetType
 from api.quant.domain.trend_follow import TrendFollow
 from api.quant.dual_momentum_services import get_todays_dual_momentum
 from api.user.entities import User
@@ -67,7 +68,12 @@ class QuantService:
         quants_dict = []
         for quant in quants:
             stock_id = quant.stock
-            stock = QuantService.find_stock_by_id(stock_id)
+            dto =  TrendFollowRequestDTO(
+                asset_type=AssetType.US.name,
+                ticker=stock_id.upper()
+            )
+            stock = QuantService.find_stock_by_id(dto)
+            
             
             # 수익 및 수익률 계산
             profits = calculate_profit(quant,stock)

@@ -107,6 +107,9 @@ class _QuantPageState extends ConsumerState<QuantPage> {
               height: 300,
               child: trendFollow.when(
                 data: (data) {
+                  if (data.models.isEmpty) {
+                    return const Center(child: Text("데이터가 부족합니다."));
+                  }
                   return QuantLineChart(
                     firstChartData: data.firstLineChart,
                     secondChartData: data.secondLineChart,
