@@ -48,6 +48,7 @@ class RouteNotifier extends Notifier<GoRouter> {
   static const String loginPath = '/login';
   static const String signUpPath = '/sign-up';
   static const String signUpCompletePath = '/sign-up-complete';
+  static const String quantPath = '/quant-form';
   static const String _strategySelectPath = '/quant-form/strategy';
   static const String dualMomentumInternationalPath =
       '/quant-form/quant/dual-momentum/international';
@@ -144,7 +145,7 @@ final bottomNavIndexProvider = StateProvider<int>((ref) => 0);
 class _ScaffoldWithNavBarState extends ConsumerState<ScaffoldWithNavBar> {
   int pathToNavIndex(String path) {
     if (path.startsWith(RouteNotifier._profilePath)) return 2;
-    if (path.startsWith(RouteNotifier._strategySelectPath)) return 1;
+    if (path.startsWith(RouteNotifier.quantPath)) return 1;
     return 0;
   }
 
