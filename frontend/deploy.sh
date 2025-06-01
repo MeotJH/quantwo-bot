@@ -4,10 +4,12 @@ flutter build web --web-renderer canvaskit  --dart-define=ENVIRONMENT=PROD &&
 CUSTOM_CODE=$(cat <<EOF
 
 self.addEventListener('push', function(event) {
+
   const data = event.data.json();
+  console.info(data,"data");
   const img_url = '/Icon-512.png';
   self.registration.showNotification(data.title, {
-    body: data.title.body,
+    body: data.body,
     icon: img_url,
     data: { url: data.url }
   })

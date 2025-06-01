@@ -5,6 +5,7 @@ class Notification:
     title: str
     body: str
     user_mail: str
+    url: str
 
     def to_dict(self):
         return asdict(self)

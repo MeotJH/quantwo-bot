@@ -16,7 +16,7 @@ user_sign_up_model = api.model('UserSignUpModel', {
     'password': password_field,
     'mobile': mobile_field,
     'appToken': fields.String(required=True, title='앱 토큰', description='앱 토큰', example='uuid.uuid4'),
-    'provider': fields.String(required=True, title='인증 제공자', description='로그인 인증 제공자 데이터', exaple='naver, google, self, etc...')
+    'provider': fields.String(required=True, title='인증 제공자', description='로그인 인증 제공자 데이터', example='self')
 })
 
 user_response_model = api.model('UserResponseModel', {

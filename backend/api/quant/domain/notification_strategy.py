@@ -82,8 +82,18 @@ class NotificationStrategy:
         notification = Notification(
             title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
             body=notification_content,
-            user_mail=quant.user.email
+            user_mail=quant.user.email,
+            url='/profile'
         )
+
+        # notification_me = Notification(
+        #     title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
+        #     body=notification_content,
+        #     user_mail='mallangyi@naver.com',
+        #     url='/profile'
+        # )
+        # NotificationService().send_notification_to_me(notification_me)
+
         logger.info(f'notification content :::::: {notification_content}')
         NotificationService().send_notification(notification)
     

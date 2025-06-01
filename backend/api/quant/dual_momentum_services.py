@@ -187,7 +187,7 @@ def run_dual_momentum_backtest(
     backtest = DualMomentumBacktest(etf_symbols, duration, str(savings_rate))
     return backtest.run_backtest()
 
-@cache.cached(timeout=86400)
+@cache.cached(timeout=86400, key_prefix="dual_momentum_intl")
 def get_todays_dual_momentum(saved_symbol: str, etf_symbols: List[str], savings_rate: float = 3.0) -> RebalancingRecommendation:
     """
     매월 1일 리밸런싱 추천
