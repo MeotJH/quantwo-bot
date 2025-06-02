@@ -10,7 +10,7 @@ import 'package:quant_bot_flutter/providers/dio_provider.dart';
 import 'package:quant_bot_flutter/providers/profile_provider.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
-import 'package:quant_bot_flutter/services/webpush_service.dart';
+import 'package:quant_bot_flutter/services/push_service.dart/push_service.dart';
 
 class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});
