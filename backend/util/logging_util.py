@@ -1,11 +1,8 @@
 import logging
-
+import sys
 
 class __LoggingWrapper:
     def __init__(self):
-        # 만약 기본 콘솔 로깅이 아닌 파일 로깅들이 필요하면 여거서 설정 추가
-        # 설정과 관련된 정보는 요 링크 참조
-        # https://docs.python.org/ko/3/howto/logging.html
         self.__default_logger_name = None
         self.__set_config()
 
@@ -13,23 +10,31 @@ class __LoggingWrapper:
         self.__default_logger_name = logger_name
         self.set_level(self.__default_logger_name, level)
 
-    # noinspection PyMethodMayBeStatic
     def __set_config(self, **kwargs):
-        logging.basicConfig(**kwargs)
+        # 기본 포맷터 설정
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
 
-    # noinspection PyMethodMayBeStatic
-    def set_level(self,  logger_name: str, level: int):
+        # StreamHandler 설정 (표준 출력)
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setFormatter(formatter)
+
+        # 루트 로거에 핸들러 추가
+        root_logger = logging.getLogger()
+        root_logger.setLevel(logging.INFO)
+        root_logger.addHandler(stream_handler)
+
+    def set_level(self, logger_name: str, level: int):
         print('New Logger Registered :', logger_name, level)
         _logger = logging.getLogger(logger_name)
         _logger.setLevel(level)
         _logger.propagate = True
 
-    # noinspection PyMethodMayBeStatic
-    # 명시적인 로거 이름으로 남길때 사용하는 메소드
     def get_logger(self, logger_name):
         return logging.getLogger(logger_name)
 
-    # set_default_logger_level(기본 로거 이름) 으로 로깅을 남길때 사용하는 메소드들
     def debug(self, msg, *args, **kwargs):
         if msg is not None:
             logging.getLogger(self.__default_logger_name).debug(msg, *args, **kwargs)
@@ -54,6 +59,4 @@ class __LoggingWrapper:
         if msg is not None:
             logging.getLogger(self.__default_logger_name).exception(msg, *args, **kwargs)
 
-
 logger = __LoggingWrapper()
-
