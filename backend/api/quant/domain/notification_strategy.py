@@ -3,6 +3,7 @@ from datetime import datetime
 from api.notification.models import Notification
 from api.notification.services import NotificationService
 from api.quant.domain.entities import Quant
+from api.quant.domain.model import TrendFollowRequestDTO
 from api.quant.domain.quant_type import QuantType
 from api.quant.domain.trend_follow import TrendFollow
 from api.quant.dual_momentum_services import get_todays_dual_momentum
@@ -16,8 +17,12 @@ class NotificationStrategy:
         """
         추세추종 전략 알림로직
         """
+        dto = TrendFollowRequestDTO(
+             asset_type="US".upper()
+            ,ticker=quant.stock.upper()
+            )
         stock_data = TrendFollow._get_stock_use_yfinance(
-                        quant.stock, period='1y', trend_follow_days=75
+                        dto, period='1y', trend_follow_days=75
                     )['stock_data']
         today_stock = stock_data.iloc[-1]
 
@@ -25,7 +30,6 @@ class NotificationStrategy:
         if cls._should_notify(quant, today_stock):
             with transaction_scope():
                 quant.current_status = 'BUY' if today_stock['Close'] > today_stock["Trend_Follow"] else 'SELL'
-
                 logger.info(f'this is quant.user.email: {quant.user.email}')
                 notification = Notification(
                     title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
@@ -40,6 +44,7 @@ class NotificationStrategy:
         logger.info("Quant Scheduler started")
 
         if not quant.notification:
+            logger.info("User Doesn't want Notification")
             return False
 
         try:
@@ -57,9 +62,10 @@ class NotificationStrategy:
         current_status = 'BUY' if close >= trend else 'SELL'
 
         if current_status != quant.current_status:
-            logger.info(f"상태 변경 감지: {quant.current_status} → {current_status}")
+            logger.info(f"상태 변경 감지: {quant.current_status} → {current_status} ::::: 알림상태 True 알림 실행")
             return True
 
+        logger.info(f"상태 동일: {quant.current_status} , {current_status}::::: 알림상태 False 생략")
         return False
 
 
