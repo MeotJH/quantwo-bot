@@ -9,6 +9,7 @@ from werkzeug.utils import import_string
 from dotenv import load_dotenv
 from api.common import jwt
 from config import config_by_name
+from constants import API_PREFIX
 from util.logging_util import logger
 
 from flask_sqlalchemy import SQLAlchemy
@@ -55,7 +56,7 @@ def _load_config(app):
     config_object = import_string(config_by_name[config_name])()
     app.config.from_object(config_object)
 
-#swagger info add
+#flask-restX info add
 def _init_api(app):
     app.add_url_rule("/", endpoint="ping", view_func=lambda: "Pong!")
     api = Api(
@@ -66,7 +67,7 @@ def _init_api(app):
         title="quantwo-bot-flask",
         version="1.0",
         description="QuantwoBot API",
-        prefix="/api/v1",
+        prefix=API_PREFIX,
     )
     return api
 
