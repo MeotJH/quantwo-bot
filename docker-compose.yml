@@ -11,6 +11,11 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   backend:
     build: ./backend
@@ -54,7 +59,11 @@ services:
     - "5432:5432"
     networks:
       - app-network
-
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 networks:
   app-network:
     driver: bridge
