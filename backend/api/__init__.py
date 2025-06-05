@@ -59,19 +59,19 @@ def create_app(testing=False):
 
     return app
 
-
+#환경분기 (local,dev,prod)
 def _load_config(app):
     config_name = os.getenv("ENVIRONMENT", "LOCAL")
     print(f"config_env: {config_name}")
     config_object = import_string(config_by_name[config_name])()
     app.config.from_object(config_object)
 
-
+#로깅 셋업
 def _setup_logger(app):
     logger.set_default_logger_level(app.name, app.config["LOG_LEVEL"])
     logger.set_level(logger_name="pynamodb", level=app.config["LOG_LEVEL"])
 
-
+#swagger info add
 def _init_api(app):
     api = Api(
         app,
@@ -85,7 +85,7 @@ def _init_api(app):
     )
     return api
 
-
+#controller 모듈들 add
 def _register_namespaces(api):
     #2. controller __init__의 명세를 등록해 주어야 한다.
     api.add_namespace(server_status_api)
@@ -103,14 +103,14 @@ def _register_namespaces(api):
     from api.notification import controllers
     from api.auth import controllers
 
-
+# flask module들 add
 def _init_extensions(app):
     jwt.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(app)
 
-
+#스케줄링 모듈 add
 def _init_schedulers(app):
     from api.scheduler.quant_scheduler import QuantScheduler
     quant_scheduler = QuantScheduler(app)
@@ -118,13 +118,13 @@ def _init_schedulers(app):
     with app.app_context():
         quant_scheduler.start()
 
-
+#캐시 모듈 add
 def _init_cache(app):
     app.config["CACHE_TYPE"] = "SimpleCache"
     app.config["CACHE_DEFAULT_TIMEOUT"] = 300
     cache.init_app(app)
 
-
+#스케줄링 exit함수 add
 def _register_shutdown_hooks(app):
     atexit.register(lambda: app.quant_scheduler.shutdown())
 
