@@ -5,8 +5,8 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Resource
 import jwt
 from api.auth import auth_api as api
-from api.auth.repository import AuthRepository
 from api.auth.service import login_or_register_with_naver
+from api.user.repository import UserRepository
 from config import BaseConfig
 from exceptions import UnauthorizedException
 from util.logging_util import logger
@@ -61,7 +61,7 @@ class OauthCallbackNaver(Resource):
         fe_redirect_uri  = decoded_state.get("fe_redirect_uri")
 
         #jwt_token 생성
-        jwt_token = login_or_register_with_naver(code=code,state=state,user_repo=AuthRepository())
+        jwt_token = login_or_register_with_naver(code=code,state=state,user_repo=UserRepository())
 
         #프로토콜이 맞지 않으면 403
         if not fe_redirect_uri.startswith("http://localhost") and not fe_redirect_uri.startswith("https://quantwo-bot"):

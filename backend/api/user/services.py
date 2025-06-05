@@ -3,17 +3,16 @@ from api import db
 from uuid import uuid4
 from werkzeug.security import generate_password_hash, check_password_hash
 from api.user.repository import UserRepository
-from exceptions import  UnauthorizedException, UserAlreadyExistException
+from exceptions import  BadRequestException, UnauthorizedException
 from flask_jwt_extended import create_access_token, get_jwt_identity
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 
-def save_user_v2(user_repo:UserRepository,user:dict):
+def save_user(user_repo:UserRepository,user:dict):
     if not user.get("email"):
-        raise ValueError("이메일이 빈값입니다.")
+        raise BadRequestException("이메일이 빈값입니다.")
     
     if not user.get("userName"):
-        raise ValueError("유저명이 빈값입니다.")
+        raise BadRequestException("유저명이 빈값입니다.")
 
     password_hash = generate_password_hash(user['password']) \
                         if user.get('password') and user.get('provider') in [None, 'self'] else None
@@ -25,31 +24,7 @@ def save_user_v2(user_repo:UserRepository,user:dict):
         "app_token": user.get("appToken"),
         "provider": user.get("provider", "self"),
     }
-    return user_repo.save_user(user_data)
-
-def save_user(user):
-    """
-    유저 저장 함수
-    """
-    try:
-        id = uuid4()
-        password_hash = generate_password_hash(user['password']) \
-                        if user.get('password') and user.get('provider') in [None, 'self'] else None
-
-        new_user = User(uuid=id,
-                        username=user['userName'],
-                        email=user['email'],
-                        password=password_hash,
-                        app_token=user.get('appToken', None),
-                        provider= user.get('provider','self')
-                        )
-        db.session.add(new_user)
-        db.session.commit()
-    #IntegrityError DB중복 예외처리
-    except IntegrityError as e:
-        db.session.rollback()
-        raise UserAlreadyExistException(f'중복된 메일 입니다 😞😞', 409)
-    return new_user.to_dict()
+    return user_repo.save(user_data).to_dict()
 
 def find_user(user):
     db_user = User.query.filter_by(email=user['email']).first()

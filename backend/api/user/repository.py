@@ -1,11 +1,12 @@
-from uuid import uuid4
-from werkzeug.security import generate_password_hash
 from api.user.entities import User
 from api import db
 from sqlalchemy.exc import IntegrityError
 from exceptions import UserAlreadyExistException
 
 class UserRepository:
+    def get_by_email(self, email):
+        return User.query.filter_by(email=email).first()
+    
     def save(self, user_data: dict) -> User:
         try:
             user = User(**user_data)
