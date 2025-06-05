@@ -41,22 +41,11 @@ cache = Cache()
 
 def create_app(testing=False):
     app = Flask(__name__)
-    if testing:
-        app.config["TESTING"] = True
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-
     load_dotenv()
-    app.add_url_rule("/", endpoint="ping", view_func=lambda: "Pong!")
-
     _load_config(app)
-    _setup_logger(app)
     api = _init_api(app)
     _register_namespaces(api)
     _init_extensions(app)
-    _init_schedulers(app)
-    _init_cache(app)
-    _register_shutdown_hooks(app)
-
     return app
 
 #환경분기 (local,dev,prod)
@@ -66,13 +55,9 @@ def _load_config(app):
     config_object = import_string(config_by_name[config_name])()
     app.config.from_object(config_object)
 
-#로깅 셋업
-def _setup_logger(app):
-    logger.set_default_logger_level(app.name, app.config["LOG_LEVEL"])
-    logger.set_level(logger_name="pynamodb", level=app.config["LOG_LEVEL"])
-
 #swagger info add
 def _init_api(app):
+    app.add_url_rule("/", endpoint="ping", view_func=lambda: "Pong!")
     api = Api(
         app,
         authorizations=authorizations,
@@ -110,6 +95,22 @@ def _init_extensions(app):
     migrate.init_app(app, db)
     CORS(app)
 
+#런타임 서비스 기동시 필요한 함수들
+def bootstrap_runtime_services(app):
+    _setup_logger(app)
+    _init_schedulers(app)
+    _register_shutdown_hooks(app)
+    _init_cache(app)
+
+#로깅 셋업
+def _setup_logger(app):
+    logger.set_default_logger_level(app.name, app.config["LOG_LEVEL"])
+    logger.set_level(logger_name="pynamodb", level=app.config["LOG_LEVEL"])
+
+#스케줄링 exit함수 add
+def _register_shutdown_hooks(app):
+    atexit.register(lambda: app.quant_scheduler.shutdown())
+
 #스케줄링 모듈 add
 def _init_schedulers(app):
     from api.scheduler.quant_scheduler import QuantScheduler
@@ -123,8 +124,4 @@ def _init_cache(app):
     app.config["CACHE_TYPE"] = "SimpleCache"
     app.config["CACHE_DEFAULT_TIMEOUT"] = 300
     cache.init_app(app)
-
-#스케줄링 exit함수 add
-def _register_shutdown_hooks(app):
-    atexit.register(lambda: app.quant_scheduler.shutdown())
 

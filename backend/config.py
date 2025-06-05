@@ -43,7 +43,10 @@ class BaseConfig(object):
 class LocalConfig(BaseConfig):
     DEBUG = True
 
-
+# Flask Test Configuration
+class TestConfig(BaseConfig):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
 
 # Flask Dev Configuration
 class DevConfig(BaseConfig):
@@ -55,4 +58,4 @@ class ProdConfig(BaseConfig):
     BASE_URL = "https://localhost"
 
 
-config_by_name = dict(LOCAL="config.LocalConfig", PROD="config.DevConfig")
+config_by_name = dict(LOCAL="config.LocalConfig", PROD="config.DevConfig", TEST="config.TestConfig")
