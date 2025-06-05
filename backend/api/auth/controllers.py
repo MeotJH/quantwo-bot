@@ -5,9 +5,11 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Resource
 import jwt
 from api.auth import auth_api as api
+from api.auth.repository import AuthRepository
 from api.auth.service import login_or_register_with_naver
 from config import BaseConfig
 from exceptions import UnauthorizedException
+from util.logging_util import logger
 
 NAVER_CLIENT_ID = 'NAVER_CLIENT_ID'
 NAVER_CLIENT_SECRET = 'NAVER_CLIENT_SECRET'
@@ -48,6 +50,10 @@ class OauthNaver(Resource):
 class OauthCallbackNaver(Resource):
 
     def get(self):
+        """
+            네이버 간편로그인 요청 리다이렉트 이후 콜백받는 함수
+        """
+                
         #callback받아서 보냈던 변수 파싱
         code = request.args.get('code')
         state = request.args.get('state')
@@ -55,11 +61,10 @@ class OauthCallbackNaver(Resource):
         fe_redirect_uri  = decoded_state.get("fe_redirect_uri")
 
         #jwt_token 생성
-        jwt_token = login_or_register_with_naver(code=code,state=state)
+        jwt_token = login_or_register_with_naver(code=code,state=state,user_repo=AuthRepository())
 
         #프로토콜이 맞지 않으면 403
         if not fe_redirect_uri.startswith("http://localhost") and not fe_redirect_uri.startswith("https://quantwo-bot"):
             raise UnauthorizedException('Unauthorized redirect', 403) 
         
-        print(f'this is fe_redirect_uri ::::: {fe_redirect_uri}')
         return redirect(f"{fe_redirect_uri}?token={jwt_token}")

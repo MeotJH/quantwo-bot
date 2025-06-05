@@ -2,10 +2,30 @@ from api.user.entities import User
 from api import db
 from uuid import uuid4
 from werkzeug.security import generate_password_hash, check_password_hash
-from exceptions import BadRequestException, UnauthorizedException, UserAlreadyExistException
+from api.user.repository import UserRepository
+from exceptions import  UnauthorizedException, UserAlreadyExistException
 from flask_jwt_extended import create_access_token, get_jwt_identity
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
+
+def save_user_v2(user_repo:UserRepository,user:dict):
+    if not user.get("email"):
+        raise ValueError("이메일이 빈값입니다.")
+    
+    if not user.get("userName"):
+        raise ValueError("유저명이 빈값입니다.")
+
+    password_hash = generate_password_hash(user['password']) \
+                        if user.get('password') and user.get('provider') in [None, 'self'] else None
+    user_data = {
+        "uuid": uuid4(),
+        "username": user['userName'],
+        "email": user["email"],
+        "password": password_hash,
+        "app_token": user.get("appToken"),
+        "provider": user.get("provider", "self"),
+    }
+    return user_repo.save_user(user_data)
 
 def save_user(user):
     """

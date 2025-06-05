@@ -1,7 +1,8 @@
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from api import user_api as api
 from flask_restx import Resource, fields
-from api.user.services import find_user_by_email, save_user, find_user, update_user_fcm_token
+from api.auth.repository import AuthRepository
+from api.user.services import find_user_by_email, find_user, save_user_v2, update_user_fcm_token
 
 email_field = fields.String(required=True, title='사용자 이메일', description="아이디로 사용됨", example='name@mail.dot',
                             pattern='([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
@@ -32,7 +33,11 @@ class UserSignUp(Resource):
     @api.marshal_with(user_response_model)
     def post(self):
         user = api.payload
-        saved_user = save_user(user=user)
+        user_repo = AuthRepository()
+        saved_user = save_user_v2(
+                        user=user,
+                        user_repo=user_repo
+                      )
         return saved_user
 
 user_sign_in_model = api.model('UserSignInModel', {
