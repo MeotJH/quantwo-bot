@@ -3,6 +3,7 @@ import yfinance
 from api.quant.domain.model import TrendFollowRequestDTO
 from api.quant.domain.quant_type import AssetType, DataSource
 from api.quant.domain.trend_follow_yahoo import TrendFollowYahoo
+from exceptions import EntityNotFoundException
 from util.logging_util import logger
 
 
@@ -44,13 +45,12 @@ class TrendFollow():
     
 
     @classmethod
-    def _get_stock(cls, dto, period='1y', trend_follow_days=75):
+    def _get_stock(cls, dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
         #일단 야후만 존재하니까 이렇게 넣기
-        key = (DataSource.YAHOO, AssetType(dto.asset_type))
-
+        key = (DataSource.YAHOO, AssetType.from_str(dto.asset_type))
         handler = cls._dispatch_table.get(key)
         if handler is None:
-            raise ValueError(f"Unsupported source/asset combination: {key}")
+            raise EntityNotFoundException(f"Unsupported source/asset combination: {key}",422)
 
         return handler(cls, dto, period, trend_follow_days)
     
