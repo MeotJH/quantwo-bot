@@ -26,7 +26,7 @@ class Notification(Resource):
 
         NotificationService().send_notification(notification=models.Notification(
             title='퀀투봇 [추세추종투자]',
-            body='저장했던 추세가 반전되었습니다. 지금 투자하세요',
+            body='저장했던 추세 반전이 감지되었습니다.',
             user_mail='name@mail.com'
         ))
         return { 'success': True }, 200

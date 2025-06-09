@@ -2,15 +2,7 @@ from enum import Enum
 
 from api.quant.domain.data_source_parser import from_yahoo_crypto, from_yahoo_us
 from api.quant.domain.model import StockInfoModel
-
-class DataSource(Enum):
-    YAHOO = 'yahoo'
-    COINMARKETCAP = 'coinmarketcap'
-
-
-class AssetType(Enum):
-    US = 'us'
-    CRYPTO = 'crypto'
+from api.quant.domain.quant_type import AssetType, DataSource
 
 
 class StockInfoWrapper:

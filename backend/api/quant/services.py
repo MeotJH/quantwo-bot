@@ -5,6 +5,7 @@ from flask_jwt_extended import get_jwt_identity
 
 from api import db
 from api.quant.domain.entities import Quant
+from api.quant.domain.quant_type import QuantType
 from api.quant.domain.stock_info_wrapper import AssetType
 from api.quant.domain.trend_follow import TrendFollow
 from api.quant.dual_momentum_services import get_todays_dual_momentum
@@ -121,16 +122,15 @@ class QuantService:
             #db.session.commit()
             return quant.to_dict()
 
-    def check_and_notify(self, notify_quant_type):
+    def check_and_notify(self, notify_quant_type : QuantType):
         try:
             logger.info("check_and_notify scheduling 시작중...")
-
             #notification 에서 알림 on한 객체들을 모은다.
             notification_enabled = NotificationEntity.query.filter_by(enabled=True).all()
             notification_enabled_set = {n.user_id for n in notification_enabled}
 
             #quant에서 알림 on 한 객체들을 quant_type별로 가져온다.
-            quants = Quant.query.options(joinedload(Quant.user)).filter_by(notification=True,quant_type=notify_quant_type).all()
+            quants = Quant.query.options(joinedload(Quant.user)).filter_by(notification=True,quant_type=notify_quant_type.value).all()
 
             #notification on한 quant들만 필터링한다.  
             filtered_quants = [quant for quant in quants if quant.user_id in notification_enabled_set]

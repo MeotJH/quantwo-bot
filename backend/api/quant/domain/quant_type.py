@@ -12,3 +12,12 @@ class QuantType(str, Enum):
             QuantType.DUAL_MOMENTUM_INTERNATIONAL: "듀얼모멘텀 국제전략",
             QuantType.ETC: "기타",
         }[self]
+
+class DataSource(Enum):
+    YAHOO = 'yahoo'
+    COINMARKETCAP = 'coinmarketcap'
+
+
+class AssetType(Enum):
+    US = 'us'
+    CRYPTO = 'crypto'

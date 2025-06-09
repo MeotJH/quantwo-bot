@@ -21,7 +21,7 @@ class NotificationStrategy:
              asset_type="US".upper()
             ,ticker=quant.stock.upper()
             )
-        stock_data = TrendFollow._get_stock_use_yfinance(
+        stock_data = TrendFollow._get_stock(
                         dto, period='1y', trend_follow_days=75
                     )['stock_data']
         today_stock = stock_data.iloc[-1]
@@ -33,7 +33,7 @@ class NotificationStrategy:
                 logger.info(f'this is quant.user.email: {quant.user.email}')
                 notification = Notification(
                     title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
-                    body=f"{quant.stock}의 상태가 변경되었습니다. 확인해주세요.",
+                    body=f"저장하신 {quant.stock}의 상태변경이 감지되었습니다. 확인해주세요.",
                     user_mail=quant.user.email
                 )
 
@@ -91,14 +91,6 @@ class NotificationStrategy:
             user_mail=quant.user.email,
             url='/profile'
         )
-
-        # notification_me = Notification(
-        #     title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
-        #     body=notification_content,
-        #     user_mail='mallangyi@naver.com',
-        #     url='/profile'
-        # )
-        # NotificationService().send_notification_to_me(notification_me)
 
         logger.info(f'notification content :::::: {notification_content}')
         NotificationService().send_notification(notification)
