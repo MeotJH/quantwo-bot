@@ -15,7 +15,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: backend
-        run:
+        run: |
           cd backend 
           pip install -r requirements.txt
 
