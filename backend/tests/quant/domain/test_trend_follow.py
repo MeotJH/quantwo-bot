@@ -1,10 +1,39 @@
 from unittest.mock import Mock
 
+import pandas as pd
 import pytest
 from api.quant.domain.model import TrendFollowRequestDTO
 from api.quant.domain.quant_type import AssetType, DataSource
 from api.quant.domain.trend_follow import TrendFollow
 from exceptions import BadRequestException, EntityNotFoundException
+
+def test_find_stock_by_id(mocker):
+    mock_result = {
+        'stock_data' :  pd.DataFrame(
+            {
+                "Close":[100,101,102]
+             ,  "Trend_Follow": [1.0, 0.0, None]
+             ,  "Date": pd.to_datetime(["2024-01-01", "2024-01-02", "2024-01-03"])
+             }
+        ),
+        'stock_info' : {},
+    }
+    mocker.patch('api.quant.domain.trend_follow.TrendFollow._get_stock', return_value=mock_result)
+
+    mocker.patch('api.quant.domain.trend_follow.TrendFollow._find_last_cross_trend_follow', return_value=0.0)
+
+    dto = TrendFollowRequestDTO(
+         asset_type='us',
+         ticker='aapl',
+    )
+
+    result = TrendFollow.find_stock_by_id(dto)
+
+    assert 'stock_history' in result
+    assert 'stock_info' in result
+    assert len(result['stock_history']) == 2
+    assert result['stock_history'][0]['Date'] == "2024-01-02"
+    assert result['stock_info']['lastCrossTrendFollow'] == 0.0
 
 
 def test__get_stock_success(mocker):
