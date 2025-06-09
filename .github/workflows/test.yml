@@ -1,0 +1,16 @@
+# .github/workflows/test.yml
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Python 설치
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: 의존성 설치 및 테스트
+        run: |
+          pip install -r requirements.txt
+          pytest tests/
