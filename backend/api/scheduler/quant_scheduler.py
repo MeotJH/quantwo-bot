@@ -3,9 +3,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from api.quant.domain.quant_type import QuantType
 from api.quant.services import QuantService
 import logging
-from apscheduler.schedulers.base import SchedulerNotRunningError
 from apscheduler.triggers.cron import CronTrigger
-from apscheduler.triggers.interval import IntervalTrigger
 from pytz import timezone
 
 logger = logging.getLogger(__name__)
@@ -44,11 +42,11 @@ class QuantScheduler:
 
     def _run_check_and_notify_trend_follow(self):
         with self.app.app_context():
-            self.quant_service.check_and_notify(QuantType.TREND_FOLLOW.value)
+            self.quant_service.check_and_notify(QuantType.TREND_FOLLOW)
 
     def _run_check_and_notify_dualmomentum_international(self):
         with self.app.app_context():
-            self.quant_service.check_and_notify(QuantType.DUAL_MOMENTUM_INTERNATIONAL.value)
+            self.quant_service.check_and_notify(QuantType.DUAL_MOMENTUM_INTERNATIONAL)
 
 
     def shutdown(self):

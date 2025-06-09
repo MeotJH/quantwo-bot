@@ -2,34 +2,29 @@ from api.user.entities import User
 from api import db
 from uuid import uuid4
 from werkzeug.security import generate_password_hash, check_password_hash
-from exceptions import BadRequestException, UnauthorizedException, UserAlreadyExistException
+from api.user.repository import UserRepository
+from exceptions import  BadRequestException, UnauthorizedException
 from flask_jwt_extended import create_access_token, get_jwt_identity
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 
-def save_user(user):
-    """
-    유저 저장 함수
-    """
-    try:
-        id = uuid4()
-        password_hash = generate_password_hash(user['password']) \
-                        if user.get('password') and user.get('provider') in [None, 'self'] else None
+def save_user(user_repo:UserRepository,user:dict):
+    if not user.get("email"):
+        raise BadRequestException("이메일이 빈값입니다.")
+    
+    if not user.get("userName"):
+        raise BadRequestException("유저명이 빈값입니다.")
 
-        new_user = User(uuid=id,
-                        username=user['userName'],
-                        email=user['email'],
-                        password=password_hash,
-                        app_token=user.get('appToken', None),
-                        provider= user.get('provider','self')
-                        )
-        db.session.add(new_user)
-        db.session.commit()
-    #IntegrityError DB중복 예외처리
-    except IntegrityError as e:
-        db.session.rollback()
-        raise UserAlreadyExistException(f'중복된 메일 입니다 😞😞', 409)
-    return new_user.to_dict()
+    password_hash = generate_password_hash(user['password']) \
+                        if user.get('password') and user.get('provider') in [None, 'self'] else None
+    user_data = {
+        "uuid": uuid4(),
+        "username": user['userName'],
+        "email": user["email"],
+        "password": password_hash,
+        "app_token": user.get("appToken"),
+        "provider": user.get("provider", "self"),
+    }
+    return user_repo.save(user_data).to_dict()
 
 def find_user(user):
     db_user = User.query.filter_by(email=user['email']).first()

@@ -1,15 +1,18 @@
 import yfinance
 
 from api.quant.domain.model import TrendFollowRequestDTO
-from api.quant.domain.stock_info_wrapper import DataSource, StockInfoWrapper
+from api.quant.domain.quant_type import AssetType, DataSource
+from api.quant.domain.trend_follow_yahoo import TrendFollowYahoo
+from exceptions import EntityNotFoundException
+from util.logging_util import logger
 
 
 class TrendFollow():
 
     @staticmethod
     def find_stock_by_id(dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
-        print(f'item_id :::::: {dto.ticker}')
-        finance_result = TrendFollow._get_stock_use_yfinance(dto, period, trend_follow_days)
+        logger.info(f'item_id :::::: {dto.ticker}')
+        finance_result = TrendFollow._get_stock(dto, period, trend_follow_days)
         # 마지막 교차점의 이동평균 값 가져오기
         last_cross_trend_follow = TrendFollow._find_last_cross_trend_follow(stock_data=finance_result['stock_data'])
         finance_result['stock_info']['lastCrossTrendFollow'] = last_cross_trend_follow
@@ -20,30 +23,8 @@ class TrendFollow():
         stocks_dict = stock_data.reset_index().to_dict(orient='records')
         for stock in stocks_dict:
             stock['Date'] = stock['Date'].strftime('%Y-%m-%d')
-
         
         return {'stock_history' : stocks_dict, 'stock_info': finance_result['stock_info']}
-    
-    @staticmethod
-    def _get_stock_use_yfinance(dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
-        #asset_type에 따른 api값 달라짐으로
-        #TODO api값에 따라서 달라지지 않게 wrapping 필요함 response를 infrastucture를 만들어서 closeprice로 통일 등..
-        #close_price =  'Close' if dto.asset_type == 'US' else 'regularMarketPreviousClose'
-
-         # 주식 데이터를 최근 period간 가져옴
-        print(f"this is tickername :::: {dto.ticker}")
-        stock_data = yfinance.Ticker(dto.ticker).history(period=period)
-        # 75일 이동평균선 계산
-        stock_data['Trend_Follow'] = stock_data['Close'].rolling(window=trend_follow_days).mean()
-
-        print(f"{stock_data['Trend_Follow']} :::: <<<<")
-        stock_info_model = StockInfoWrapper.from_source(source=DataSource.YAHOO.value
-                                ,category=dto.asset_type
-                                , raw_data=yfinance.Ticker(dto.ticker).info
-                                )
-        
-        print(f'stock_info_model.__dict__ :::: {stock_info_model.__dict__}')
-        return {"stock_data": stock_data, "stock_info": stock_info_model.__dict__}
     
 
     @staticmethod
@@ -61,3 +42,20 @@ class TrendFollow():
             last_cross_trend_follow = None
         
         return last_cross_trend_follow
+    
+
+    @classmethod
+    def _get_stock(cls, dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
+        #일단 야후만 존재하니까 이렇게 넣기
+        key = (DataSource.YAHOO, AssetType.from_str(dto.asset_type))
+        handler = cls._dispatch_table.get(key)
+        if handler is None:
+            raise EntityNotFoundException(f"Unsupported source/asset combination: {key}",422)
+
+        return handler(cls, dto, period, trend_follow_days)
+    
+    _dispatch_table = {
+        (DataSource.YAHOO, AssetType.US): TrendFollowYahoo._get_stock_use_yfinance,
+        (DataSource.YAHOO, AssetType.CRYPTO): TrendFollowYahoo._get_stock_use_yfinance,
+        # (DataSource.COINMARKETCAP, AssetType.CRYPTO): _get_stock_coinmarketcap, 등 추가 가능
+    }

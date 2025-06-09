@@ -3,13 +3,12 @@ import string
 import uuid
 from flask_jwt_extended import create_access_token
 import requests
-from api.user.entities import User
-from api.user.services import save_user
+from api.user.repository import UserRepository
 from util.logging_util import logger
 
 NAVER_CLIENT_ID = 'NAVER_CLIENT_ID'
 NAVER_CLIENT_SECRET = 'NAVER_CLIENT_SECRET'
-def login_or_register_with_naver(code: string, state: string):
+def login_or_register_with_naver(code: string, state: string, user_repo: UserRepository):
     """
     네이버 간편로그인으로 가입or로그인처리 후 fe와 통신위한 jwt리턴한다.
     """
@@ -36,11 +35,10 @@ def login_or_register_with_naver(code: string, state: string):
     if not email:
         return {"error": "No email from Naver"}, 400
     
-
     #처음 이용자라면 가입처리
-    user = User.query.filter_by(email=email).first()
+    user = user_repo.get_by_email(email)
     if not user:
-        save_user(
+        user_repo.save(
             {
                 'userName' :f"{email.split('@')[0]}_{uuid.uuid4().hex[:4]}",
                 'email' : email,

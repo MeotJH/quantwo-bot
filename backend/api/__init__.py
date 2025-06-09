@@ -1,25 +1,28 @@
+import atexit
 import os
-import json
 
 from flask import Flask
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_restx import Api
 from werkzeug.utils import import_string
-from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from api.common import jwt
+from config import config_by_name
+from constants import API_PREFIX
+from util.logging_util import logger
+
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+#1. controller __init__.py를 import해줘야한다.
 from api.server_status import server_status_api
 from api.stock import stock_api
 from api.quant import quant_api
 from api.user import user_api
 from api.notification import notification_api
 from api.auth import auth_api
-from config import config_by_name
-from util.logging_util import logger
 
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 
 authorizations = {
     "user_token": {
@@ -37,12 +40,25 @@ migrate = Migrate()
 cache = Cache()
 
 
-def create_app():
+def create_app(testing=False):
     app = Flask(__name__)
-    # for zappa health check;
-    app.add_url_rule("/", endpoint="ping", view_func=lambda: "Pong!")
     load_dotenv()
-    # app.wsgi_app = ProxyFix(app.wsgi_app)
+    _load_config(app)
+    api = _init_api(app)
+    _register_namespaces(api)
+    _init_extensions(app)
+    return app
+
+#환경분기 (local,dev,prod)
+def _load_config(app):
+    config_name = os.getenv("ENVIRONMENT", "LOCAL")
+    print(f"config_env: {config_name}")
+    config_object = import_string(config_by_name[config_name])()
+    app.config.from_object(config_object)
+
+#flask-restX info add
+def _init_api(app):
+    app.add_url_rule("/", endpoint="ping", view_func=lambda: "Pong!")
     api = Api(
         app,
         authorizations=authorizations,
@@ -51,29 +67,13 @@ def create_app():
         title="quantwo-bot-flask",
         version="1.0",
         description="QuantwoBot API",
-        prefix='/api/v1',
+        prefix=API_PREFIX,
     )
-    
-    config_name = os.getenv("ENVIRONMENT", "LOCAL")
-    print(f"config_env:{config_name}")
-    config_object = import_string(config_by_name[config_name])()
-    app.config.from_object(config_object)
+    return api
 
-
-    # 참조하는 모든 라이브러리의 로그 레벨을 변경하고 싶을때 아래 코드를 주석 풀면 모든 라이브러리의 로그가 출력된다.
-    # logger.set_level(None, app.config['LOG_LEVEL'])
-
-    # 텝플릿 에서 사용하는 기본 logger 설정
-    logger.set_default_logger_level(app.name, app.config["LOG_LEVEL"])
-
-    # dynamodb logger 설정
-    logger.set_level(logger_name="pynamodb", level=app.config["LOG_LEVEL"])
-
-    # firebase admin 설정
-
-    # jwt
-    jwt.init_app(app)
-    # register namespace
+#controller 모듈들 add
+def _register_namespaces(api):
+    #2. controller __init__의 명세를 등록해 주어야 한다.
     api.add_namespace(server_status_api)
     api.add_namespace(stock_api)
     api.add_namespace(quant_api)
@@ -81,6 +81,7 @@ def create_app():
     api.add_namespace(notification_api)
     api.add_namespace(auth_api)
     # register controllers
+    #3. controller controller를 import해줘야한다.
     from api.server_status import controllers
     from api.stock import controllers
     from api.quant.controller import controllers
@@ -88,34 +89,40 @@ def create_app():
     from api.notification import controllers
     from api.auth import controllers
 
-    # enable CORS for front-end app
+# flask module들 add
+def _init_extensions(app):
+    jwt.init_app(app)
+    db.init_app(app)
+    migrate.init_app(app, db)
     CORS(app)
-    # sqlalchemy 및 데이터베이스 DDL 관리 lib 
-    #db.init_app(app)
-    #migrate.init_app(app, db)
 
-    from api.quant.domain.entities import Quant
-    from api.user.entities import User
-    from api.stock.domain.entities import Stocks
+#런타임 서비스 기동시 필요한 함수들
+def bootstrap_runtime_services(app):
+    _setup_logger(app)
+    _init_schedulers(app)
+    _register_shutdown_hooks(app)
+    _init_cache(app)
 
+#로깅 셋업
+def _setup_logger(app):
+    logger.set_default_logger_level(app.name, app.config["LOG_LEVEL"])
+    logger.set_level(logger_name="pynamodb", level=app.config["LOG_LEVEL"])
+
+#스케줄링 exit함수 add
+def _register_shutdown_hooks(app):
+    atexit.register(lambda: app.quant_scheduler.shutdown())
+
+#스케줄링 모듈 add
+def _init_schedulers(app):
     from api.scheduler.quant_scheduler import QuantScheduler
-    quant_scheduler = QuantScheduler(app)  # app 인스턴스를 전달
-
+    quant_scheduler = QuantScheduler(app)
+    app.quant_scheduler = quant_scheduler
     with app.app_context():
-        # 데이터베이스 초기화
-        db.init_app(app)
-        migrate.init_app(app, db)
-
-        # 스케줄러 시작
         quant_scheduler.start()
 
-    import atexit
-    atexit.register(quant_scheduler.shutdown)
-
-
-    # SimpleCache: 메모리 기반, 서버 재시작 시 캐시 초기화됨
+#캐시 모듈 add
+def _init_cache(app):
     app.config["CACHE_TYPE"] = "SimpleCache"
-    app.config["CACHE_DEFAULT_TIMEOUT"] = 300  # 5분
+    app.config["CACHE_DEFAULT_TIMEOUT"] = 300
     cache.init_app(app)
 
-    return app

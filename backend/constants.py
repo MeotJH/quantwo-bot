@@ -46,3 +46,6 @@ class SingletonInstance:
         cls.__instance = cls(*args, **kargs)
         cls.instance = cls.__get_instance
         return cls.__instance
+
+
+API_PREFIX = '/api/v1'

@@ -1,14 +1,15 @@
 import traceback
 from http import HTTPStatus
 
-from api import create_app
+from api import bootstrap_runtime_services, create_app
 from util.logging_util import logger
 
 
 import firebase_admin
 from firebase_admin import credentials
 
-app = create_app()
+app = create_app(testing=False)
+bootstrap_runtime_services(app)
 
 
 @app.errorhandler(Exception)
