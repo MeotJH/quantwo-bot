@@ -19,7 +19,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Set environment variables
-        run: echo "SQLALCHEMY_DATABASE_URI=sqlite:///test.db" >> backend/.env
+        run: |
+          echo "SQLALCHEMY_DATABASE_URI=sqlite:///test.db" >> backend/.env
+          echo "JWT_SECRET_KEY=your_test_secret_key" >> backend/.env
 
       - name: Run tests
         working-directory: backend
