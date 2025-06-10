@@ -9,7 +9,7 @@ from constants import API_PREFIX
 #자기자신을 확인하는 함수 테스트한다.
 def test_me_endpoint_returns_user_id(client, app):
     with app.app_context():
-        test_user_id = 123
+        test_user_id = "123"
         access_token = create_access_token(identity=test_user_id)
 
     headers = {
