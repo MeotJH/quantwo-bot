@@ -40,7 +40,7 @@ def login_or_register_with_naver(code: string, state: string, user_repo: UserRep
     if not user:
         user_repo.save(
             {
-                'userName' :f"{email.split('@')[0]}_{uuid.uuid4().hex[:4]}",
+                'username' :f"{email.split('@')[0]}_{uuid.uuid4().hex[:4]}",
                 'email' : email,
                 'password' : None,
                 'provider' : 'naver'
