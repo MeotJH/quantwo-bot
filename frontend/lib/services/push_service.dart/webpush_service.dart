@@ -16,7 +16,7 @@ class WebPushService {
       '/notification/',
       options: Options(headers: {"Content-Type": "application/json"}),
       data: {
-        'toggle': isToggle,
+        'enabled': isToggle,
       },
     );
 
