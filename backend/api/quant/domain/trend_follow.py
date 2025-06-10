@@ -52,7 +52,7 @@ class TrendFollow():
         if handler is None:
             raise EntityNotFoundException(f"Unsupported source/asset combination: {key}",422)
 
-        return handler(cls, dto, period, trend_follow_days)
+        return handler(dto, period, trend_follow_days)
     
     _dispatch_table = {
         (DataSource.YAHOO, AssetType.US): TrendFollowYahoo._get_stock_use_yfinance,
