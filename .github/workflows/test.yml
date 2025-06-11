@@ -5,12 +5,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Python 설치
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-      - name: 의존성 설치 및 테스트
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: backend
         run: |
-          pip install -r /backend/requirements.txt
-          pytest tests/
+          pip install -r requirements.txt
+
+      - name: Set environment variables
+        run: |
+          echo "SQLALCHEMY_DATABASE_URI=sqlite:///test.db" >> backend/.env
+          echo "JWT_SECRET_KEY=your_test_secret_key" >> backend/.env
+
+      - name: Run tests
+        working-directory: backend
+        run: pytest tests/
+
