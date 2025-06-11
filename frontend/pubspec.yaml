@@ -53,6 +53,7 @@ dependencies:
   marquee: ^2.2.3
   url_launcher: ^6.3.1
   intl: ^0.20.2
+  number_display: ^3.0.0
 
 dev_dependencies:
   flutter_test:

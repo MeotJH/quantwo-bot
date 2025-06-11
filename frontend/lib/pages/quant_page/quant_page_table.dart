@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:number_display/number_display.dart';
 
 class QuantPageTable extends StatelessWidget {
   final QuantStockModel recentStockOne;
@@ -10,6 +11,7 @@ class QuantPageTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat('#,###');
+    final display = createDisplay(length: 6);
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(1),
@@ -53,8 +55,7 @@ class QuantPageTable extends StatelessWidget {
               color: CustomColors.joyOrange100),
           _buildTableCell('\$${recentStockOne.dayLow}',
               color: CustomColors.clearBlue100),
-          _buildTableCell(
-              '\$${formatter.format(recentStockOne.enterpriseValue)}'),
+          _buildTableCell('\$${display(recentStockOne.enterpriseValue)}'),
         ]),
       ],
     );

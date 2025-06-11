@@ -66,6 +66,7 @@ class _StockListPageState extends ConsumerState<StockListPage>
                 fontWeight: FontWeight.bold,
               ),
             ),
+            //TODO 라디오 넣어서 원화 외화
           ],
         ),
         actions: [
