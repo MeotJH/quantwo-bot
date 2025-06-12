@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/models/stock_model/stock_model.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
@@ -33,7 +35,7 @@ class StocksNotifier extends AutoDisposeAsyncNotifier<List<StockModel>> {
       firstFetchStocks = stocks;
       return stocks;
     } catch (e) {
-      print(e);
+      log(e.toString());
       rethrow;
     }
   }

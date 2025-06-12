@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/constants/legal_notice.dart';
 
 class TopMarqueeBanner extends StatefulWidget {
   const TopMarqueeBanner({super.key});
@@ -24,13 +25,16 @@ class _TopMarqueeBannerState extends State<TopMarqueeBanner> {
           // 마키 텍스트
           Expanded(
             child: SizedBox(
-              height: 20,
+              height: 18,
               child: Marquee(
-                text: '모든 투자는 개인의 선택이며 투자의 책임은 투자자 본인에게 있습니다.',
-                style: TextStyle(color: CustomColors.gray80, fontSize: 16),
-                blankSpace: 60,
-                velocity: 50,
-                pauseAfterRound: const Duration(seconds: 1),
+                text: legalNotice,
+                style: TextStyle(
+                  color: CustomColors.gray80.withOpacity(0.5),
+                  fontSize: 14,
+                ),
+                blankSpace: 100,
+                velocity: 20,
+                pauseAfterRound: const Duration(seconds: 3),
               ),
             ),
           ),

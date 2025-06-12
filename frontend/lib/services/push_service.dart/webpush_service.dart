@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:html' as html;
 import 'dart:js_util' as js_util;
 import 'dart:convert';
@@ -21,9 +22,9 @@ class WebPushService {
     );
 
     if (response.statusCode == 201) {
-      print("✅ 푸시 구독 OFF");
+      log("✅ 푸시 구독 OFF");
     } else {
-      print("❌ 푸시 구독 OFF 실패: $response");
+      log("❌ 푸시 구독 OFF 실패: $response");
     }
   }
 
@@ -41,7 +42,7 @@ class WebPushService {
     // 📌 Service Worker가 등록되었는지 확인
     final swRegistration = await html.window.navigator.serviceWorker?.ready;
     if (swRegistration == null) {
-      print("❌ Service Worker 미등록");
+      log("❌ Service Worker 미등록");
       return;
     }
 
@@ -84,9 +85,9 @@ class WebPushService {
     );
 
     if (response.statusCode == 201) {
-      print("✅ 푸시 구독 성공");
+      log("✅ 푸시 구독 성공");
     } else {
-      print("❌ 푸시 구독 실패: $response");
+      log("❌ 푸시 구독 실패: $response");
     }
   }
 
@@ -94,13 +95,13 @@ class WebPushService {
     // 📌 Service Worker가 등록되었는지 확인
     final swRegistration = await html.window.navigator.serviceWorker?.ready;
     if (swRegistration == null) {
-      print("❌ Service Worker 미등록 상태");
+      log("❌ Service Worker 미등록 상태");
       return;
     }
 
     // 📌 pushManager가 있는지 확인
     if (swRegistration.pushManager == null) {
-      print("❌ pushManager 사용 불가 (브라우저가 웹 푸시 미지원)");
+      log("❌ pushManager 사용 불가 (브라우저가 웹 푸시 미지원)");
       return;
     }
 
@@ -114,7 +115,7 @@ class WebPushService {
     );
 
     if (existingSubscription != null) {
-      print("✅ 기존 푸시 구독 발견! 삭제 진행...");
+      log("✅ 기존 푸시 구독 발견! 삭제 진행...");
 
       // 📌 구독 해제
       final unsubResult = await js_util.promiseToFuture<bool>(
@@ -126,12 +127,12 @@ class WebPushService {
       );
 
       if (unsubResult) {
-        print("✅ 기존 푸시 구독 해제 성공");
+        log("✅ 기존 푸시 구독 해제 성공");
       } else {
-        print("❌ 기존 푸시 구독 해제 실패");
+        log("❌ 기존 푸시 구독 해제 실패");
       }
     } else {
-      print("🔹 기존 구독 없음");
+      log("🔹 기존 구독 없음");
     }
   }
 
