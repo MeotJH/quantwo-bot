@@ -1,19 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/common/utils.dart';
+
 import 'package:quant_bot_flutter/components/custom_password_field.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/constants/api_constants.dart';
-import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
+
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:quant_bot_flutter/services/oauth_login_service.dart/oauth_login_service.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 //import 'dart:html' as html;
 
@@ -211,21 +207,21 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAppleLoginButton() {
-    return OutlinedButton.icon(
-      onPressed: null,
-      style: OutlinedButton.styleFrom(
-        minimumSize: const Size(double.infinity, 50),
-        side: const BorderSide(color: Colors.black),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
-      icon: const Icon(Icons.apple, color: Colors.black),
-      label: const Text(
-        'Apple로 로그인',
-        style: TextStyle(color: Colors.black),
-      ),
-    );
-  }
+  // Widget _buildAppleLoginButton() {
+  //   return OutlinedButton.icon(
+  //     onPressed: null,
+  //     style: OutlinedButton.styleFrom(
+  //       minimumSize: const Size(double.infinity, 50),
+  //       side: const BorderSide(color: Colors.black),
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(5),
+  //       ),
+  //     ),
+  //     icon: const Icon(Icons.apple, color: Colors.black),
+  //     label: const Text(
+  //       'Apple로 로그인',
+  //       style: TextStyle(color: Colors.black),
+  //     ),
+  //   );
+  // }
 }

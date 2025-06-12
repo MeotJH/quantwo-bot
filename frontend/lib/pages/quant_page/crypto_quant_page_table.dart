@@ -19,7 +19,7 @@ class CryptoQuantPageTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat('#,###.00');
+    //final formatter = NumberFormat('#,###.00');
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(1),

@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/custom_button.dart';
@@ -17,7 +14,6 @@ import 'package:quant_bot_flutter/pages/quant_page/dual_momentums/international/
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/dual_momentum_international_provider.dart';
 import 'package:quant_bot_flutter/providers/loading_provider.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
 
 class DualMomentumInternational extends ConsumerStatefulWidget {
   const DualMomentumInternational({super.key});
@@ -128,7 +124,7 @@ class _DualMomentumInternationalState
       CustomToast.show(message: '퀀트 알림이 성공적으로 설정되었습니다.');
     } catch (e) {
       CustomToast.show(message: getErrorMessage(e), isWarn: true);
-      print('퀀트 알림 설정 오류: $e');
+      log('퀀트 알림 설정 오류: $e');
     }
   }
 }

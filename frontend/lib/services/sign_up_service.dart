@@ -37,8 +37,6 @@ class SignUpService {
       }
     } catch (e) {
       if (e is DioException) {
-        final errorCode = e.response?.statusCode;
-        e.message;
         final data = e.response?.data;
         CustomToast.show(message: data['message'].toString(), isWarn: true);
         throw DioException(requestOptions: data);

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/common/custom_exception.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/constants/api_constants.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_response_model.dart';
@@ -95,7 +94,7 @@ class AuthStorageNotifier extends AutoDisposeAsyncNotifier<String?> {
       state = AsyncValue.data(token);
       return token;
     } catch (e) {
-      print(e); // 디버깅을 위해 에러 로그를 출력
+      log(e.toString()); // 디버깅을 위해 에러 로그를 출력
       state =
           const AsyncValue.error("Failed to decrypt token", StackTrace.empty);
       return null;

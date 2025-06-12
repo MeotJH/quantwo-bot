@@ -21,7 +21,6 @@ import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_qua
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/loading_provider.dart';
 import 'package:quant_bot_flutter/providers/quant_provider.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
 
 class TrendFollowDetailPage extends ConsumerStatefulWidget {
   final TrendFollowArgs tfargs;

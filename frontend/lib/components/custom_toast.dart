@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
@@ -23,7 +25,7 @@ class CustomToast {
         overlayEntry.remove();
       });
     } else {
-      print('No overlay found');
+      log('No overlay found');
     }
   }
 }

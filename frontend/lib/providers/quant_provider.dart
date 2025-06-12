@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_model.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
@@ -59,7 +61,7 @@ class TrendFollowNotifier
       // 상태 변경 없이 작업 완료
     } catch (e) {
       // 오류 처리, 하지만 상태 변경은 하지 않음
-      print('주식 추가 중 오류 발생: $e');
+      log('주식 추가 중 오류 발생: $e');
       rethrow;
     }
   }
@@ -68,7 +70,7 @@ class TrendFollowNotifier
     try {
       await _stockService.toggleNotification(ticker);
     } catch (e) {
-      print('알림 상태 변경 중 오류 발생: $e');
+      log('알림 상태 변경 중 오류 발생: $e');
       rethrow;
     }
   }

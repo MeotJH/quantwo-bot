@@ -1,14 +1,12 @@
-import 'package:dio/dio.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/custom_password_field.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:quant_bot_flutter/providers/sign_up_provider.dart';
-import 'package:quant_bot_flutter/services/phone_formatter_service.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -132,7 +130,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           child: ElevatedButton(
             onPressed: () async {
               try {
-                final result = await ref.read(
+                await ref.read(
                   signUpProvider(ref.watch(signUpFormProvider)).future,
                 );
 
@@ -141,7 +139,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   context.go(RouterPath.signUpCompletePath);
                   //context.go('/');
                 }
-              } catch (e) {}
+              } catch (e) {
+                log(e.toString());
+              }
             },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.grey[300],

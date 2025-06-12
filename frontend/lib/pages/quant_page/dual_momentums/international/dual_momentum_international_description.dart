@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/custom_button.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
 
 class DualMomentuInternationalDescription extends StatelessWidget {
   const DualMomentuInternationalDescription({super.key});

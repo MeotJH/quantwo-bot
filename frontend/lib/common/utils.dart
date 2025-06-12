@@ -9,7 +9,7 @@ calculatePercentageChange({required double open, required double close}) {
 }
 
 String getErrorMessage(dynamic error) {
-  if (error is DioError) {
+  if (error is DioException) {
     final response = error.response;
     if (response != null && response.data is Map<String, dynamic>) {
       final responseData = response.data as Map<String, dynamic>;

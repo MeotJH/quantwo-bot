@@ -6,7 +6,6 @@ import 'package:quant_bot_flutter/common/custom_exception.dart';
 import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:quant_bot_flutter/providers/stock_providers/stocks_provider.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
