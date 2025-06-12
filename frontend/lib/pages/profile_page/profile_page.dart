@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/custom_dialog.dart';
 import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/models/profile_stock_model/profile_stock_model.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/profile_info_skeleton.dart';
 import 'package:quant_bot_flutter/providers/dio_provider.dart';
@@ -380,6 +381,6 @@ class ProfilePage extends ConsumerWidget {
     QuantType.TREND_FOLLOW: (stock) =>
         '/quant-form/quant/trend-follow/${stock.ticker}',
     QuantType.DUAL_MOMENTUM_INTL: (_) =>
-        RouteNotifier.dualMomentumInternationalPath,
+        RouterPath.dualMomentumInternationalPath,
   };
 }

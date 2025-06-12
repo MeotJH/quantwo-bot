@@ -8,6 +8,7 @@ import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/constants/api_constants.dart';
 import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
 import 'package:quant_bot_flutter/providers/auth_provider.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
@@ -30,7 +31,7 @@ class LoginScreen extends ConsumerWidget {
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () {
-            context.go(RouteNotifier.stockListPath);
+            context.go(RouterPath.stockListPath);
             ref.invalidate(authFormProvider);
           },
         ),
@@ -129,7 +130,7 @@ class LoginScreen extends ConsumerWidget {
           ? () async {
               await ref.read(authProvider(model).future);
               if (!context.mounted) return;
-              context.go(RouteNotifier.stockListPath);
+              context.go(RouterPath.stockListPath);
             }
           : null,
       style: ElevatedButton.styleFrom(
@@ -179,7 +180,7 @@ class LoginScreen extends ConsumerWidget {
       children: [
         TextButton(
           onPressed: () {
-            context.push(RouteNotifier.signUpPath);
+            context.push(RouterPath.signUpPath);
           },
           child: const Text(
             '이메일 가입',

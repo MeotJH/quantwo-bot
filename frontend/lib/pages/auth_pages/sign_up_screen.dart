@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/custom_password_field.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/providers/router_provider.dart';
 import 'package:quant_bot_flutter/providers/sign_up_provider.dart';
 import 'package:quant_bot_flutter/services/phone_formatter_service.dart';
@@ -30,7 +31,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () {
-            context.go(RouteNotifier.stockListPath);
+            context.go(RouterPath.stockListPath);
           },
         ),
       ),
@@ -137,7 +138,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
                 if (context.mounted) {
                   Navigator.pop(context); // 로딩 닫기
-                  context.go(RouteNotifier.signUpCompletePath);
+                  context.go(RouterPath.signUpCompletePath);
                   //context.go('/');
                 }
               } catch (e) {}

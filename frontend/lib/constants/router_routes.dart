@@ -6,6 +6,7 @@ import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_des
 import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_detail_page.dart';
 import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_page.dart';
 import 'package:quant_bot_flutter/pages/quant_select_page/quant_select_page.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_select_page.dart';
 
 const String _quantTypePath = '/quant-form/quant';
 const String _trendFollowPath = '/quant-form/quant/trend-follow';
@@ -50,5 +51,14 @@ List<GoRoute> quantTypeRoutes = [
   GoRoute(
     path: _internationDualMomentumDescriptionPath,
     builder: (context, state) => const DualMomentuInternationalDescription(),
+  ),
+];
+
+const String toolsSelectPath = '/tools';
+
+List<GoRoute> toolsRoutes = [
+  GoRoute(
+    path: toolsSelectPath,
+    builder: (context, state) => const ToolsSelectPage(),
   ),
 ];

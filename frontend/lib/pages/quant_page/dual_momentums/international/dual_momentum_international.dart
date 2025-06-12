@@ -9,6 +9,7 @@ import 'package:quant_bot_flutter/components/custom_button.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/common/utils.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/pages/comm/quant_bot_detail_page_header.dart';
 import 'package:quant_bot_flutter/pages/loading_pages/skeleton_detail_page_loading.dart';
 import 'package:quant_bot_flutter/pages/quant_page/dual_momentums/international/dual_momentum_international_graph.dart';
@@ -117,7 +118,7 @@ class _DualMomentumInternationalState
       CustomToast.show(message: '로그인이 필요합니다.', isWarn: true);
 
       if (!context.mounted) return;
-      context.push(RouteNotifier.loginPath);
+      context.push(RouterPath.loginPath);
       return;
     }
 

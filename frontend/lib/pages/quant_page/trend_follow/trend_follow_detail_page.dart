@@ -12,6 +12,7 @@ import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/constants/quant_type.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/common/utils.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
 import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
 import 'package:quant_bot_flutter/pages/comm/quant_bot_detail_page_header.dart';
@@ -209,7 +210,7 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
       CustomToast.show(message: '로그인이 필요합니다.', isWarn: true);
 
       if (!context.mounted) return;
-      context.push(RouteNotifier.loginPath);
+      context.push(RouterPath.loginPath);
       return;
     }
     final notifier = ref.read(trendFollowProvider(args).notifier);

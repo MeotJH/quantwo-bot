@@ -6,6 +6,7 @@ import 'package:quant_bot_flutter/common/custom_exception.dart';
 import 'package:quant_bot_flutter/components/custom_dialog.dart';
 import 'package:quant_bot_flutter/components/custom_toast.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/crypto_currency_list.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/stocks_page_search_bar.dart';
 import 'package:quant_bot_flutter/pages/stocks_page/us_stock_list.dart';
@@ -76,7 +77,7 @@ class _StockListPageState extends ConsumerState<StockListPage>
                     ? IconButton(
                         icon: const Icon(Icons.login),
                         onPressed: () async {
-                          context.go(RouteNotifier.loginPath);
+                          context.go(RouterPath.loginPath);
                         },
                       )
                     : IconButton(
@@ -91,7 +92,7 @@ class _StockListPageState extends ConsumerState<StockListPage>
                               await ref
                                   .read(authStorageProvider.notifier)
                                   .logout();
-                              if (mounted) context.go(RouteNotifier.loginPath);
+                              if (mounted) context.go(RouterPath.loginPath);
                             },
                           );
                         },

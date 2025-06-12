@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/components/top_marquee_banner.dart';
+import 'package:quant_bot_flutter/constants/nav_tab_enum.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/constants/router_routes.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
@@ -36,22 +38,9 @@ class RouteNotifier extends Notifier<GoRouter> {
           routes: _buildRoutes(),
         ),
       ],
-      initialLocation: _initialLocation,
+      initialLocation: RouterPath.initialLocation,
     );
   }
-
-  static const String _initialLocation = '/';
-  static const String _stockListPath = '/main';
-  static const String stockListPath = '/main';
-  static const String _quantPath = '/quants/trend-follow/:assetType/:ticker';
-  static const String _profilePath = '/profile';
-  static const String loginPath = '/login';
-  static const String signUpPath = '/sign-up';
-  static const String signUpCompletePath = '/sign-up-complete';
-  static const String quantPath = '/quant-form';
-  static const String _strategySelectPath = '/quant-form/strategy';
-  static const String dualMomentumInternationalPath =
-      '/quant-form/quant/dual-momentum/international';
 
   // 프로필 페이지 갈때 토큰 검증 함수
   Widget _buildWithToken(
@@ -66,7 +55,7 @@ class RouteNotifier extends Notifier<GoRouter> {
         //에러있거나 데이터 없거나 널이면 로그인페이지로 간다.
         if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            GoRouter.of(context).go(loginPath);
+            GoRouter.of(context).go(RouterPath.loginPath);
 
             ref.read(bottomNavIndexProvider.notifier).state = 0;
           });
@@ -80,15 +69,15 @@ class RouteNotifier extends Notifier<GoRouter> {
 
   List<GoRoute> _buildRoutes() => [
         GoRoute(
-          path: _initialLocation,
+          path: RouterPath.initialLocation,
           builder: (context, state) => const SplashPage(),
         ),
         GoRoute(
-          path: _stockListPath,
+          path: RouterPath.stockListPath,
           builder: (context, state) => const StockListPage(),
         ),
         GoRoute(
-          path: _quantPath,
+          path: RouterPath.trendFollow,
           builder: (context, state) {
             final String ticker = state.pathParameters['ticker']!;
             final String assetType = state.pathParameters['assetType']!;
@@ -101,28 +90,29 @@ class RouteNotifier extends Notifier<GoRouter> {
           },
         ),
         GoRoute(
-          path: _profilePath,
+          path: RouterPath.profilePath,
           builder: (context, state) {
             return _buildWithToken(context, ref);
           },
         ),
         GoRoute(
-          path: loginPath,
+          path: RouterPath.loginPath,
           builder: (context, state) => const LoginScreen(),
         ),
         GoRoute(
-          path: signUpPath,
+          path: RouterPath.signUpPath,
           builder: (context, state) => const SignUpScreen(),
         ),
         GoRoute(
-          path: signUpCompletePath,
+          path: RouterPath.signUpCompletePath,
           builder: (context, state) => const SignUpCompleteScreen(),
         ),
         GoRoute(
-          path: _strategySelectPath,
+          path: RouterPath.strategySelectPath,
           builder: (context, state) => const StrategySelectPage(),
         ),
         ...quantTypeRoutes,
+        ...toolsRoutes,
       ];
 
   @override
@@ -143,76 +133,52 @@ class ScaffoldWithNavBar extends ConsumerStatefulWidget {
 final bottomNavIndexProvider = StateProvider<int>((ref) => 0);
 
 class _ScaffoldWithNavBarState extends ConsumerState<ScaffoldWithNavBar> {
-  int pathToNavIndex(String path) {
-    if (path.startsWith(RouteNotifier._profilePath)) return 2;
-    if (path.startsWith(RouteNotifier.quantPath)) return 1;
-    return 0;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final path = widget.state.fullPath ?? RouteNotifier.stockListPath;
+    final path = widget.state.fullPath ?? RouterPath.stockListPath;
     final selectedIndex = ref.watch(bottomNavIndexProvider);
 
-    // 상태 변경은 build 밖에서 실행 (프레임 이후 안전하게)
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final targetIndex = pathToNavIndex(path);
-      if (ref.read(bottomNavIndexProvider) != targetIndex) {
-        ref.read(bottomNavIndexProvider.notifier).state = targetIndex;
+      final currentTab = NavTab.fromPath(path);
+      if (ref.read(bottomNavIndexProvider) != currentTab.idx) {
+        ref.read(bottomNavIndexProvider.notifier).state = currentTab.idx;
       }
     });
+
     return Scaffold(
       body: Column(
         children: [
-          if (!isMinimalLayoutPage()) const TopMarqueeBanner(), // <-- 공통 마키 위치
+          if (!isMinimalLayoutPage()) const TopMarqueeBanner(),
           Expanded(child: widget.child),
         ],
       ),
       bottomNavigationBar: isMinimalLayoutPage()
-          ? null // 로그인 페이지 일떄는 BottomNavigationBar를 숨김
+          ? null
           : BottomNavigationBar(
               currentIndex: selectedIndex,
               selectedItemColor: CustomColors.black,
               unselectedItemColor: CustomColors.gray40,
               onTap: (index) {
                 ref.read(bottomNavIndexProvider.notifier).state = index;
-                switch (index) {
-                  case 0:
-                    context.push(RouteNotifier._stockListPath);
-                    break;
-                  case 1:
-                    context.push(RouteNotifier._strategySelectPath);
-                    break;
-                  case 2:
-                    context.push(RouteNotifier._profilePath);
-                    break;
-                }
+                final tab = NavTab.fromIndex(index);
+                context.push(tab.path);
               },
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.show_chart_rounded),
-                  label: 'Stocks',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.add_chart),
-                  label: 'Quants',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-              ],
+              items: NavTab.values.map((tab) {
+                return BottomNavigationBarItem(
+                  icon: Icon(tab.icon),
+                  label: tab.label,
+                );
+              }).toList(),
             ),
     );
   }
 
   bool isMinimalLayoutPage() {
     final path = widget.state.fullPath;
-    bool hideBottomNav = path == RouteNotifier.loginPath ||
-        path == RouteNotifier.signUpPath ||
-        path == RouteNotifier.signUpCompletePath ||
-        path == RouteNotifier._initialLocation;
-    return hideBottomNav;
+    return path == RouterPath.loginPath ||
+        path == RouterPath.signUpPath ||
+        path == RouterPath.signUpCompletePath ||
+        path == RouterPath.initialLocation;
   }
 }
 
