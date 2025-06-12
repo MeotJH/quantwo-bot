@@ -16,7 +16,7 @@ enum NavTab {
   ),
   tools(
     idx: 2,
-    path: RouterPath.toolsPath,
+    path: RouterPath.tools,
     icon: Icons.smart_toy_outlined,
     label: 'Tools',
   ),
