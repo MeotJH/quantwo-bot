@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class ToggleNumberText extends StatefulWidget {
 
 class _ToggleNumberTextState extends State<ToggleNumberText> {
   bool _isCompact = true;
+  Timer? _timer;
 
   String _formatFull(double value) {
     final formatter = NumberFormat('#,###.##');
@@ -43,6 +45,30 @@ class _ToggleNumberTextState extends State<ToggleNumberText> {
   bool _shouldUseCompact(double value) {
     return value >=
         pow(10, widget.displayLength).toDouble(); // 10^widget.displayLength
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    final value = widget.value ?? 0.0;
+    final shouldToggle = _shouldUseCompact(value);
+    if (!shouldToggle) return;
+
+    setState(() => _isCompact = !_isCompact);
+    // 최초 프레임 렌더링이 끝난 뒤 실행
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!shouldToggle) return;
+
+      // 1. 유저가 화면을 보면 최초 1회 실행
+      setState(() => _isCompact = !_isCompact);
+
+      // 2. 이후 5초마다 실행
+      _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+        if (!mounted) return;
+        setState(() => _isCompact = !_isCompact);
+      });
+    });
   }
 
   @override
