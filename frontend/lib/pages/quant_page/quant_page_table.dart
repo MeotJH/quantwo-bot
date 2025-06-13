@@ -10,8 +10,6 @@ class QuantPageTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat('#,###');
-    final display = createDisplay(length: 6);
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(1),
@@ -27,9 +25,9 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 세 번째 데이터 행
         TableRow(children: [
-          _buildTableCell((recentStockOne.trailingPE ?? 0.0).toString()),
-          _buildTableCell((recentStockOne.trailingEps ?? 0.0).toString()),
-          _buildTableCell(_getEvEbitda(recentStockOne).toStringAsFixed(2)),
+          _buildTableCell(recentStockOne.trailingPE),
+          _buildTableCell(recentStockOne.trailingEps),
+          _buildTableCell(_getEvEbitda(recentStockOne)),
         ]),
         // 첫 번째 행: 제목들
         TableRow(children: [
@@ -39,9 +37,9 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 첫 번째 데이터 행
         TableRow(children: [
-          _buildTableCell('\$${recentStockOne.previousClose}'),
-          _buildTableCell('\$${recentStockOne.open}'),
-          _buildTableCell(formatter.format(recentStockOne.volume ?? 0.0)),
+          _buildTableCell(recentStockOne.previousClose),
+          _buildTableCell(recentStockOne.open),
+          _buildTableCell(recentStockOne.volume),
         ]),
         // 두 번째 행: 제목들
         TableRow(children: [
@@ -51,11 +49,11 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 두 번째 데이터 행
         TableRow(children: [
-          _buildTableCell('\$${recentStockOne.dayHigh}',
+          _buildTableCell(recentStockOne.dayHigh,
               color: CustomColors.joyOrange100),
-          _buildTableCell('\$${recentStockOne.dayLow}',
+          _buildTableCell(recentStockOne.dayLow,
               color: CustomColors.clearBlue100),
-          _buildTableCell('\$${display(recentStockOne.enterpriseValue)}'),
+          _buildTableCell(recentStockOne.enterpriseValue),
         ]),
       ],
     );
@@ -84,17 +82,22 @@ class QuantPageTable extends StatelessWidget {
   }
 
   // 테이블 셀 스타일링 함수
-  Widget _buildTableCell(String text, {Color? color}) {
+  Widget _buildTableCell(double? val, {Color? color}) {
+    final formatter = NumberFormat('#,###.##');
+    final display = createDisplay(length: 6);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: color ?? Colors.black,
+      child: Tooltip(
+        message: formatter.format(val),
+        child: Text(
+          '\$${display(val)}',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: color ?? Colors.black,
+          ),
+          textAlign: TextAlign.left,
         ),
-        textAlign: TextAlign.left,
       ),
     );
   }
