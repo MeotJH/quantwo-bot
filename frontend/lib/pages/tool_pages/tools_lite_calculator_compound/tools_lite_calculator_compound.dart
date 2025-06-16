@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/components/custom_button.dart';
 import 'package:quant_bot_flutter/constants/router_path_constants.dart';
 import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/compound_calculator_controller_model.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound_result.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_result.dart';
 import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_controller_provider.dart';
 import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_notifier.dart';
 
@@ -48,6 +51,11 @@ class _ToolsLiteCalculatorCompoundState
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  CurrencyInputFormatter(
+                    thousandSeparator: ThousandSeparator.Comma, // 1,000,000 형식
+                    mantissaLength: 0, // 소수점 자리수 (0이면 없음)
+                    trailingSymbol: '원', // 또는 '$'
+                  ),
                 ],
                 controller: controllers.initial,
               ),
@@ -58,6 +66,11 @@ class _ToolsLiteCalculatorCompoundState
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  CurrencyInputFormatter(
+                    thousandSeparator: ThousandSeparator.Comma, // 1,000,000 형식
+                    mantissaLength: 0, // 소수점 자리수 (0이면 없음)
+                    trailingSymbol: '원', // 또는 '$'
+                  ),
                 ],
                 controller: controllers.invest,
               ),
@@ -68,6 +81,11 @@ class _ToolsLiteCalculatorCompoundState
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                  CurrencyInputFormatter(
+                    thousandSeparator: ThousandSeparator.Comma, // 1,000,000 형식
+                    mantissaLength: 0, // 소수점 자리수 (0이면 없음)
+                    trailingSymbol: '%', // 또는 '$'
+                  ),
                 ],
                 controller: controllers.yields,
               ),
@@ -78,6 +96,11 @@ class _ToolsLiteCalculatorCompoundState
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  CurrencyInputFormatter(
+                    thousandSeparator: ThousandSeparator.Comma, // 1,000,000 형식
+                    mantissaLength: 0, // 소수점 자리수 (0이면 없음)
+                    trailingSymbol: '년', // 또는 '$'
+                  ),
                 ],
                 controller: controllers.year,
               ),
@@ -88,15 +111,15 @@ class _ToolsLiteCalculatorCompoundState
                   onPressed: () async {
                     await compoundCalculator.calculate();
                     if (context.mounted) {
-                      showModalBottomSheet(
+                      showDialog(
                         context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(16)),
-                        ),
-                        builder: (_) =>
-                            const ToolsLiteCalculatorCompoundResult(),
+                        builder: (context) {
+                          return const Dialog(
+                            insetPadding: EdgeInsets.zero, // 💡 여백 제거
+                            backgroundColor: Colors.transparent,
+                            child: ToolsLiteCalculatorCompoundResult(),
+                          );
+                        },
                       );
                     }
                   },

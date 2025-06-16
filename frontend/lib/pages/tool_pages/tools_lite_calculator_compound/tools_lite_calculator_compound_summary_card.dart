@@ -40,7 +40,7 @@ class ToolsLiteCalculatorCompoundSummaryCard extends StatelessWidget {
             _buildRow(
               '수익률',
               '${rate >= 0 ? '+' : ''}${rate.toStringAsFixed(1)}%',
-              valueColor: rate >= 0 ? Colors.blue : Colors.red,
+              valueColor: rate >= 0 ? Colors.red : Colors.blue,
             ),
           ],
         ),

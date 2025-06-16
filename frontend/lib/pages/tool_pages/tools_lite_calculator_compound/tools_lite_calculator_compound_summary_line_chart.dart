@@ -1,8 +1,9 @@
-import 'dart:developer';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:quant_bot_flutter/common/colors.dart';
+
 import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/compound_result.dart';
+import 'package:quant_bot_flutter/widgets/create_display_korean.dart';
 
 class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
   final List<CompoundAnnualResult> data;
@@ -12,6 +13,8 @@ class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final display = createDisplayKorean(length: 5, separator: ',', decimal: 2);
+
     if (data.isEmpty) return const SizedBox();
 
     final totalAsset =
@@ -41,7 +44,7 @@ class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
                 getTooltipItems: (touchedSpots) {
                   return touchedSpots.map((LineBarSpot touchedSpot) {
                     final index = touchedSpot.spotIndex;
-                    final result = data[index]; // 👈 너의 데이터 모델 사용
+                    final result = data[index];
                     final bar = touchedSpot.barIndex;
 
                     const textStyle = TextStyle(
@@ -53,15 +56,15 @@ class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
                     switch (bar) {
                       case 0:
                         return LineTooltipItem(
-                            '자산: ${result.totalAsset.toStringAsFixed(0)}원',
+                            '[${result.year}Y]자산: ${display(result.totalAsset)}원',
                             const TextStyle(color: Colors.white));
                       case 1:
                         return LineTooltipItem(
-                            '납입: ${result.totalInvested.toStringAsFixed(0)}원',
+                            '[${result.year}Y] 납입: ${display(result.totalInvested)}원',
                             const TextStyle(color: Colors.white));
                       case 2:
                         return LineTooltipItem(
-                            '수익: ${result.interestEarned.toStringAsFixed(0)}원',
+                            '[${result.year}Y] 수익: ${display(result.interestEarned)}원',
                             const TextStyle(color: Colors.white));
                       default:
                         return null;
@@ -92,9 +95,9 @@ class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
                 }).toList();
               },
             ),
-            gridData: FlGridData(show: false),
+            gridData: const FlGridData(show: false),
             titlesData: FlTitlesData(
-              bottomTitles: AxisTitles(
+              bottomTitles: const AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: false,
                   reservedSize: 30,
@@ -108,10 +111,19 @@ class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
                 ),
               ),
               rightTitles:
-                  AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              topTitles:
+                  const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             ),
-            borderData: FlBorderData(show: false),
+            borderData: FlBorderData(
+              show: true,
+              border: Border(
+                left: BorderSide(color: CustomColors.gray50, width: 2),
+                bottom: BorderSide(color: CustomColors.gray50, width: 2),
+                top: BorderSide.none,
+                right: BorderSide.none,
+              ),
+            ),
             minX: 1,
             maxX: data.length.toDouble(),
             minY: 0,
@@ -122,21 +134,21 @@ class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
                 isCurved: true,
                 color: Colors.blue,
                 barWidth: 3,
-                dotData: FlDotData(show: false),
+                dotData: const FlDotData(show: false),
               ),
               LineChartBarData(
                 spots: totalInvested,
                 isCurved: true,
                 color: Colors.amber,
                 barWidth: 3,
-                dotData: FlDotData(show: false),
+                dotData: const FlDotData(show: false),
               ),
               LineChartBarData(
                 spots: interestEarned,
                 isCurved: true,
                 color: Colors.deepOrangeAccent,
                 barWidth: 3,
-                dotData: FlDotData(show: false),
+                dotData: const FlDotData(show: false),
               ),
             ],
           ),

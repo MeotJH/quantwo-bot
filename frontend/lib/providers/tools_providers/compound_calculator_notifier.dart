@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/compound_result.dart';
 import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_controller_provider.dart';
+import 'package:quant_bot_flutter/widgets/currency_text_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'compound_calculator_notifier.g.dart';
@@ -27,13 +28,10 @@ class CompoundCalculator extends _$CompoundCalculator {
   Future<void> calculate() async {
     final model = ref.read(compoundCalculatorControllerProvider);
 
-    final double initial =
-        double.tryParse(model.initial.text.replaceAll(',', '')) ?? 0;
-    final double invest =
-        double.tryParse(model.invest.text.replaceAll(',', '')) ?? 0;
-    final double yields =
-        double.tryParse(model.yields.text.replaceAll('%', '')) ?? 0;
-    final int year = int.tryParse(model.year.text) ?? 0;
+    final double initial = model.initial.decimalValue;
+    final double invest = model.invest.decimalValue;
+    final double yields = model.yields.decimalValue;
+    final int year = model.year.numericValue;
 
     double asset = initial;
     final List<CompoundAnnualResult> breakdown = [];
