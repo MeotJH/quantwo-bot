@@ -8,6 +8,7 @@ import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_det
 import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_page.dart';
 import 'package:quant_bot_flutter/pages/quant_select_page/quant_select_page.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound_result.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_page.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_page.dart';
@@ -74,5 +75,9 @@ List<GoRoute> toolsRoutes = [
   GoRoute(
     path: RouterPath.toolsLiteCompound,
     builder: (context, state) => const ToolsLiteCalculatorCompound(),
+  ),
+  GoRoute(
+    path: RouterPath.toolsLiteCompoundResult,
+    builder: (context, state) => const ToolsLiteCalculatorCompoundResult(),
   ),
 ];

@@ -10,8 +10,11 @@ class RouterPath {
   static const String strategySelectPath = '/quant-form/strategy';
   static const String dualMomentumInternationalPath =
       '/quant-form/quant/dual-momentum/international';
+
   static const String tools = '/tools';
   static const String toolsLite = '/tools/lite';
   static const String toolsLiteRetire = '/tools/lite/calculator/retire';
   static const String toolsLiteCompound = '/tools/lite/calculator/compound';
+  static const String toolsLiteCompoundResult =
+      '/tools/lite/calculator/compound/result';
 }
