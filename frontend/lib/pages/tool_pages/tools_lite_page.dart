@@ -43,7 +43,7 @@ class ToolsLitePage extends ConsumerWidget {
             ToolItemCard(
               context: context,
               title: '은퇴자금 계산기',
-              description: '투자의 첫걸음을 위한, 가볍고 유용한 도구 모음입니다.',
+              description: '노후 준비를 시작하는 당신을 위한, 쉬운 은퇴자금 시뮬레이터입니다.',
               icon: Icons.calculate_outlined,
               color: CustomColors.gray100,
               onTap: () {
