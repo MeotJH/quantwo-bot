@@ -14,12 +14,12 @@ enum NavTab {
     icon: Icons.add_chart,
     label: 'Quants',
   ),
-  // tools(
-  //   idx: 2,
-  //   path: RouterPath.toolsPath,
-  //   icon: Icons.build_rounded,
-  //   label: 'Tools',
-  // ),
+  tools(
+    idx: 2,
+    path: RouterPath.tools,
+    icon: Icons.smart_toy_outlined,
+    label: 'Tools',
+  ),
   profile(
     idx: 2,
     path: RouterPath.profilePath,

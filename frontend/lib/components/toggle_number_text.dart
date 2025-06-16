@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:number_display/number_display.dart';
+import 'package:quant_bot_flutter/constants/currency_type_enu.dart';
 
 class ToggleNumberText extends StatefulWidget {
   final double? value;
@@ -12,6 +13,7 @@ class ToggleNumberText extends StatefulWidget {
   final TextStyle? style;
   final String? prefix;
   final String? suffix;
+  final CurrencyType? currencyType;
 
   const ToggleNumberText({
     super.key,
@@ -21,6 +23,7 @@ class ToggleNumberText extends StatefulWidget {
     this.suffix,
     this.color,
     this.style,
+    this.currencyType,
   });
 
   @override
@@ -37,7 +40,10 @@ class _ToggleNumberTextState extends State<ToggleNumberText> {
   }
 
   String _formatCompact(double value) {
-    final display = createDisplay(length: widget.displayLength);
+    final currencyType = widget.currencyType ?? CurrencyType.USD;
+    final display = currencyType.displayFunc(
+        length: widget.displayLength, separator: ',', decimal: 2);
+    //final display = createDisplay(length: widget.displayLength);
     return display(value);
   }
 

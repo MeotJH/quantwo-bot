@@ -1,10 +1,7 @@
-import 'package:quant_bot_flutter/constants/router_routes.dart';
-
 class RouterPath {
   static const String initialLocation = '/';
   static const String stockListPath = '/main';
-  static const String trendFollow =
-      '/quants/trend-follow/:assetType/:ticker'; // trendFollow
+  static const String trendFollow = '/quants/trend-follow/:assetType/:ticker';
   static const String profilePath = '/profile';
   static const String loginPath = '/login';
   static const String signUpPath = '/sign-up';
@@ -12,5 +9,11 @@ class RouterPath {
   static const String strategySelectPath = '/quant-form';
   static const String dualMomentumInternationalPath =
       '/quant-form/quant/dual-momentum/international';
-  static const String toolsPath = toolsSelectPath;
+
+  static const String tools = '/tools';
+  static const String toolsLite = '/tools/lite';
+  static const String toolsLiteRetire = '/tools/lite/calculator/retire';
+  static const String toolsLiteCompound = '/tools/lite/calculator/compound';
+  static const String toolsLiteCompoundResult =
+      '/tools/lite/calculator/compound/result';
 }
