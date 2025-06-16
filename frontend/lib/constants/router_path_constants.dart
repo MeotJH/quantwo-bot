@@ -6,8 +6,7 @@ class RouterPath {
   static const String loginPath = '/login';
   static const String signUpPath = '/sign-up';
   static const String signUpCompletePath = '/sign-up-complete';
-  static const String quantPath = '/quant-form';
-  static const String strategySelectPath = '/quant-form/strategy';
+  static const String strategySelectPath = '/quant-form';
   static const String dualMomentumInternationalPath =
       '/quant-form/quant/dual-momentum/international';
 

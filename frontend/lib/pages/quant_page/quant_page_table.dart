@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot_flutter/components/toggle_number_text.dart';
 import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:number_display/number_display.dart';
 
 class QuantPageTable extends StatelessWidget {
   final QuantStockModel recentStockOne;
@@ -9,7 +11,6 @@ class QuantPageTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat('#,###');
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(1),
@@ -25,9 +26,9 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 세 번째 데이터 행
         TableRow(children: [
-          _buildTableCell((recentStockOne.trailingPE ?? 0.0).toString()),
-          _buildTableCell((recentStockOne.trailingEps ?? 0.0).toString()),
-          _buildTableCell(_getEvEbitda(recentStockOne).toStringAsFixed(2)),
+          _buildTableCell(recentStockOne.trailingPE),
+          _buildTableCell(recentStockOne.trailingEps),
+          _buildTableCell(_getEvEbitda(recentStockOne)),
         ]),
         // 첫 번째 행: 제목들
         TableRow(children: [
@@ -37,9 +38,9 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 첫 번째 데이터 행
         TableRow(children: [
-          _buildTableCell('\$${recentStockOne.previousClose}'),
-          _buildTableCell('\$${recentStockOne.open}'),
-          _buildTableCell(formatter.format(recentStockOne.volume ?? 0.0)),
+          _buildTableCell(recentStockOne.previousClose, prefix: '\$'),
+          _buildTableCell(recentStockOne.open, prefix: '\$'),
+          _buildTableCell(recentStockOne.volume, prefix: '\$'),
         ]),
         // 두 번째 행: 제목들
         TableRow(children: [
@@ -49,12 +50,11 @@ class QuantPageTable extends StatelessWidget {
         ]),
         // 두 번째 데이터 행
         TableRow(children: [
-          _buildTableCell('\$${recentStockOne.dayHigh}',
-              color: CustomColors.joyOrange100),
-          _buildTableCell('\$${recentStockOne.dayLow}',
-              color: CustomColors.clearBlue100),
-          _buildTableCell(
-              '\$${formatter.format(recentStockOne.enterpriseValue)}'),
+          _buildTableCell(recentStockOne.dayHigh,
+              color: CustomColors.joyOrange100, prefix: '\$'),
+          _buildTableCell(recentStockOne.dayLow,
+              color: CustomColors.clearBlue100, prefix: '\$'),
+          _buildTableCell(recentStockOne.enterpriseValue, prefix: '\$'),
         ]),
       ],
     );
@@ -83,17 +83,15 @@ class QuantPageTable extends StatelessWidget {
   }
 
   // 테이블 셀 스타일링 함수
-  Widget _buildTableCell(String text, {Color? color}) {
+  Widget _buildTableCell(double? val,
+      {Color? color, String? prefix, String? suffix}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: color ?? Colors.black,
-        ),
-        textAlign: TextAlign.left,
+      child: ToggleNumberText(
+        value: val,
+        prefix: prefix,
+        suffix: suffix,
+        color: color,
       ),
     );
   }
