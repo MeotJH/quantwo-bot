@@ -10,7 +10,7 @@ import 'package:quant_bot_flutter/pages/quant_select_page/quant_select_page.dart
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_result.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_page.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_page.dart';
 
 const String _quantTypePath = '/quant-form/quant';

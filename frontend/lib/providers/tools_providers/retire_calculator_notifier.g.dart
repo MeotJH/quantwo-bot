@@ -1,27 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'compound_calculator_notifier.dart';
+part of 'retire_calculator_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$compoundCalculatorHash() =>
-    r'465f60e61b23aa8aada4e325a529e98e6114b65b';
+String _$retireCalculatorHash() => r'1abce7662a217c021bcfe6f9e27163ba4e873989';
 
-/// See also [CompoundCalculator].
-@ProviderFor(CompoundCalculator)
-final compoundCalculatorProvider = AutoDisposeNotifierProvider<
-    CompoundCalculator, CompoundSummaryResult>.internal(
-  CompoundCalculator.new,
-  name: r'compoundCalculatorProvider',
+/// See also [RetireCalculator].
+@ProviderFor(RetireCalculator)
+final retireCalculatorProvider =
+    AutoDisposeNotifierProvider<RetireCalculator, RetireSummaryResult>.internal(
+  RetireCalculator.new,
+  name: r'retireCalculatorProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$compoundCalculatorHash,
+      : _$retireCalculatorHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CompoundCalculator = AutoDisposeNotifier<CompoundSummaryResult>;
+typedef _$RetireCalculator = AutoDisposeNotifier<RetireSummaryResult>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
