@@ -7,27 +7,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot_flutter/common/colors.dart';
 import 'package:quant_bot_flutter/components/custom_button.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_result.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_controller_provider.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire_result.dart';
 import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_notifier.dart';
+import 'package:quant_bot_flutter/providers/tools_providers/retire_calculator_controller_provider.dart';
+import 'package:quant_bot_flutter/providers/tools_providers/retire_calculator_notifier.dart';
 
-class ToolsLiteCalculatorCompound extends ConsumerStatefulWidget {
-  const ToolsLiteCalculatorCompound({super.key});
+class ToolsLiteCalculatorRetire extends ConsumerStatefulWidget {
+  const ToolsLiteCalculatorRetire({super.key});
 
   @override
-  ConsumerState<ToolsLiteCalculatorCompound> createState() =>
+  ConsumerState<ToolsLiteCalculatorRetire> createState() =>
       _ToolsLiteCalculatorCompoundState();
 }
 
 class _ToolsLiteCalculatorCompoundState
-    extends ConsumerState<ToolsLiteCalculatorCompound> {
+    extends ConsumerState<ToolsLiteCalculatorRetire> {
   @override
   Widget build(BuildContext context) {
-    final controllers = ref.watch(compoundCalculatorControllerProvider);
-    final compoundCalculator = ref.watch(compoundCalculatorProvider.notifier);
+    final controllers = ref.watch(retireCalculatorControllerProvider);
+    final retireCalculator = ref.watch(retireCalculatorProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('복리 계산기',
+        title: const Text('은퇴자금 계산기',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -42,22 +44,8 @@ class _ToolsLiteCalculatorCompoundState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               textFieldWidget(
-                '기초자금',
-                hintText: 'EX) 100,000,000',
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CurrencyInputFormatter(
-                    thousandSeparator: ThousandSeparator.Comma, // 1,000,000 형식
-                    mantissaLength: 0, // 소수점 자리수 (0이면 없음)
-                    trailingSymbol: '원', // 또는 '$'
-                  ),
-                ],
-                controller: controllers.initial,
-              ),
-              textFieldWidget(
-                '투자금',
-                hintText: 'EX) 10,000,000',
+                '은퇴 후 연 지출액',
+                hintText: 'EX) 30,000,000',
                 isRequired: true,
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -68,11 +56,26 @@ class _ToolsLiteCalculatorCompoundState
                     trailingSymbol: '원', // 또는 '$'
                   ),
                 ],
-                controller: controllers.invest,
+                controller: controllers.expense,
               ),
               textFieldWidget(
-                '수익률',
-                hintText: 'EX) 8%',
+                '은퇴 후 기대 연 투자수익',
+                hintText: 'EX) 7~8%',
+                isRequired: true,
+                textInputType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  CurrencyInputFormatter(
+                    thousandSeparator: ThousandSeparator.Comma, // 1,000,000 형식
+                    mantissaLength: 0, // 소수점 자리수 (0이면 없음)
+                    trailingSymbol: '%', // 또는 '$'
+                  ),
+                ],
+                controller: controllers.yields,
+              ),
+              textFieldWidget(
+                '물가상승률',
+                hintText: 'EX) 2~3%',
                 isRequired: true,
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -83,11 +86,11 @@ class _ToolsLiteCalculatorCompoundState
                     trailingSymbol: '%', // 또는 '$'
                   ),
                 ],
-                controller: controllers.yields,
+                controller: controllers.inflation,
               ),
               textFieldWidget(
-                '투자기간',
-                hintText: 'EX) 10년',
+                '은퇴까지 남은 연수',
+                hintText: 'EX) 25년',
                 isRequired: true,
                 textInputType: TextInputType.number,
                 inputFormatters: [
@@ -98,14 +101,14 @@ class _ToolsLiteCalculatorCompoundState
                     trailingSymbol: '년', // 또는 '$'
                   ),
                 ],
-                controller: controllers.year,
+                controller: controllers.retireYear,
               ),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: CustomButton(
                   onPressed: () async {
-                    await compoundCalculator.calculate();
+                    await retireCalculator.calculate();
                     if (context.mounted) {
                       showDialog(
                         context: context,
@@ -113,7 +116,7 @@ class _ToolsLiteCalculatorCompoundState
                           return const Dialog(
                             insetPadding: EdgeInsets.zero, // 💡 여백 제거
                             backgroundColor: Colors.transparent,
-                            child: ToolsLiteCalculatorCompoundResult(),
+                            child: ToolsLiteCalculatorRetireResult(),
                           );
                         },
                       );
