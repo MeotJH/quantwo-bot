@@ -39,17 +39,17 @@ class ToolsLitePage extends ConsumerWidget {
                 context.push(RouterPath.toolsLiteCompound);
               },
             ),
-            const SizedBox(height: 16),
-            ToolItemCard(
-              context: context,
-              title: '은퇴자금 계산기',
-              description: '투자의 첫걸음을 위한, 가볍고 유용한 도구 모음입니다.',
-              icon: Icons.calculate_outlined,
-              color: CustomColors.gray100,
-              onTap: () {
-                context.push(RouterPath.toolsLiteRetire);
-              },
-            ),
+            // const SizedBox(height: 16),
+            // ToolItemCard(
+            //   context: context,
+            //   title: '은퇴자금 계산기',
+            //   description: '투자의 첫걸음을 위한, 가볍고 유용한 도구 모음입니다.',
+            //   icon: Icons.calculate_outlined,
+            //   color: CustomColors.gray100,
+            //   onTap: () {
+            //     context.push(RouterPath.toolsLiteRetire);
+            //   },
+            // ),
           ],
         ),
       ),
