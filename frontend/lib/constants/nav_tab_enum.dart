@@ -21,7 +21,7 @@ enum NavTab {
     label: 'Tools',
   ),
   profile(
-    idx: 2,
+    idx: 3,
     path: RouterPath.profilePath,
     icon: Icons.person,
     label: 'Profile',
