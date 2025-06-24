@@ -30,7 +30,7 @@ services:
       - FLASK_APP=wsgi.py
       - FLASK_ENV=PROD
       - ENVIRONMENT=PROD
-      - SQLALCHEMY_DATABASE_URI=postgresql://myuser:mypassword@postgres:5432/mydb
+      - SQLALCHEMY_DATABASE_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     command: >
       sh -c "flask db upgrade && gunicorn wsgi:app -b 0.0.0.0:8080 --log-file=- --access-logfile=-"
     healthcheck:
