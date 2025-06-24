@@ -138,7 +138,7 @@ class ProfilePage extends ConsumerWidget {
             ),
             child: InkWell(
               onTap: () {
-                context.push('/quant-form/strategy');
+                context.push(RouterPath.strategySelectPath);
               },
               child: Padding(
                 padding: const EdgeInsets.all(12),

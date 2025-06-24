@@ -7,7 +7,7 @@ from api.user.services import find_user_by_email, find_user, save_user, update_u
 email_field = fields.String(required=True, title='사용자 이메일', description="아이디로 사용됨", example='name@mail.dot',
                             pattern='([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 password_field = fields.String(required=True, title='사용자 비밀번호', description="4자리 이상", example='password', min_length=8)
-mobile_field = fields.String(required=True, title='사용자 전화번호', description='- 없음, 비번찾기 시 사용',
+mobile_field = fields.String(required=False, title='사용자 전화번호', description='- 없음, 비번찾기 시 사용',
                              example='01012345678', pattern='^[0-9]+$', min_length=11, max_length=11)
 name_field = fields.String(required=True, title='사용자 이름', description='사용자 이름', example='MeotJH')
 
@@ -16,8 +16,8 @@ user_sign_up_model = api.model('UserSignUpModel', {
     'email': email_field,
     'password': password_field,
     'mobile': mobile_field,
-    'appToken': fields.String(required=True, title='앱 토큰', description='앱 토큰', example='uuid.uuid4'),
-    'provider': fields.String(required=True, title='인증 제공자', description='로그인 인증 제공자 데이터', example='self')
+    'appToken': fields.String(required=False, title='앱 토큰', description='앱 토큰', example='uuid.uuid4'),
+    'provider': fields.String(required=False, title='인증 제공자', description='로그인 인증 제공자 데이터', example='self')
 })
 
 user_response_model = api.model('UserResponseModel', {

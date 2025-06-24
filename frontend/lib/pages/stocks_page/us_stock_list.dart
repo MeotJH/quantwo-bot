@@ -23,7 +23,8 @@ class UsStockList extends ConsumerWidget {
             return InkWell(
               onTap: () {
                 if (context.mounted) {
-                  context.push('/quants/trend-follow/us/${stock.ticker}');
+                  final encodedTicker = Uri.encodeComponent(stock.ticker);
+                  context.push('/quants/trend-follow/us/$encodedTicker');
                 }
               },
               child: Container(

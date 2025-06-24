@@ -24,8 +24,9 @@ class TrendFollowNotifier
     final dio = ref.read(dioProvider);
     _stockService = StockService(ref.read(dioProvider));
     try {
+      final encodedTicker = arg.ticker.replaceAll("/", "-");
       final response =
-          await dio.get('/quants/trend-follow/${arg.assetType}/${arg.ticker}');
+          await dio.get('/quants/trend-follow/${arg.assetType}/$encodedTicker');
 
       if (response.statusCode != 200) {
         return TrendFollowModel(
