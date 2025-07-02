@@ -13,31 +13,21 @@ import 'package:quant_bot_flutter/pages/tool_pages/tools_page.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire.dart';
 import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_page.dart';
 
-const String _quantTypePath = '/quant-form/quant';
-const String _trendFollowPath = '/quant-form/quant/trend-follow';
-const String _trendFollowDetailPath = '/quant-form/quant/trend-follow/:ticker';
-const String _trendFollowDescription =
-    '/quant-form/quant/trend-follow/description';
-const String _internationalDualMomentumPath =
-    '/quant-form/quant/dual-momentum/international';
-const String _internationDualMomentumDescriptionPath =
-    '/quant-form/quant/dual-momentum/international/description';
-
 List<GoRoute> quantTypeRoutes = [
   GoRoute(
-    path: _quantTypePath,
+    path: RouterPath.quantTypePath,
     builder: (context, state) => const QuantSelectPage(),
   ),
   GoRoute(
-    path: _trendFollowPath,
+    path: RouterPath.trendFollowPath,
     builder: (context, state) => const TrendFollowPage(),
   ),
   GoRoute(
-    path: _trendFollowDescription,
+    path: RouterPath.trendFollowDescription,
     builder: (context, state) => const TrendFollowDescription(),
   ),
   GoRoute(
-    path: _trendFollowDetailPath,
+    path: RouterPath.trendFollowDetailPath,
     builder: (context, state) => TrendFollowDetailPage(
       tfargs: TrendFollowArgs(
         ticker: state.pathParameters['ticker']!,
@@ -46,15 +36,11 @@ List<GoRoute> quantTypeRoutes = [
     ),
   ),
   GoRoute(
-    path: _internationalDualMomentumPath,
+    path: RouterPath.internationalDualMomentumPath,
     builder: (context, state) => const DualMomentumInternational(),
   ),
   GoRoute(
-    path: _trendFollowDescription,
-    builder: (context, state) => const TrendFollowDescription(),
-  ),
-  GoRoute(
-    path: _internationDualMomentumDescriptionPath,
+    path: RouterPath.internationDualMomentumDescriptionPath,
     builder: (context, state) => const DualMomentuInternationalDescription(),
   ),
 ];
