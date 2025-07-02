@@ -140,7 +140,7 @@ class TrendFollowDescription extends StatelessWidget {
                     },
                     textColor: CustomColors.white,
                     backgroundColor: CustomColors.clearBlue120,
-                    text: '다음으로'),
+                    text: '주식 선택하기'),
               ),
               const SizedBox(height: 16),
             ],

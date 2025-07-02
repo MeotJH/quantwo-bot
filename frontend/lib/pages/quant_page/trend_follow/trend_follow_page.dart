@@ -20,7 +20,7 @@ class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
     final stocks = ref.watch(stocksProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('주식 선택',
+        title: const Text('이 전략에 적용할 종목을 선택하세요',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -48,11 +48,13 @@ class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
                           return InkWell(
                             onTap: () async {
                               if (context.mounted) {
+                                final encodedTicker =
+                                    Uri.encodeComponent(stock.ticker);
                                 ref
                                     .read(stepFormProvider.notifier)
                                     .setTicker(stock.ticker);
                                 context.push(
-                                    '/quant-form/quant/trend-follow/${stock.ticker}');
+                                    '/quant-form/quant/trend-follow/$encodedTicker');
                               }
                             },
                             child: Container(
@@ -115,7 +117,7 @@ class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
                                                     BorderRadius.circular(4)),
                                           ),
                                           child: Text(
-                                            '\$${double.parse(stock.lastsale.replaceAll('\$', '')).toStringAsFixed(2)}', //상태
+                                            "${double.parse(stock.pctchange.replaceAll('%', '')).toStringAsFixed(2)}%", //상태
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,

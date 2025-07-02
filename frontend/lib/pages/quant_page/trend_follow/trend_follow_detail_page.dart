@@ -185,7 +185,7 @@ class _TrendFollowDetailPageState extends ConsumerState<TrendFollowDetailPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomButton(
-              text: '퀀트 알림 설정',
+              text: ' $ticker 추적 알림 설정하기',
               onPressed: () => _handleQuantAlertSetting(
                   TrendFollowArgs(
                     ticker: widget.tfargs.ticker,

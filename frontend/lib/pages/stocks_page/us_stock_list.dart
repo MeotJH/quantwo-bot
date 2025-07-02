@@ -77,13 +77,13 @@ class UsStockList extends ConsumerWidget {
                             decoration: ShapeDecoration(
                               color: stock.pctchange.contains('-')
                                   ? CustomColors.success
-                                  : CustomColors.error,
+                                  : CustomColors.red100,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                               ),
                             ),
                             child: Text(
-                              '\$${double.parse(stock.lastsale.replaceAll('\$', '')).toStringAsFixed(2)}',
+                              "${double.parse(stock.pctchange.replaceAll('%', '')).toStringAsFixed(2)}%", //상태
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
