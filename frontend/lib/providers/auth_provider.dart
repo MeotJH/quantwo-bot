@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/common/custom_exception.dart';
-import 'package:quant_bot_flutter/constants/api_constants.dart';
-import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
-import 'package:quant_bot_flutter/models/user_model/user_auth_response_model.dart';
-import 'package:quant_bot_flutter/models/user_model/user_model.dart';
-import 'package:quant_bot_flutter/providers/dio_provider.dart';
+import 'package:quant_bot/common/custom_exception.dart';
+import 'package:quant_bot/constants/api_constants.dart';
+import 'package:quant_bot/models/user_model/user_auth_model.dart';
+import 'package:quant_bot/models/user_model/user_auth_response_model.dart';
+import 'package:quant_bot/models/user_model/user_model.dart';
+import 'package:quant_bot/providers/dio_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer';
 

@@ -1,4 +1,4 @@
-import 'package:quant_bot_flutter/constants/api_constants.dart';
+import 'package:quant_bot/constants/api_constants.dart';
 
 class Environment {
   static const _environment = String.fromEnvironment('ENVIRONMENT');

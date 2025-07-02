@@ -1,6 +1,6 @@
-import 'package:quant_bot_flutter/models/quant_model/quant_model.dart';
-import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
-import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_model.dart';
+import 'package:quant_bot/models/quant_model/quant_model.dart';
+import 'package:quant_bot/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot/models/trend_follow_model/trend_follow_model.dart';
 
 class TrendFollowService {
   final List<QuantModel> models;

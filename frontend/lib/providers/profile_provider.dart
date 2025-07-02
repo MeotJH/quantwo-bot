@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/models/profile_stock_model/profile_stock_model.dart';
-import 'package:quant_bot_flutter/models/user_model/user_model.dart';
-import 'package:quant_bot_flutter/providers/auth_provider.dart';
-import 'package:quant_bot_flutter/providers/dio_provider.dart';
-import 'package:quant_bot_flutter/services/stock_service.dart';
+import 'package:quant_bot/components/custom_toast.dart';
+import 'package:quant_bot/models/profile_stock_model/profile_stock_model.dart';
+import 'package:quant_bot/models/user_model/user_model.dart';
+import 'package:quant_bot/providers/auth_provider.dart';
+import 'package:quant_bot/providers/dio_provider.dart';
+import 'package:quant_bot/services/stock_service.dart';
 
 final profileStocksProvider =
     AsyncNotifierProvider<ProfileStocksNotifier, List<ProfileStockModel>>(

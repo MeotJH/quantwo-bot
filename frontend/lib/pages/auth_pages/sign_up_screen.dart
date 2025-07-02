@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/components/custom_password_field.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/providers/sign_up_provider.dart';
+import 'package:quant_bot/components/custom_password_field.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
+import 'package:quant_bot/providers/sign_up_provider.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});

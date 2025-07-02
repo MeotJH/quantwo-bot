@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/models/sign_up_model/sign_up_model.dart';
-import 'package:quant_bot_flutter/providers/dio_provider.dart';
-import 'package:quant_bot_flutter/services/sign_up_service.dart';
+import 'package:quant_bot/models/sign_up_model/sign_up_model.dart';
+import 'package:quant_bot/providers/dio_provider.dart';
+import 'package:quant_bot/services/sign_up_service.dart';
 
 final signUpFormProvider =
     StateNotifierProvider.autoDispose<SignUpFormNotifier, SignUpModel>(

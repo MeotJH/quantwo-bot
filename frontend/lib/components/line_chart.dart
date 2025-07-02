@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot/common/colors.dart';
 
 class QuantLineChart extends StatelessWidget {
   final List<Map<String, double>> firstChartData;

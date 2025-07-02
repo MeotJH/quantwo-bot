@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/constants/quant_type.dart';
-import 'package:quant_bot_flutter/providers/step_form_provider.dart';
+import 'package:quant_bot/constants/quant_type.dart';
+import 'package:quant_bot/providers/step_form_provider.dart';
 
 class QuantStrategyModel {
   final String name;

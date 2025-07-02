@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
 
 enum NavTab {
   stocks(

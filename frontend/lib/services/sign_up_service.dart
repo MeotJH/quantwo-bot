@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/models/sign_up_model/sign_up_model.dart';
+import 'package:quant_bot/components/custom_toast.dart';
+import 'package:quant_bot/models/sign_up_model/sign_up_model.dart';
 
 class SignUpService {
   final SignUpModel model;

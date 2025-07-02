@@ -4,13 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/components/custom_button.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_result.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire_result.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_notifier.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/retire_calculator_controller_provider.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/retire_calculator_notifier.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/components/custom_button.dart';
+import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_result.dart';
+import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire_result.dart';
+import 'package:quant_bot/providers/tools_providers/compound_calculator_notifier.dart';
+import 'package:quant_bot/providers/tools_providers/retire_calculator_controller_provider.dart';
+import 'package:quant_bot/providers/tools_providers/retire_calculator_notifier.dart';
 
 class ToolsLiteCalculatorRetire extends ConsumerStatefulWidget {
   const ToolsLiteCalculatorRetire({super.key});

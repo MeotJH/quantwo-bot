@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/providers/router_provider.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/providers/router_provider.dart';
 
 class CustomToast {
   static void show({

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/components/line_chart.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
-import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
-import 'package:quant_bot_flutter/pages/loading_pages/skeleton_detail_page_loading.dart';
-import 'package:quant_bot_flutter/pages/quant_page/crypto_quant_page_table.dart';
-import 'package:quant_bot_flutter/pages/quant_page/quant_page_table.dart';
-import 'package:quant_bot_flutter/providers/quant_provider.dart';
+import 'package:quant_bot/components/line_chart.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot/models/trend_follow_model/trend_follow_args_model.dart';
+import 'package:quant_bot/pages/loading_pages/skeleton_detail_page_loading.dart';
+import 'package:quant_bot/pages/quant_page/crypto_quant_page_table.dart';
+import 'package:quant_bot/pages/quant_page/quant_page_table.dart';
+import 'package:quant_bot/providers/quant_provider.dart';
 
 class QuantPage extends ConsumerStatefulWidget {
   final TrendFollowArgs tfArgs;

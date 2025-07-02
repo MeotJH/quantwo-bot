@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:quant_bot_flutter/constants/currency_type_enu.dart';
+import 'package:quant_bot/constants/currency_type_enu.dart';
 
 class ToggleNumberText extends StatefulWidget {
   final double? value;

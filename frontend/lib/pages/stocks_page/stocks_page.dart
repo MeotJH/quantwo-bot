@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/common/custom_exception.dart';
-import 'package:quant_bot_flutter/components/custom_dialog.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/pages/stocks_page/crypto_currency_list.dart';
-import 'package:quant_bot_flutter/pages/stocks_page/stocks_page_search_bar.dart';
-import 'package:quant_bot_flutter/pages/stocks_page/us_stock_list.dart';
-import 'package:quant_bot_flutter/providers/auth_provider.dart';
-import 'package:quant_bot_flutter/providers/dio_provider.dart';
-import 'package:quant_bot_flutter/providers/stock_providers/stock_tab_provider.dart';
+import 'package:quant_bot/common/custom_exception.dart';
+import 'package:quant_bot/components/custom_dialog.dart';
+import 'package:quant_bot/components/custom_toast.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
+import 'package:quant_bot/pages/stocks_page/crypto_currency_list.dart';
+import 'package:quant_bot/pages/stocks_page/stocks_page_search_bar.dart';
+import 'package:quant_bot/pages/stocks_page/us_stock_list.dart';
+import 'package:quant_bot/providers/auth_provider.dart';
+import 'package:quant_bot/providers/dio_provider.dart';
+import 'package:quant_bot/providers/stock_providers/stock_tab_provider.dart';
 
 class StockListPage extends ConsumerStatefulWidget {
   const StockListPage({super.key});

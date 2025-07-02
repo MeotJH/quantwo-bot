@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/retire_result.dart';
-import 'package:quant_bot_flutter/widgets/create_display_korean.dart';
+import 'package:quant_bot/models/tools_model/compound_calculator_model/retire_result.dart';
+import 'package:quant_bot/widgets/create_display_korean.dart';
 
 class ToolsLiteCalculatorRetireTable extends StatelessWidget {
   final RetireSummaryResult result;

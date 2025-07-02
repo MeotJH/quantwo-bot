@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:quant_bot_flutter/components/custom_password_field.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
+import 'package:quant_bot/components/custom_password_field.dart';
+import 'package:quant_bot/components/custom_toast.dart';
 
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/models/user_model/user_auth_model.dart';
-import 'package:quant_bot_flutter/providers/auth_provider.dart';
-import 'package:quant_bot_flutter/services/oauth_login_service.dart/oauth_login_service.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
+import 'package:quant_bot/models/user_model/user_auth_model.dart';
+import 'package:quant_bot/providers/auth_provider.dart';
+import 'package:quant_bot/services/oauth_login_service.dart/oauth_login_service.dart';
 
 //import 'dart:html' as html;
 

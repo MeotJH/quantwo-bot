@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/components/confetti_animation.dart';
-import 'package:quant_bot_flutter/components/custom_button.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot/components/confetti_animation.dart';
+import 'package:quant_bot/components/custom_button.dart';
+import 'package:quant_bot/common/colors.dart';
 import 'package:flutter/foundation.dart';
 
 class SignUpCompleteScreen extends StatelessWidget {

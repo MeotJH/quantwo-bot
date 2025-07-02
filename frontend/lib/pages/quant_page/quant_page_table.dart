@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/components/toggle_number_text.dart';
-import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/components/toggle_number_text.dart';
+import 'package:quant_bot/models/quant_model/quant_stock_model.dart';
 import 'package:number_display/number_display.dart';
 
 class QuantPageTable extends StatelessWidget {

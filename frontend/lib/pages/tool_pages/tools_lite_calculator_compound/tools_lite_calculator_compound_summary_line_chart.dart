@@ -1,9 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot/common/colors.dart';
 
-import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/compound_result.dart';
-import 'package:quant_bot_flutter/widgets/create_display_korean.dart';
+import 'package:quant_bot/models/tools_model/compound_calculator_model/compound_result.dart';
+import 'package:quant_bot/widgets/create_display_korean.dart';
 
 class ToolsLiteCalculatorCompoundSummaryLineChart extends StatelessWidget {
   final List<CompoundAnnualResult> data;

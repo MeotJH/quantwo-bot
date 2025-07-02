@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_summary_card.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_summary_line_chart.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_summary_table.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_notifier.dart';
+import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_summary_card.dart';
+import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_summary_line_chart.dart';
+import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_summary_table.dart';
+import 'package:quant_bot/providers/tools_providers/compound_calculator_notifier.dart';
 
 class ToolsLiteCalculatorCompoundResult extends ConsumerStatefulWidget {
   const ToolsLiteCalculatorCompoundResult({super.key});
