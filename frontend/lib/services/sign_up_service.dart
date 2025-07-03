@@ -15,11 +15,13 @@ class SignUpService {
     try {
       validate();
       await addAppToken();
-
+      final newModel = _modelWithToken.copyWith(
+        mobile: _modelWithToken.mobile.replaceAll('-', ''),
+      );
       final response = await dio
           .post(
         '/users/sign-up',
-        data: _modelWithToken.toJson(),
+        data: newModel.toJson(),
       )
           .timeout(
         const Duration(seconds: 10), // 타임아웃 설정
