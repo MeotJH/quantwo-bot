@@ -32,18 +32,18 @@ class QuantScheduler:
             )
 
             self.scheduler.add_job(
+                self._run_check_and_notify_dualmomentum_international, 
+                trigger=CronTrigger(day=1, hour=9, minute=00),
+                #trigger=IntervalTrigger(seconds=10),
+                timezone=timezone('Asia/Seoul')
+            )
+
+            self.scheduler.add_job(
                 self._run_check_and_notify_trend_follow_to_admin,
                 trigger=DateTrigger(
                     run_date=datetime.now(timezone('Asia/Seoul')) + timedelta(minutes=1),
                     timezone=timezone('Asia/Seoul')
                 )
-            )
-
-            self.scheduler.add_job(
-                self._run_check_and_notify_dualmomentum_international, 
-                trigger=CronTrigger(day=1, hour=9, minute=00),
-                #trigger=IntervalTrigger(seconds=10),
-                timezone=timezone('Asia/Seoul')
             )
             self.scheduler.start()
             logger.info("Quant Scheduler started, will run daily at 10:30 PM and 11:30 PM KST, and Month of 1")
