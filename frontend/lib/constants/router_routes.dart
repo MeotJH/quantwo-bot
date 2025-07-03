@@ -1,17 +1,17 @@
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot/constants/router_path_constants.dart';
-import 'package:quant_bot/models/trend_follow_model/trend_follow_args_model.dart';
-import 'package:quant_bot/pages/quant_page/dual_momentums/international/dual_momentum_international.dart';
-import 'package:quant_bot/pages/quant_page/dual_momentums/international/dual_momentum_international_description.dart';
-import 'package:quant_bot/pages/quant_page/trend_follow/trend_follow_description.dart';
-import 'package:quant_bot/pages/quant_page/trend_follow/trend_follow_detail_page.dart';
-import 'package:quant_bot/pages/quant_page/trend_follow/trend_follow_page.dart';
-import 'package:quant_bot/pages/quant_select_page/quant_select_page.dart';
-import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound.dart';
-import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_result.dart';
-import 'package:quant_bot/pages/tool_pages/tools_page.dart';
-import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire.dart';
-import 'package:quant_bot/pages/tool_pages/tools_lite_page.dart';
+import 'package:quant_bot_flutter/constants/router_path_constants.dart';
+import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
+import 'package:quant_bot_flutter/pages/quant_page/dual_momentums/international/dual_momentum_international.dart';
+import 'package:quant_bot_flutter/pages/quant_page/dual_momentums/international/dual_momentum_international_description.dart';
+import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_description.dart';
+import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_detail_page.dart';
+import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_page.dart';
+import 'package:quant_bot_flutter/pages/quant_select_page/quant_select_page.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_compound/tools_lite_calculator_compound_result.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_page.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire.dart';
+import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_page.dart';
 
 List<GoRoute> quantTypeRoutes = [
   GoRoute(
