@@ -89,7 +89,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/
-    - assets/.env
     - assets/animations/
   fonts:
     - family: Pretendard

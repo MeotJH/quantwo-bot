@@ -1,5 +1,10 @@
 flutter build web --web-renderer canvaskit  --dart-define=ENVIRONMENT=PROD &&
 
+if [ ! -f ./build/web/flutter_service_worker.js ]; then
+  echo "ERROR: flutter_service_worker.js not found. Build may have failed."
+  exit 1
+fi
+
 # 서비스 워커 파일 넣어야 알림처리 가능해서 넣은 로직
 CUSTOM_CODE=$(cat <<EOF
 
