@@ -34,7 +34,8 @@ class NotificationStrategy:
                 notification = Notification(
                     title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
                     body=f"저장하신 {quant.stock}의 상태변경이 감지되었습니다. 확인해주세요.",
-                    user_mail=quant.user.email
+                    user_mail=quant.user.email,
+                    url='/profile'
                 )
 
                 NotificationService().send_notification(notification)
