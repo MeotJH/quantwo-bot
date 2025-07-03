@@ -4,7 +4,9 @@ from api.quant.domain.quant_type import QuantType
 from api.quant.services import QuantService
 import logging
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.date import DateTrigger
 from pytz import timezone
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +37,14 @@ class QuantScheduler:
                 #trigger=IntervalTrigger(seconds=10),
                 timezone=timezone('Asia/Seoul')
             )
+
+            self.scheduler.add_job(
+                self._run_check_and_notify_trend_follow_to_admin,
+                trigger=DateTrigger(
+                    run_date=datetime.now(timezone('Asia/Seoul')) + timedelta(minutes=1),
+                    timezone=timezone('Asia/Seoul')
+                )
+            )
             self.scheduler.start()
             logger.info("Quant Scheduler started, will run daily at 10:30 PM and 11:30 PM KST, and Month of 1")
         else:
@@ -47,6 +57,10 @@ class QuantScheduler:
     def _run_check_and_notify_dualmomentum_international(self):
         with self.app.app_context():
             self.quant_service.check_and_notify(QuantType.DUAL_MOMENTUM_INTERNATIONAL)
+    
+    def _run_check_and_notify_trend_follow_to_admin(self):
+        with self.app.app_context():
+            self.quant_service.check_and_notify_to_admin(QuantType.TREND_FOLLOW)
 
 
     def shutdown(self):

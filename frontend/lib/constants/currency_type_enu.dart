@@ -1,5 +1,5 @@
 import 'package:number_display/number_display.dart';
-import 'package:quant_bot_flutter/widgets/create_display_korean.dart';
+import 'package:quant_bot/widgets/create_display_korean.dart';
 
 enum CurrencyType {
   USD(

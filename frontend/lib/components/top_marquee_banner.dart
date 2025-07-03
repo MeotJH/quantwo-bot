@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/constants/legal_notice.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/constants/legal_notice.dart';
 
 class TopMarqueeBanner extends StatefulWidget {
   const TopMarqueeBanner({super.key});

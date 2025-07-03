@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:quant_bot_flutter/constants/api_constants.dart';
+import 'package:quant_bot/constants/api_constants.dart';
 import 'dart:html' as html;
 
-import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
+import 'package:quant_bot/constants/enviroment_constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> launchNaverLogin() async {

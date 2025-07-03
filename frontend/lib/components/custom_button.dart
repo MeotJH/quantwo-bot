@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/providers/loading_provider.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/providers/loading_provider.dart';
 
 class CustomButton extends ConsumerWidget {
   final VoidCallback? onPressed;

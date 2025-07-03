@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire_card.dart';
-import 'package:quant_bot_flutter/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire_table.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/retire_calculator_notifier.dart';
+import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire_card.dart';
+import 'package:quant_bot/pages/tool_pages/tools_lite_calculator_retire/tools_lite_calculator_retire_table.dart';
+import 'package:quant_bot/providers/tools_providers/retire_calculator_notifier.dart';
 
 class ToolsLiteCalculatorRetireResult extends ConsumerStatefulWidget {
   const ToolsLiteCalculatorRetireResult({super.key});

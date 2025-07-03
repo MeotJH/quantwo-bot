@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/retire_result.dart';
+import 'package:quant_bot/models/tools_model/compound_calculator_model/retire_result.dart';
 
 class ToolsLiteCalculatorRetireCard extends StatelessWidget {
   final RetireSummaryResult result;

@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:quant_bot_flutter/models/stock_model/stock_model.dart';
-import 'package:quant_bot_flutter/providers/dio_provider.dart';
+import 'package:quant_bot/models/stock_model/stock_model.dart';
+import 'package:quant_bot/providers/dio_provider.dart';
 
 final cryptoCurrencyProvider =
     AsyncNotifierProvider.autoDispose<CryptoCurrencyNotifier, List<StockModel>>(

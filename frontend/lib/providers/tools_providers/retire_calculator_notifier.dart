@@ -2,10 +2,10 @@
 import 'dart:developer';
 import 'dart:math';
 
-import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/retire_result.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/retire_calculator_controller_provider.dart';
-import 'package:quant_bot_flutter/widgets/currency_text_controller.dart';
+import 'package:quant_bot/components/custom_toast.dart';
+import 'package:quant_bot/models/tools_model/compound_calculator_model/retire_result.dart';
+import 'package:quant_bot/providers/tools_providers/retire_calculator_controller_provider.dart';
+import 'package:quant_bot/widgets/currency_text_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'retire_calculator_notifier.g.dart';

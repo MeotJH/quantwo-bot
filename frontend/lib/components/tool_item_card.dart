@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
+import 'package:quant_bot/common/colors.dart';
 
 class ToolItemCard extends StatelessWidget {
   final String title;

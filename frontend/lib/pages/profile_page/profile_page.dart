@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/components/custom_dialog.dart';
-import 'package:quant_bot_flutter/constants/quant_type.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/models/profile_stock_model/profile_stock_model.dart';
-import 'package:quant_bot_flutter/pages/loading_pages/profile_info_skeleton.dart';
-import 'package:quant_bot_flutter/providers/dio_provider.dart';
-import 'package:quant_bot_flutter/providers/profile_provider.dart';
-import 'package:quant_bot_flutter/pages/loading_pages/skeleton_list_loading.dart';
-import 'package:quant_bot_flutter/services/push_service.dart/push_service.dart';
+import 'package:quant_bot/components/custom_dialog.dart';
+import 'package:quant_bot/constants/quant_type.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
+import 'package:quant_bot/models/profile_stock_model/profile_stock_model.dart';
+import 'package:quant_bot/pages/loading_pages/profile_info_skeleton.dart';
+import 'package:quant_bot/providers/dio_provider.dart';
+import 'package:quant_bot/providers/profile_provider.dart';
+import 'package:quant_bot/pages/loading_pages/skeleton_list_loading.dart';
+import 'package:quant_bot/services/push_service.dart/push_service.dart';
 
 class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});

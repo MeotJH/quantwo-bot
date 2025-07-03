@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/components/toggle_number_text.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/constants/currency_type_enu.dart';
-import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/compound_result.dart';
+import 'package:quant_bot/components/toggle_number_text.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/constants/currency_type_enu.dart';
+import 'package:quant_bot/models/tools_model/compound_calculator_model/compound_result.dart';
 
 class ToolsLiteCalculatorCompoundTable extends StatelessWidget {
   final List<CompoundAnnualResult> data;

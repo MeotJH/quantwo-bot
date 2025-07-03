@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/models/dual_momentum_international_model/dual_momentum_international_model.dart';
-import 'package:quant_bot_flutter/widgets/quant_line_chart.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/models/dual_momentum_international_model/dual_momentum_international_model.dart';
+import 'package:quant_bot/widgets/quant_line_chart.dart';
 
 class DualMomentumInternationalGraph extends StatelessWidget {
   final DualMomentumInternationalModel data; // 실제 데이터 타입에 맞게 수정 필요

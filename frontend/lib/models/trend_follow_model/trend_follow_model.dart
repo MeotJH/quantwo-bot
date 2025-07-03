@@ -1,5 +1,5 @@
-import 'package:quant_bot_flutter/models/quant_model/quant_model.dart';
-import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot/models/quant_model/quant_model.dart';
+import 'package:quant_bot/models/quant_model/quant_stock_model.dart';
 
 class TrendFollowModel {
   final List<Map<String, double>> firstLineChart;

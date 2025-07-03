@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/components/custom_dialog.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot/components/custom_dialog.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/models/quant_model/quant_stock_model.dart';
 
 class TrendFollowQuantTable extends StatefulWidget {
   final QuantStockModel recentStockOne;

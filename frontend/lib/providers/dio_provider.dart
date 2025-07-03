@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/constants/api_constants.dart';
-import 'package:quant_bot_flutter/constants/enviroment_constant.dart';
-import 'package:quant_bot_flutter/providers/auth_provider.dart';
+import 'package:quant_bot/components/custom_toast.dart';
+import 'package:quant_bot/constants/api_constants.dart';
+import 'package:quant_bot/constants/enviroment_constant.dart';
+import 'package:quant_bot/providers/auth_provider.dart';
 import 'package:riverpod/riverpod.dart';
 import 'dart:developer';
 

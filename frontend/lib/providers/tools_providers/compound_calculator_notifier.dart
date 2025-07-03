@@ -1,9 +1,9 @@
 // 계산 Notifier
 import 'dart:developer';
 
-import 'package:quant_bot_flutter/models/tools_model/compound_calculator_model/compound_result.dart';
-import 'package:quant_bot_flutter/providers/tools_providers/compound_calculator_controller_provider.dart';
-import 'package:quant_bot_flutter/widgets/currency_text_controller.dart';
+import 'package:quant_bot/models/tools_model/compound_calculator_model/compound_result.dart';
+import 'package:quant_bot/providers/tools_providers/compound_calculator_controller_provider.dart';
+import 'package:quant_bot/widgets/currency_text_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'compound_calculator_notifier.g.dart';

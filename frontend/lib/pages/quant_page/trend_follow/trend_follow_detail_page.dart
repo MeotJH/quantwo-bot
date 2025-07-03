@@ -5,22 +5,22 @@ import 'package:flutter/widgets.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/components/custom_button.dart';
-import 'package:quant_bot_flutter/components/custom_dialog.dart';
-import 'package:quant_bot_flutter/components/line_chart.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
-import 'package:quant_bot_flutter/constants/quant_type.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/common/utils.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/models/quant_model/quant_stock_model.dart';
-import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
-import 'package:quant_bot_flutter/pages/comm/quant_bot_detail_page_header.dart';
-import 'package:quant_bot_flutter/pages/loading_pages/skeleton_detail_page_loading.dart';
-import 'package:quant_bot_flutter/pages/quant_page/trend_follow/trend_follow_quant_table.dart';
-import 'package:quant_bot_flutter/providers/auth_provider.dart';
-import 'package:quant_bot_flutter/providers/loading_provider.dart';
-import 'package:quant_bot_flutter/providers/quant_provider.dart';
+import 'package:quant_bot/components/custom_button.dart';
+import 'package:quant_bot/components/custom_dialog.dart';
+import 'package:quant_bot/components/line_chart.dart';
+import 'package:quant_bot/components/custom_toast.dart';
+import 'package:quant_bot/constants/quant_type.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/common/utils.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
+import 'package:quant_bot/models/quant_model/quant_stock_model.dart';
+import 'package:quant_bot/models/trend_follow_model/trend_follow_args_model.dart';
+import 'package:quant_bot/pages/comm/quant_bot_detail_page_header.dart';
+import 'package:quant_bot/pages/loading_pages/skeleton_detail_page_loading.dart';
+import 'package:quant_bot/pages/quant_page/trend_follow/trend_follow_quant_table.dart';
+import 'package:quant_bot/providers/auth_provider.dart';
+import 'package:quant_bot/providers/loading_provider.dart';
+import 'package:quant_bot/providers/quant_provider.dart';
 
 class TrendFollowDetailPage extends ConsumerStatefulWidget {
   final TrendFollowArgs tfargs;

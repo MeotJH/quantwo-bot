@@ -21,7 +21,7 @@ def test_start_scheduler(MockBackgroundScheduler):
     scheduler.start()
 
     # 🔹 호출 횟수 검증
-    assert mock_scheduler_instance.add_job.call_count == 2
+    assert mock_scheduler_instance.add_job.call_count == 3
 
     # 🔹 첫 번째 호출 인자 검증 (trend_follow)
     first_call = mock_scheduler_instance.add_job.call_args_list[0]

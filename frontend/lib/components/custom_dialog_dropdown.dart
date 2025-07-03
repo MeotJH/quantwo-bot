@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/constants/quant_type.dart';
+import 'package:quant_bot/constants/quant_type.dart';
 
 class CustomDialogDropDown extends StatefulWidget {
   const CustomDialogDropDown({super.key});
@@ -21,7 +21,8 @@ class CustomDialogDropDown extends StatefulWidget {
 }
 
 class _CustomDialogDropDownState extends State<CustomDialogDropDown> {
-  final List<bool> isHovering = List<bool>.filled(QuantType.values.length, false);
+  final List<bool> isHovering =
+      List<bool>.filled(QuantType.values.length, false);
   QuantType selectedCategory = QuantType.SELECT;
 
   @override
@@ -31,7 +32,8 @@ class _CustomDialogDropDownState extends State<CustomDialogDropDown> {
       title: const Padding(
         padding: EdgeInsets.all(8.0),
         child: Center(
-          child: Text('투자 방법 선택', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          child: Text('투자 방법 선택',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ),
       ),
       shape: RoundedRectangleBorder(
@@ -68,7 +70,8 @@ class _CustomDialogDropDownState extends State<CustomDialogDropDown> {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
               (Set<MaterialState> states) {
-                if (states.contains(MaterialState.hovered) || states.contains(MaterialState.pressed)) {
+                if (states.contains(MaterialState.hovered) ||
+                    states.contains(MaterialState.pressed)) {
                   return const Color(0xFF009999);
                 }
                 return Colors.white;

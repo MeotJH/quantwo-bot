@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/components/tool_item_card.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/providers/step_form_provider.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/components/tool_item_card.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
+import 'package:quant_bot/providers/step_form_provider.dart';
 
 class ToolsLitePage extends ConsumerWidget {
   const ToolsLitePage({super.key});

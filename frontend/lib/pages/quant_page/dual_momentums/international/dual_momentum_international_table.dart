@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/models/dual_momentum_international_model/dual_momentum_international_model.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/models/dual_momentum_international_model/dual_momentum_international_model.dart';
 
 class DualMomentumInternationalTable extends StatelessWidget {
   final Summary summary;

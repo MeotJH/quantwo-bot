@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:quant_bot_flutter/components/top_marquee_banner.dart';
-import 'package:quant_bot_flutter/constants/nav_tab_enum.dart';
-import 'package:quant_bot_flutter/constants/router_path_constants.dart';
-import 'package:quant_bot_flutter/constants/router_routes.dart';
-import 'package:quant_bot_flutter/common/colors.dart';
-import 'package:quant_bot_flutter/models/trend_follow_model/trend_follow_args_model.dart';
-import 'package:quant_bot_flutter/pages/auth_pages/login_page.dart';
-import 'package:quant_bot_flutter/pages/auth_pages/sign_up_complete_screen.dart';
-import 'package:quant_bot_flutter/pages/auth_pages/sign_up_screen.dart';
-import 'package:quant_bot_flutter/pages/quant_page/quant_page.dart';
-import 'package:quant_bot_flutter/pages/quant_select_page/strategy_select_page.dart';
-import 'package:quant_bot_flutter/pages/splash_pages/splash_page.dart';
-import 'package:quant_bot_flutter/pages/stocks_page/stocks_page.dart';
-import 'package:quant_bot_flutter/providers/auth_provider.dart';
+import 'package:quant_bot/components/top_marquee_banner.dart';
+import 'package:quant_bot/constants/nav_tab_enum.dart';
+import 'package:quant_bot/constants/router_path_constants.dart';
+import 'package:quant_bot/constants/router_routes.dart';
+import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/models/trend_follow_model/trend_follow_args_model.dart';
+import 'package:quant_bot/pages/auth_pages/login_page.dart';
+import 'package:quant_bot/pages/auth_pages/sign_up_complete_screen.dart';
+import 'package:quant_bot/pages/auth_pages/sign_up_screen.dart';
+import 'package:quant_bot/pages/quant_page/quant_page.dart';
+import 'package:quant_bot/pages/quant_select_page/strategy_select_page.dart';
+import 'package:quant_bot/pages/splash_pages/splash_page.dart';
+import 'package:quant_bot/pages/stocks_page/stocks_page.dart';
+import 'package:quant_bot/providers/auth_provider.dart';
 import '../pages/profile_page/profile_page.dart';
 
 // navigatorKey를 전역에서 사용하기 위해 선언

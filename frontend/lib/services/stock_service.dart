@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:quant_bot_flutter/components/custom_toast.dart';
+import 'package:quant_bot/components/custom_toast.dart';
 import 'dart:developer';
 
 class StockService {
