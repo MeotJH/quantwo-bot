@@ -197,13 +197,13 @@ class QuantService:
 
             notification = Notification(
                     title=f"퀀투봇 [어드민 알람]",
-                    body=f"퀀투봇 어드민 알람입니다 서버시작 스케줄링 1분후에 나타나는 알람입니다.",
+                    body=f"서버 스케줄링 알람 이상 무",
                     user_mail="mallangyi@naver.com",
-                    url="https:quantwo-bot.com"
+                    url="/main"
                 )
 
             NotificationService().send_notification(notification)
-            logger.info(f"{notification.to_dict}::: 퀀투봇 어드민 로깅알람 보냄")
+            logger.info(f" Quantwo Bot Logging Alarm Send :::::: {notification.to_dict}:::")
             
             for quant in filtered_quants:
                 #전략에 따라서 알림보낸다.

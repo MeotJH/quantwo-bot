@@ -194,61 +194,48 @@ class ProfilePage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'SAVED QUANT',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 3,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: CustomColors.jadeGreen120.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            QuantType.fromCode(stock.quantType)
+                                .name
+                                .toUpperCase(),
+                            style: TextStyle(
+                              color: CustomColors.jadeGreen120,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
+                        const SizedBox(height: 5),
                         Text(
-                          stock.ticker.toUpperCase(),
+                          stock.initialStatus == stock.currentStatus
+                              ? '포지션 유지: ${stock.initialStatus}'
+                              : '포지션 변화: ${stock.initialStatus.toUpperCase()} -> ${stock.currentStatus.toUpperCase()}',
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          stock.name,
-                          style: TextStyle(
-                              fontSize: 12, color: CustomColors.gray50),
-                        ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 5),
                         Row(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: CustomColors.clearBlue120,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                QuantType.fromCode(stock.quantType)
-                                    .name
-                                    .toUpperCase(),
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 10),
-                              ),
+                            Text(
+                              stock.ticker.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 12, color: CustomColors.gray60),
                             ),
-                            const SizedBox(width: 6),
-                            // BUY, SELL 부분 UI
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: stock.currentStatus == 'SELL'
-                                    ? CustomColors.clearBlue120.withOpacity(0.1)
-                                    : CustomColors.error.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                '저장시 포지션 → ${stock.currentStatus.toUpperCase()}',
-                                style: TextStyle(
-                                  color: stock.currentStatus == 'SELL'
-                                      ? CustomColors.clearBlue120
-                                      : CustomColors.error,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
+                            const SizedBox(width: 10),
+                            Text(
+                              stock.name,
+                              style: TextStyle(
+                                  fontSize: 10, color: CustomColors.gray40),
                             ),
                           ],
                         ),
@@ -271,12 +258,6 @@ class ProfilePage extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(
                             vertical: 6, horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: double.parse(stock.profit) >= 0
-                              ? CustomColors.error.withOpacity(0.1)
-                              : CustomColors.clearBlue120.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
                         child: Column(
                           children: [
                             Text(

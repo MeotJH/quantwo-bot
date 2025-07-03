@@ -155,6 +155,7 @@ class _ScaffoldWithNavBarState extends ConsumerState<ScaffoldWithNavBar> {
       bottomNavigationBar: isMinimalLayoutPage()
           ? null
           : BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
               currentIndex: selectedIndex,
               selectedItemColor: CustomColors.black,
               unselectedItemColor: CustomColors.gray40,

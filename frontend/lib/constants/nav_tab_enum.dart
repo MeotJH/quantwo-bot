@@ -6,25 +6,25 @@ enum NavTab {
     idx: 0,
     path: RouterPath.stockListPath,
     icon: Icons.show_chart_rounded,
-    label: 'Stocks',
+    label: '주식정보',
   ),
   quants(
     idx: 1,
     path: RouterPath.strategySelectPath,
     icon: Icons.add_chart,
-    label: 'Quants',
+    label: '퀀트투자',
   ),
   tools(
     idx: 2,
     path: RouterPath.tools,
     icon: Icons.smart_toy_outlined,
-    label: 'Tools',
+    label: '도구',
   ),
   profile(
     idx: 3,
     path: RouterPath.profilePath,
     icon: Icons.person,
-    label: 'Profile',
+    label: '내 정보',
   );
 
   final int idx;
