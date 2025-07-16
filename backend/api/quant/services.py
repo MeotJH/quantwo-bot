@@ -41,9 +41,14 @@ class QuantService:
         user = User.query.filter_by(email=jwt_user).first()
 
         quant = Quant.query.filter_by(stock=stock, user_id=user.uuid, quant_type=quant_data.quant_type ).first()
+        quant_cnt = Quant.query.filter_by(user_id=user.uuid).count()
+        logger.info(f'저장된 퀀트는 {quant_cnt}개 입니다.')
 
         if quant is not None:
             raise AlreadyExistsException('이미 존재하는 퀀트입니다.', 409)
+        
+        # if quant_cnt >= 5 :
+        #     raise BadRequestException('❗최대 5개까지 등록할 수 있어요', 409)
 
         if user is None:
             return {"error": "User not found"}
