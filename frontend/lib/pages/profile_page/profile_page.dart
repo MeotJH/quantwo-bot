@@ -218,10 +218,10 @@ class ProfilePage extends ConsumerWidget {
                         const SizedBox(height: 5),
                         Text(
                           stock.initialStatus == stock.currentStatus
-                              ? '포지션 유지: ${stock.initialStatus}'
+                              ? '포지션 유지: ${stock.initialStatus.toUpperCase()}'
                               : '포지션 변화: ${stock.initialStatus.toUpperCase()} -> ${stock.currentStatus.toUpperCase()}',
                           style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 5),
                         Row(
@@ -250,14 +250,14 @@ class ProfilePage extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(
-                    width: 8,
+                    width: 4,
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 6, horizontal: 12),
+                            vertical: 3, horizontal: 3),
                         child: Column(
                           children: [
                             Text(
@@ -293,7 +293,6 @@ class ProfilePage extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(width: 8),
                       Column(
                         children: [
                           IconButton(
