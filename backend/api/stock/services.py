@@ -27,6 +27,9 @@ def daily_cache_key():
         date_key = (now.replace(hour=0, minute=0, second=0) + timedelta(days=1)).strftime('%Y-%m-%d')
     return f"my_function_cache::{date_key}"
 
+def save_finded_stocks():
+    True
+
 @cache.cached(key_prefix=daily_cache_key)
 def find_stocks():
     external_api_url = "https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=25&offset=0&download=true"
@@ -62,7 +65,9 @@ def find_stocks():
     except KeyError as e:
         print(f"Error parsing stock data: {e}")
         return []
-
+    
+    logger.info(f'this is logger ::::: {stocks} ')
+    save_finded_stocks(stocks)
     print(f'stock selected example array[0] :::::::: {stocks[0]}')
     sorted_objects = sorted(stocks, key=lambda x: float(x.market_cap) if x.market_cap else 0.0, reverse=True)
     return sorted_objects
