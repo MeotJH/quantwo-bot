@@ -67,7 +67,6 @@ def find_stocks():
         return []
     
     logger.info(f'this is logger ::::: {stocks} ')
-    save_finded_stocks(stocks)
     print(f'stock selected example array[0] :::::::: {stocks[0]}')
     sorted_objects = sorted(stocks, key=lambda x: float(x.market_cap) if x.market_cap else 0.0, reverse=True)
     return sorted_objects
