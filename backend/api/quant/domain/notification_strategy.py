@@ -71,21 +71,28 @@ class NotificationStrategy:
 
 
     @classmethod
-    def _calculate_dualmomentum_intl_strategy(cls,quant: Quant):
+    def _calculate_dualmomentum_intl_strategy(cls, quant: Quant):
         """
-            국제 듀얼모멘텀 전략 알림로직
+        국제 듀얼모멘텀 전략 알림 로직
         """
         momentum = get_todays_dual_momentum(
-                                saved_symbol=quant.stock
-                                 ,etf_symbols=['SPY', 'FEZ', 'EWJ', 'EWY']
-                                 ,savings_rate=3.0
-                                 )
-        
-        if momentum.should_rebalance:
-            notification_content = f'이달의 듀얼모멘텀 결과: {momentum.recommendation}가 상대적으로 강세입니다.'
-        else:
-            notification_content = f'{datetime.now().month}월에는 포트폴리오 변경 없이 기존 구성을 유지하는 것이 권장됩니다.'
-        
+            saved_symbol=quant.stock,
+            etf_symbols=['SPY', 'FEZ', 'EWJ', 'EWY'],
+            savings_rate=3.0
+        )
+
+        today_pick = momentum.recommendation
+        notification_content = None
+        should_notify = quant.current_status != today_pick  # 마지막 알림 종목과 다르면 알림 필요
+
+        with transaction_scope():
+            if should_notify and momentum.should_rebalance:
+                quant.current_status = today_pick  # 알림 보냈으므로 상태 갱신
+                notification_content = f'이달의 듀얼모멘텀 결과: {today_pick}가 상대적으로 강세입니다.'
+            else:
+                notification_content = f'{datetime.now().month}월에는 포트폴리오 변경 없이 기존 구성을 유지하는 것이 권장됩니다.'
+
+        # 알림 전송 (항상 전송할지, 알림 있을 때만 전송할지는 선택 사항)
         notification = Notification(
             title=f"퀀투봇 [{QuantType(quant.quant_type).kor}]",
             body=notification_content,
@@ -95,6 +102,7 @@ class NotificationStrategy:
 
         logger.info(f'notification content :::::: {notification_content}')
         NotificationService().send_notification(notification)
+
     
     @classmethod
     def calculate_strategy(cls, quant: Quant):

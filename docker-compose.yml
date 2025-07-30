@@ -27,6 +27,7 @@ services:
     networks:
       - app-network
     environment:
+      - TZ=Asia/Seoul
       - FLASK_APP=wsgi.py
       - FLASK_ENV=PROD
       - ENVIRONMENT=PROD
