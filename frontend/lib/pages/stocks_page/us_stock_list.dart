@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quant_bot/common/colors.dart';
+import 'package:quant_bot/components/custom_button.dart';
 import 'package:quant_bot/pages/loading_pages/skeleton_list_loading.dart';
 import 'package:quant_bot/providers/stock_providers/stocks_provider.dart';
 
@@ -104,9 +105,25 @@ class UsStockList extends ConsumerWidget {
         child: Container(
           alignment: Alignment.center,
           color: CustomColors.white,
-          child: const Text(
-            '서버에 문제가 생겼습니다. \n 개발자 도비가 금방 조치할테니 조금만 기다려주세요.',
-            textAlign: TextAlign.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                '서버에 문제가 생겼습니다. \n 개발자 도비가 금방 조치할테니 조금만 기다려주세요.',
+                textAlign: TextAlign.center,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                width: 200,
+                child: CustomButton(
+                    onPressed: () async {
+                      await ref.read(stocksProvider.notifier).refreshStocks();
+                    },
+                    textColor: CustomColors.white,
+                    backgroundColor: CustomColors.clearBlue120,
+                    text: '새로고침'),
+              )
+            ],
           ),
         ),
       ),
