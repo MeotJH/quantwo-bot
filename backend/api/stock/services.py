@@ -27,7 +27,6 @@ def find_stocks(external_api_client: ExternalApiClient = None):
     sorted_objects = external_api_client.get_stocks()
     return sorted_objects
 
-@cache.cached(key_prefix=daily_cache_key)
 def find_crypto_currency(external_api_client: ExternalApiClient = None):
     return external_api_client.get_cryptos()
 
