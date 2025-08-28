@@ -63,7 +63,7 @@ class DualMomentumBacktest:
 
     def _calculate_returns(self, current_date: datetime) -> tuple[pd.Series, pd.Series]:
         """수익률 계산"""
-        lookback_date = current_date - timedelta(days=self.config.lookback_months * 30)
+        lookback_date = current_date - pd.DateOffset(months=self.config.lookback_months)
         prices = self.df.loc[lookback_date:current_date]
         returns = (prices.iloc[-1] / prices.iloc[0] - 1) * 100
         monthly_returns = (1 + returns / 100) ** (1 / self.config.lookback_months) - 1
@@ -96,7 +96,7 @@ class DualMomentumBacktest:
         """각 거래 기간 처리"""
         try:
             returns, monthly_returns = self._calculate_returns(date)
-            months_passed = ((date - self.start_date).days) / 30
+            months_passed = (date.year - self.start_date.year) * 12 + (date.month - self.start_date.month)
             cash_capital = self.config.initial_capital * (1 + self.monthly_savings_rate) ** months_passed
             buy_and_hold_capital = self._calculate_buy_and_hold(date, self.config.initial_capital)
             
@@ -130,7 +130,7 @@ class DualMomentumBacktest:
         capital = self.config.initial_capital
         results = []
         for date in pd.date_range(start=self.start_date, end=self.end_date, freq='M'):
-            if date - timedelta(days=self.config.lookback_months * 30) < self.df.index[0]:
+            if date - pd.DateOffset(months=self.config.lookback_months) < self.df.index[0]:
                 continue
                 
             result = self._process_trading_period(date, capital)
@@ -221,3 +221,4 @@ def get_todays_dual_momentum(saved_symbol: str, etf_symbols: List[str], savings_
         cash_return=cash_return,
         should_rebalance=should_rebalance
     )
+

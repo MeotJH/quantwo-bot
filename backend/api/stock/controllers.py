@@ -1,8 +1,9 @@
-import json
+
 from dataclasses import asdict
 from flask_restx import Resource, fields
 from api import stock_api as api
 from api import cache
+from api.stock.repository.yfinance_api_client_impl import YFinanceApiClientImpl
 from api.stock.services import find_crypto_currency, find_stocks
 
 
@@ -33,8 +34,8 @@ class Stocks(Resource):
         """
         주식리스트 정보를 가져온다.
         """
-        # item_id가 없을 경우 모든 stocks를 반환
-        stocks = find_stocks()
+        external_api_client = YFinanceApiClientImpl()
+        stocks = find_stocks(external_api_client)
         stocks_dict_list = [asdict(stock) for stock in stocks]
         return {'stocks': stocks_dict_list}
 
@@ -48,9 +49,9 @@ class CryptoCurrency(Resource):
         """
         암호화폐리스트 정보를 가져온다.
         """
-
         # item_id가 없을 경우 모든 stocks를 반환
-        crypto_list = find_crypto_currency()
+        external_api_client = YFinanceApiClientImpl()
+        crypto_list = find_crypto_currency(external_api_client)
         #stocks_dict_list = [asdict(stock) for stock in crypto]
         return {'stocks': crypto_list}
 

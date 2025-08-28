@@ -27,7 +27,7 @@ Future<void> launchNaverLogin() async {
 
 void launchNaverOAuthPopup() {
   html.window.open(
-    Environment.serverUri + ApiEndpoints.oauthNaver,
+    Environment.serverUri! + ApiEndpoints.oauthNaver,
     'NaverLogin',
     'width=500,height=600',
   );
