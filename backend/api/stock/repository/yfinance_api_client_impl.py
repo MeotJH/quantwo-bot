@@ -45,7 +45,7 @@ class YFinanceApiClientImpl(ExternalApiClient):
         try:
             stocks_json = response_json['data']['rows']
             for stock_dict in stocks_json:
-                stock = Stock(stock_dict)
+                stock = Stock.from_nasdaq(stock_dict)
                 stocks.append(stock)
         except KeyError as e:
             print(f"Error parsing stock data: {e}")
@@ -75,22 +75,9 @@ class YFinanceApiClientImpl(ExternalApiClient):
                     stock.insert_date = now
 
         return [
-            {
-                'symbol': info.get('symbol', ''),
-                'name': info.get('name', ''),
-                'lastsale': info.get('current_price', ''),
-                'netchange': 0,
-                'pctchange': info.get('price_change_percentage_24h', ''),
-                'market_cap': info.get('market_cap', 0),
-                'volume': info.get('total_volume', 0),
-                'country': '',
-                'ipo_year': '',
-                'industry': '',
-                'sector': '',
-                'url': info.get('image', ''),
-            }
+            Stock.from_coingecko(info)
             for info in (stock.stock_infos if stock else [])
-        ]   
+        ]
 
 
     COINGECKO_URL = "https://api.coingecko.com/api/v3/coins/markets"
