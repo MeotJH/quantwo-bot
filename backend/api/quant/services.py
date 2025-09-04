@@ -1,23 +1,25 @@
 from dataclasses import asdict
 import traceback
-from api.quant.domain.model import QuantData, TrendFollowRequestDTO
+from api.quant.domain.value_objects.model import QuantData, TrendFollowRequestDTO
 from flask_jwt_extended import get_jwt_identity
 
 from api import db
 from api.quant.domain.entities import Quant
-from api.quant.domain.quant_type import QuantType
-from api.quant.domain.stock_info_wrapper import AssetType
-from api.quant.domain.trend_follow import TrendFollow
+from api.quant.domain.value_objects.quant_type import QuantType
+from api.quant.repository.market_data.mappers.stock_info_wrapper import AssetType
+from api.quant.domain.services.trend_follow import TrendFollow
 from api.quant.dual_momentum_services import get_todays_dual_momentum
+from api.quant.repository.database.quant_repository_impl import QuantRepositoryImpl
+from api.quant.repository.market_data.yahoo_finance_client import YahooFinanceClient
 from api.user.entities import User
 from api.notification.entities import NotificationEntity
-from api.quant.domain.notification_strategy import NotificationStrategy
+from api.quant.domain.services.notification_strategy import NotificationStrategy
 from exceptions import AlreadyExistsException, BadRequestException
 from util.logging_util import logger
 from util.transactional_util import transaction_scope
 import uuid
 
-from api.quant.domain.profit import calculate_profit
+from api.quant.domain.services.profit import calculate_profit
 from sqlalchemy.orm import joinedload
 
 #admin_notify_test용
@@ -33,7 +35,9 @@ class QuantService:
     def find_stock_by_id(dto: TrendFollowRequestDTO, period='1y', trend_follow_days=75):
         if dto.asset_type == 'CRYPTO':
             dto.ticker = f'{dto.ticker}-USD'
-        return TrendFollow.find_stock_by_id(dto=dto, period=period, trend_follow_days=trend_follow_days)
+
+        trend_follow = TrendFollow(market_data_client=YahooFinanceClient())
+        return trend_follow.find_stock_by_id(dto=dto, period=period, trend_follow_days=trend_follow_days)
 
     @staticmethod
     def register_quant_by_stock(stock: str, quant_data: QuantData):
@@ -72,7 +76,7 @@ class QuantService:
     def find_quants_by_user():
         jwt_user = get_jwt_identity()
         user = User.query.filter_by(email=jwt_user).first()
-        quants = Quant.query.filter_by(user_id=user.uuid).all()
+        quants = QuantRepositoryImpl().find_by_user_uuid(user_uuid=user.uuid)
 
 
         quants_dict = []

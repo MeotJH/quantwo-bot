@@ -2,10 +2,10 @@ import yfinance as yf
 import pandas as pd
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from logging import getLogger
 from api import cache
-from api.quant.domain.model import QuantData, RebalancingRecommendation
+from api.quant.domain.value_objects.model import RebalancingRecommendation
 
 logger = getLogger(__name__)
 

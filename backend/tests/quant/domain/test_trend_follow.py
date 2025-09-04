@@ -2,9 +2,9 @@ from unittest.mock import Mock
 
 import pandas as pd
 import pytest
-from api.quant.domain.model import TrendFollowRequestDTO
-from api.quant.domain.quant_type import AssetType, DataSource
-from api.quant.domain.trend_follow import TrendFollow
+from api.quant.domain.value_objects.model import TrendFollowRequestDTO
+from api.quant.domain.value_objects.quant_type import AssetType, DataSource
+from api.quant.domain.services.trend_follow import TrendFollow
 from exceptions import BadRequestException, EntityNotFoundException
 
 def test_find_stock_by_id(mocker):
@@ -18,16 +18,19 @@ def test_find_stock_by_id(mocker):
         ),
         'stock_info' : {},
     }
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._get_stock', return_value=mock_result)
-
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._find_last_cross_trend_follow', return_value=0.0)
+    
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.return_value = mock_result
+    
+    mocker.patch('api.quant.domain.services.trend_follow.TrendFollow._find_last_cross_trend_follow', return_value=0.0)
 
     dto = TrendFollowRequestDTO(
          asset_type='us',
          ticker='aapl',
     )
 
-    result = TrendFollow.find_stock_by_id(dto)
+    trend_follow = TrendFollow(mock_market_data_client)
+    result = trend_follow.find_stock_by_id(dto)
 
     assert 'stock_history' in result
     assert 'stock_info' in result
@@ -39,16 +42,16 @@ def test_find_stock_by_id(mocker):
 def test__get_stock_success(mocker):
 
     mock_result= "mocked_result"
-    mock_handler = Mock(return_value=mock_result)
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.return_value = mock_result
+    
     dto = TrendFollowRequestDTO(
          asset_type='us',
          ticker='aapl',
     )
-    key = (DataSource.YAHOO, AssetType("us"))
 
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._dispatch_table', {key:mock_handler})
-
-    result = TrendFollow._get_stock(dto)
+    trend_follow = TrendFollow(mock_market_data_client)
+    result = trend_follow._get_stock(dto)
     assert result == mock_result
 
 def test__get_stock_invalid_key(mocker):
@@ -57,11 +60,13 @@ def test__get_stock_invalid_key(mocker):
         ticker='aapl',
     )
 
-    # 빈 dispatch_table을 주입하거나, 유효하지 않은 key는 포함하지 않음
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._dispatch_table', {})
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.side_effect = BadRequestException("Invalid asset_type: invalid", "INVALID_ASSET_TYPE")
+    
+    trend_follow = TrendFollow(mock_market_data_client)
 
     with pytest.raises(BadRequestException) as excinfo:
-        TrendFollow._get_stock(dto)
+        trend_follow._get_stock(dto)
 
     assert "Invalid asset_type: " in str(excinfo.value)
 
@@ -72,10 +77,12 @@ def test__get_stock_invalid_combination_key(mocker):
         ticker='aapl',
     )
 
-    # 빈 dispatch_table을 주입하거나, 유효하지 않은 key는 포함하지 않음
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._dispatch_table', {})
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.side_effect = EntityNotFoundException("Unsupported source/asset combination", "INVALID_ASSET_TYPE")
+    
+    trend_follow = TrendFollow(mock_market_data_client)
 
     with pytest.raises(EntityNotFoundException) as excinfo:
-        TrendFollow._get_stock(dto)
+        trend_follow._get_stock(dto)
 
     assert "Unsupported source/asset combination" in str(excinfo.value)

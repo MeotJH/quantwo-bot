@@ -1,4 +1,4 @@
-from api.quant.domain.model import QuantData, TrendFollowRequestDTO
+from api.quant.domain.value_objects.model import QuantData, TrendFollowRequestDTO
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, fields
 from flask import request
@@ -7,8 +7,7 @@ from api import quant_api as api
 from api.quant.services import QuantService
 from api.quant.dual_momentum_services import run_dual_momentum_backtest
 from .response_models import trend_follows_model, trend_follows_register_response_model, quants_model, quant_by_user_model, quant_data_model
-import urllib.parse
-from util.logging_util import logger
+
 
 @api.route('/trend-follow/<string:asset_type>/<string:stock_id>', strict_slashes=False)
 class TrendFollow(Resource):

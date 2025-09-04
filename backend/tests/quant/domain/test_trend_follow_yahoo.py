@@ -1,13 +1,13 @@
 
 from unittest.mock import Mock
 
-from api.quant.domain.trend_follow_yahoo import TrendFollowYahoo
+from api.quant.repository.market_data.trend_follow_yahoo import TrendFollowYahoo
+from api.quant.repository.market_data.yahoo_finance_client import YahooFinanceClient
 
 
-
-def test__get_stock_use_yfinance(mocker):
+def test_get_stock_use_yfinance(mocker):
     import pandas as pd
-    from api.quant.domain.model import TrendFollowRequestDTO
+    from api.quant.domain.value_objects.model import TrendFollowRequestDTO
     mock_ticker = Mock()
     mock_ticker.history.return_value = pd.DataFrame({"Close":[100,101,102]})
     mocker.patch('yfinance.Ticker', return_value=mock_ticker)
@@ -17,7 +17,7 @@ def test__get_stock_use_yfinance(mocker):
         asset_type='us'
     )
 
-    result = TrendFollowYahoo._get_stock_use_yfinance(dto)
+    result = YahooFinanceClient().get_stocks(dto)
 
     #검증
     mock_ticker.history.assert_called_once_with(period="1y")
