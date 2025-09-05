@@ -1,9 +1,5 @@
 from api.quant.domain.value_objects.model import TrendFollowRequestDTO
-from api.quant.domain.value_objects.quant_type import AssetType, DataSource
 from api.quant.repository.market_data.market_data_client import MarketDataClient
-from api.quant.repository.market_data.trend_follow_yahoo import TrendFollowYahoo
-from api.quant.repository.market_data.yahoo_finance_client import YahooFinanceClient
-from exceptions import EntityNotFoundException
 from util.logging_util import logger
 
 

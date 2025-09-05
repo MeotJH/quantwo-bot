@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from logging import getLogger
 from api import cache
 from api.quant.domain.value_objects.model import RebalancingRecommendation
+from api.quant.repository.market_data.market_data_client import MarketDataClient
+from api.quant.repository.market_data.yahoo_finance_client import YahooFinanceClient
 
 logger = getLogger(__name__)
 
@@ -15,7 +17,8 @@ class BacktestConfig:
     lookback_months: int = 6
 
 class DualMomentumBacktest:
-    def __init__(self, etf_symbols: List[str], duration: str, savings_rate: str, config: BacktestConfig = BacktestConfig()):
+    def __init__(self, etf_symbols: List[str], duration: str, savings_rate: str, config: BacktestConfig = BacktestConfig(), market_data_client: MarketDataClient = YahooFinanceClient() ):
+        self.market_data_client = market_data_client
         end_date = datetime.today()
         start_date = end_date - timedelta(days=int(duration) * 365)
         self.etf_symbols = etf_symbols
@@ -37,21 +40,11 @@ class DualMomentumBacktest:
         data = {}
         start_date_str = self.start_date.strftime('%Y-%m-%d')
         end_date_str = self.end_date.strftime('%Y-%m-%d')
-        
-        for symbol in self.etf_symbols:
-            try:
-                etf_data = yf.download(symbol, start=start_date_str, end=end_date_str)
-                if not etf_data.empty and 'Close' in etf_data.columns:
-                    # 'Close' 컬럼을 Series로 저장
-                    data[symbol] = etf_data['Close']
-                else:
-                    logger.error(f"No data or 'Close' column for symbol: {symbol}")
-            except Exception as e:
-                logger.error(f"Failed to fetch data for {symbol}: {e}")
-        
-        logger.debug(f"Fetched data for symbols: {list(data.keys())}")
-        
-        # data가 비어있지 않으면 pd.concat으로 Series들을 결합합니다.
+
+        data = self.market_data_client.get_close_prices(etf_symbols=self.etf_symbols
+                                                 ,start_date_str=start_date_str
+                                                 ,end_date_str=end_date_str
+                                                 )
         if data:
             combined_df = pd.concat(data, axis=1)
             # pd.concat()의 결과가 멀티인덱스 컬럼으로 생성될 경우, 첫 번째 레벨만 사용

@@ -3,7 +3,6 @@ from unittest.mock import Mock
 import pandas as pd
 import pytest
 from api.quant.domain.value_objects.model import TrendFollowRequestDTO
-from api.quant.domain.value_objects.quant_type import AssetType, DataSource
 from api.quant.domain.services.trend_follow import TrendFollow
 from exceptions import BadRequestException, EntityNotFoundException
 

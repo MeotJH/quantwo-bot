@@ -1,7 +1,6 @@
 
 from unittest.mock import Mock
 
-from api.quant.repository.market_data.trend_follow_yahoo import TrendFollowYahoo
 from api.quant.repository.market_data.yahoo_finance_client import YahooFinanceClient
 
 

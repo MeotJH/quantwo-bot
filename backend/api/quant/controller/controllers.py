@@ -94,7 +94,7 @@ class DualMomentum(Resource):
         
         for symbol in raw_symbols:
             # 콤마로 구분된 경우 분할
-            etf_symbols.extend(symbol.split(','))
+            etf_symbols.extend([s.strip() for s in symbol.split(",") if s.strip()])
             
         # 빈 문자열 제거 및 중복 제거
         etf_symbols = list(filter(None, etf_symbols))
