@@ -5,6 +5,8 @@ from typing import List, Dict, Any
 from dataclasses import dataclass
 from logging import getLogger
 from api import cache
+from api.quant.domain.dtos.back_test_summary_model import BackTestSummaryModel
+from api.quant.domain.dtos.trading_period import TradingPeriod
 from api.quant.domain.value_objects.model import RebalancingRecommendation
 from api.quant.repository.market_data.market_data_client import MarketDataClient
 from api.quant.repository.market_data.yahoo_finance_client import YahooFinanceClient
@@ -54,6 +56,80 @@ class DualMomentumBacktest:
         else:
             return pd.DataFrame()
 
+    def run_backtest(self) -> Dict[str, Any]:
+        """백테스트 실행"""
+        capital = self.config.initial_capital
+        results = []
+        for date in pd.date_range(start=self.start_date, end=self.end_date, freq='M'):
+            if date - pd.DateOffset(months=self.config.lookback_months) < self.df.index[0]:
+                continue
+                
+            result = self._process_trading_period(date, capital)
+            if result:
+                result['date'] = result['date'].strftime('%Y-%m-%d')
+                results.append(result)
+
+                capital = result['capital']
+
+        results_df = pd.DataFrame(results)
+        
+        return {
+            "data": results_df.to_dict('records'),
+            "summary": self._generate_summary(results_df).to_dict()
+        }
+
+    def _process_trading_period(self, date: datetime, capital: float) -> Dict[str, Any]:
+        """각 거래 기간 처리"""
+        try:
+            returns, monthly_returns = self._calculate_returns(date)
+            months_passed = (date.year - self.start_date.year) * 12 + (date.month - self.start_date.month)
+            cash_capital = self.config.initial_capital * (1 + self.monthly_savings_rate) ** months_passed
+            buy_and_hold_capital = self._calculate_buy_and_hold(date, self.config.initial_capital)
+
+            if all(monthly_returns <= self.monthly_savings_rate):
+                capital *= (1 + self.monthly_savings_rate)
+                return TradingPeriod.from_cash_hold(capital, cash_capital).to_dict()
+
+            best_etf = monthly_returns.idxmax()
+            capital *= (1 + monthly_returns[best_etf])
+
+            return TradingPeriod.from_calculation(
+                date=date,
+                monthly_returns=monthly_returns,
+                returns=returns,
+                capital=cash_capital,
+                cash_capital=cash_capital,
+                buy_and_hold_capital=buy_and_hold_capital,
+            ).to_dict()
+        except Exception as e:
+            logger.error(f"Error processing trading period {date}: {e}")
+            return None
+
+    def _generate_summary(self, results_df: pd.DataFrame) -> BackTestSummaryModel:
+        """백테스트 결과 요약 생성"""
+        if results_df.empty:
+            model = BackTestSummaryModel.of_empty(self.config)
+            return model
+
+        final_capital = float(results_df['capital'].iloc[-1])
+        final_cash = float(results_df['cash_hold'].iloc[-1])
+        final_ewy = float(results_df['ewy_hold'].iloc[-1])
+        final_best_etf = results_df['best_etf'].iloc[-1]
+
+        check_date = datetime.today()
+        ticker_profit_by_date, _ = self._calculate_returns(check_date)
+        today_best_profit = float(ticker_profit_by_date.max())
+
+        model = BackTestSummaryModel.of_calculation(
+            config=self.config
+            , final_capital=final_capital
+            , final_cash=final_cash
+            , final_ewy=final_ewy
+            , final_best_etf=final_best_etf
+            , today_best_profit=today_best_profit
+        )
+        return model
+
     def _calculate_returns(self, current_date: datetime) -> tuple[pd.Series, pd.Series]:
         """수익률 계산"""
         lookback_date = current_date - pd.DateOffset(months=self.config.lookback_months)
@@ -84,92 +160,6 @@ class DualMomentumBacktest:
                 return self._calculate_buy_and_hold(last_valid_date, initial_capital)
             except Exception:
                 return initial_capital
-
-    def _process_trading_period(self, date: datetime, capital: float) -> Dict[str, Any]:
-        """각 거래 기간 처리"""
-        try:
-            returns, monthly_returns = self._calculate_returns(date)
-            months_passed = (date.year - self.start_date.year) * 12 + (date.month - self.start_date.month)
-            cash_capital = self.config.initial_capital * (1 + self.monthly_savings_rate) ** months_passed
-            buy_and_hold_capital = self._calculate_buy_and_hold(date, self.config.initial_capital)
-            
-            if all(monthly_returns <= self.monthly_savings_rate):
-                capital *= (1 + self.monthly_savings_rate)
-                return {
-                    'date': date,
-                    'best_etf': 'cash',
-                    '6m_return': 0.0,
-                    'capital': capital,
-                    'cash_hold': cash_capital,
-                    'ewy_hold': buy_and_hold_capital
-                }
-            
-            best_etf = monthly_returns.idxmax()
-            capital *= (1 + monthly_returns[best_etf])
-            return {
-                'date': date,
-                'best_etf': best_etf.lower(),
-                '6m_return': float(returns[best_etf]),
-                'capital': capital,
-                'cash_hold': cash_capital,
-                'ewy_hold': buy_and_hold_capital
-            }
-        except Exception as e:
-            logger.error(f"Error processing trading period {date}: {e}")
-            return None
-
-    def run_backtest(self) -> Dict[str, Any]:
-        """백테스트 실행"""
-        capital = self.config.initial_capital
-        results = []
-        for date in pd.date_range(start=self.start_date, end=self.end_date, freq='M'):
-            if date - pd.DateOffset(months=self.config.lookback_months) < self.df.index[0]:
-                continue
-                
-            result = self._process_trading_period(date, capital)
-            if result:
-                result['date'] = result['date'].strftime('%Y-%m-%d')
-                results.append(result)
-
-                capital = result['capital']
-
-        results_df = pd.DataFrame(results)
-        
-        return {
-            "data": results_df.to_dict('records'),
-            "summary": self._generate_summary(results_df)
-        }
-    
-    def _generate_summary(self, results_df: pd.DataFrame) -> Dict[str, float]:
-        """백테스트 결과 요약 생성"""
-        if results_df.empty:
-            return {
-                "initial_capital": self.config.initial_capital,
-                "final_capital": self.config.initial_capital,
-                "total_return": 0,
-                "cash_hold_return": 0,
-                "ewy_hold_return": 0,
-                "final_best_etf" : 'EMPTY'
-            }
-            
-        final_capital = float(results_df['capital'].iloc[-1])
-        final_cash = float(results_df['cash_hold'].iloc[-1])
-        final_ewy = float(results_df['ewy_hold'].iloc[-1])
-        final_best_etf = results_df['best_etf'].iloc[-1]
-
-        check_date = datetime.today()
-        ticker_profit_by_date, _ = self._calculate_returns(check_date)
-        today_best_profit = float(ticker_profit_by_date.max())
-
-        return {
-            "initial_capital": self.config.initial_capital,
-            "final_capital": final_capital,
-            "total_return": float((final_capital / self.config.initial_capital - 1) * 100),
-            "cash_hold_return": float((final_cash / self.config.initial_capital - 1) * 100),
-            "ewy_hold_return": float((final_ewy / self.config.initial_capital - 1) * 100),
-            "final_best_etf" : final_best_etf,
-            "today_best_profit" : today_best_profit,
-        }
 
 def run_dual_momentum_backtest(
     etf_symbols: List[str],
