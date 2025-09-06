@@ -14,7 +14,7 @@ class TradingPeriod():
         return asdict(self);
 
     @classmethod
-    def from_cash_hold(cls, date: date, capital: float = 0.0,
+    def from_cash_hold(cls, date: datetime, capital: float = 0.0,
                       cash_capital: float = 0.0, buy_and_hold_capital: float = 0.0):
         return cls(
             date=date,
@@ -26,7 +26,7 @@ class TradingPeriod():
         )
 
     @classmethod
-    def from_calculation(cls, date: date, monthly_returns, returns,
+    def from_calculation(cls, date: datetime, monthly_returns, returns,
                          capital: float, cash_capital: float, buy_and_hold_capital: float):
         """계산을 통해 레코드 생성"""
         best_etf = monthly_returns.idxmax()
