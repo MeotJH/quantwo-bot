@@ -1,6 +1,6 @@
 from flask import Flask
 from apscheduler.schedulers.background import BackgroundScheduler
-from api.quant.domain.quant_type import QuantType
+from api.quant.domain.value_objects.quant_type import QuantType
 from api.quant.services import QuantService
 import logging
 from apscheduler.triggers.cron import CronTrigger

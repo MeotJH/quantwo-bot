@@ -19,9 +19,6 @@ def daily_cache_key():
         date_key = (now.replace(hour=0, minute=0, second=0) + timedelta(days=1)).strftime('%Y-%m-%d')
     return f"my_function_cache::{date_key}"
 
-def save_finded_stocks():
-    True
-
 @cache.cached(key_prefix=daily_cache_key)
 def find_stocks(external_api_client: ExternalApiClient = None):
     sorted_objects = external_api_client.get_stocks()

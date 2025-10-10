@@ -1,7 +1,6 @@
-import pandas as pd
 import pytest
 from unittest.mock import Mock, patch
-from api.quant.domain.quant_type import QuantType
+from api.quant.domain.value_objects.quant_type import QuantType
 from api.quant.services import QuantService
 from api.quant.domain.entities import Quant
 from api.user.entities import User

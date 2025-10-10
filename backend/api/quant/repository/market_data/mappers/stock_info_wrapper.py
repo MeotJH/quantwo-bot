@@ -1,8 +1,6 @@
-from enum import Enum
-
-from api.quant.domain.data_source_parser import from_yahoo_crypto, from_yahoo_us
-from api.quant.domain.model import StockInfoModel
-from api.quant.domain.quant_type import AssetType, DataSource
+from api.quant.repository.market_data.mappers.data_source_parser import from_yahoo_crypto, from_yahoo_us
+from api.quant.domain.dtos.stock_info_model import StockInfoModel
+from api.quant.domain.value_objects.quant_type import AssetType, DataSource
 
 
 class StockInfoWrapper:

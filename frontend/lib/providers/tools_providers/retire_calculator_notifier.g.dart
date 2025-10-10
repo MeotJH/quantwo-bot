@@ -6,7 +6,7 @@ part of 'retire_calculator_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$retireCalculatorHash() => r'1abce7662a217c021bcfe6f9e27163ba4e873989';
+String _$retireCalculatorHash() => r'1692ff74b8b415bf2cd1e2713fe00df98bddd83a';
 
 /// See also [RetireCalculator].
 @ProviderFor(RetireCalculator)

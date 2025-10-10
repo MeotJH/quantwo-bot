@@ -1,5 +1,4 @@
-from api.quant.domain.model import StockInfoModel
-
+from api.quant.domain.dtos.stock_info_model import StockInfoModel
 
 def from_yahoo_us(data: dict) -> dict:
     return StockInfoModel(

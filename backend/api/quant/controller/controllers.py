@@ -1,14 +1,25 @@
-from api.quant.domain.model import QuantData, TrendFollowRequestDTO
+from api.quant.domain.value_objects.model import QuantData, TrendFollowRequestDTO
 from flask_jwt_extended import jwt_required
 from flask_restx import Resource, fields
 from flask import request
 from api import cache
 from api import quant_api as api
 from api.quant.services import QuantService
-from api.quant.dual_momentum_services import run_dual_momentum_backtest
-from .response_models import trend_follows_model, trend_follows_register_response_model, quants_model, quant_by_user_model, quant_data_model
-import urllib.parse
-from util.logging_util import logger
+from .response_models import trend_follows_model, trend_follows_register_response_model, quants_model, \
+    quant_by_user_model, quant_data_model, trend_follow_list_model
+from ..dual_momentum_services import run_dual_momentum_backtest
+
+@api.route('/trend-follows', strict_slashes=False)
+class TrendFollow(Resource):
+    def __init__(self, api=None, *args, **kwargs):
+        super().__init__(api, *args, **kwargs)
+        self.quant_service = QuantService()
+
+    @api.marshal_with(trend_follow_list_model)
+    def get(self):
+        # 응답값 예시 response = {'stok_history' : List , 'stock_info': dict }
+        dtos = self.quant_service.find_trend_follows()
+        return [dto.to_dict() for dto in dtos]
 
 @api.route('/trend-follow/<string:asset_type>/<string:stock_id>', strict_slashes=False)
 class TrendFollow(Resource):
@@ -95,7 +106,7 @@ class DualMomentum(Resource):
         
         for symbol in raw_symbols:
             # 콤마로 구분된 경우 분할
-            etf_symbols.extend(symbol.split(','))
+            etf_symbols.extend([s.strip() for s in symbol.split(",") if s.strip()])
             
         # 빈 문자열 제거 및 중복 제거
         etf_symbols = list(filter(None, etf_symbols))

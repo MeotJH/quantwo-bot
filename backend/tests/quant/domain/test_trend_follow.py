@@ -1,10 +1,10 @@
 from unittest.mock import Mock
 
 import pandas as pd
+from api.stock.models import Stock
 import pytest
-from api.quant.domain.model import TrendFollowRequestDTO
-from api.quant.domain.quant_type import AssetType, DataSource
-from api.quant.domain.trend_follow import TrendFollow
+from api.quant.domain.value_objects.model import TrendFollowRequestDTO
+from api.quant.domain.services.trend_follow import TrendFollow
 from exceptions import BadRequestException, EntityNotFoundException
 
 def test_find_stock_by_id(mocker):
@@ -18,16 +18,19 @@ def test_find_stock_by_id(mocker):
         ),
         'stock_info' : {},
     }
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._get_stock', return_value=mock_result)
-
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._find_last_cross_trend_follow', return_value=0.0)
+    
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.return_value = mock_result
+    
+    mocker.patch('api.quant.domain.services.trend_follow.TrendFollow._find_last_cross_trend_follow', return_value=0.0)
 
     dto = TrendFollowRequestDTO(
          asset_type='us',
          ticker='aapl',
     )
 
-    result = TrendFollow.find_stock_by_id(dto)
+    trend_follow = TrendFollow(mock_market_data_client)
+    result = trend_follow.find_stock_by_id(dto)
 
     assert 'stock_history' in result
     assert 'stock_info' in result
@@ -39,16 +42,16 @@ def test_find_stock_by_id(mocker):
 def test__get_stock_success(mocker):
 
     mock_result= "mocked_result"
-    mock_handler = Mock(return_value=mock_result)
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.return_value = mock_result
+    
     dto = TrendFollowRequestDTO(
          asset_type='us',
          ticker='aapl',
     )
-    key = (DataSource.YAHOO, AssetType("us"))
 
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._dispatch_table', {key:mock_handler})
-
-    result = TrendFollow._get_stock(dto)
+    trend_follow = TrendFollow(mock_market_data_client)
+    result = trend_follow._get_stock(dto)
     assert result == mock_result
 
 def test__get_stock_invalid_key(mocker):
@@ -57,11 +60,13 @@ def test__get_stock_invalid_key(mocker):
         ticker='aapl',
     )
 
-    # 빈 dispatch_table을 주입하거나, 유효하지 않은 key는 포함하지 않음
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._dispatch_table', {})
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.side_effect = BadRequestException("Invalid asset_type: invalid", "INVALID_ASSET_TYPE")
+    
+    trend_follow = TrendFollow(mock_market_data_client)
 
     with pytest.raises(BadRequestException) as excinfo:
-        TrendFollow._get_stock(dto)
+        trend_follow._get_stock(dto)
 
     assert "Invalid asset_type: " in str(excinfo.value)
 
@@ -72,10 +77,130 @@ def test__get_stock_invalid_combination_key(mocker):
         ticker='aapl',
     )
 
-    # 빈 dispatch_table을 주입하거나, 유효하지 않은 key는 포함하지 않음
-    mocker.patch('api.quant.domain.trend_follow.TrendFollow._dispatch_table', {})
+    mock_market_data_client = Mock()
+    mock_market_data_client.get_stocks.side_effect = EntityNotFoundException("Unsupported source/asset combination", "INVALID_ASSET_TYPE")
+
+    trend_follow = TrendFollow(mock_market_data_client)
 
     with pytest.raises(EntityNotFoundException) as excinfo:
-        TrendFollow._get_stock(dto)
+        trend_follow._get_stock(dto)
 
     assert "Unsupported source/asset combination" in str(excinfo.value)
+
+
+def test_find_trend_follows(mocker):
+    """find_trend_follows 메서드 테스트"""
+    # Mock 데이터: 다양한 시나리오를 포함한 주식 데이터
+    mock_stock_dicts = [
+        {
+            "symbol": "AAPL",
+            "name": "Apple Inc.",
+            "lastsale": "150.00",
+            "netchange": "3.75",
+            "pctchange": "2.5",
+            "volume": "50000000",
+            "marketCap": "2500000000000",  # 2.5T (대형주)
+            "country": "US",
+            "ipoyear": "1980",
+            "industry": "Computer Manufacturing",
+            "sector": "Technology",
+            "url": ""
+        },
+        {
+            "symbol": "XYZ",
+            "name": "XYZ Corp",
+            "lastsale": "10.00",
+            "netchange": "1.30",
+            "pctchange": "15.0",  # 고변동성
+            "volume": "100000",
+            "marketCap": "50000000",  # 5천만 (마이크로캡)
+            "country": "US",
+            "ipoyear": "2023",  # 최근 IPO
+            "industry": "Computer Manufacturing",
+            "sector": "Technology",
+            "url": ""
+        },
+        {
+            "symbol": "BAC",
+            "name": "Bank of America",
+            "lastsale": "30.00",
+            "netchange": "0.30",
+            "pctchange": "1.0",
+            "volume": "40000000",
+            "marketCap": "250000000000",  # 250B
+            "country": "US",
+            "ipoyear": "1980",
+            "industry": "Banks",
+            "sector": "Financials",
+            "url": ""
+        }
+    ]
+
+    # 딕셔너리를 Stock 모델 인스턴스로 변환
+    mock_stocks = [Stock.from_nasdaq(stock_dict) for stock_dict in mock_stock_dicts]
+
+    # find_stocks를 mock 처리
+    mocker.patch('api.quant.domain.services.trend_follow.find_stocks', return_value=mock_stocks)
+
+    # TrendFollow 인스턴스 생성
+    mock_market_data_client = Mock()
+    trend_follow = TrendFollow(mock_market_data_client)
+
+    # find_trend_follows 실행
+    result = trend_follow.fetch_lists()
+
+    # 검증
+    assert result is not None
+    assert len(result) == 3
+
+    # AAPL 검증 (대형 기술주 - 높은 점수 기대)
+    aapl = next(r for r in result if r.ticker == "AAPL")
+    assert aapl.bucket in ["A. Strong Trend Candidates", "B. Possible Trenders"]
+    assert aapl.sector == "Technology"
+
+    # XYZ 검증 (마이크로캡 + 고변동성 + 최근 IPO - 낮은 점수 기대)
+    xyz = next(r for r in result if r.ticker == "XYZ")
+    assert xyz.bucket in ["C. Likely Range/Choppy", "D. Exclude for Trend-Following"]
+
+    # BAC 검증 (금융주 - 중간 점수 기대)
+    bac = next(r for r in result if r.ticker == "BAC")
+    assert bac.sector == "Financials"
+
+    # 모든 결과에 필수 필드가 있는지 확인
+    for stock in result:
+        assert stock.ticker is not None
+        assert stock.name is not None
+        assert stock.score is not None
+        assert stock.bucket is not None
+        assert stock.reasons is not None
+
+
+def test_trend_following_bucket(mocker):
+    """trend_following_bucket 메서드를 직접 테스트"""
+
+    stock = Stock(symbol="TSLA",
+                name="Tesla Inc.",
+                lastsale="200.00",
+                netchange="5.0",
+                pctchange="5.0",
+                volume="100000000",
+                market_cap="600000000000",
+                country="US",
+                ipo_year= "2010",
+                industry="CAR",
+                sector="Technology",
+                url="")
+    mock_stocks = []
+    mock_stocks.append(stock)
+
+    mock_market_data_client = Mock()
+    trend_follow = TrendFollow(mock_market_data_client)
+
+    # trend_following_bucket 직접 호출
+    result = trend_follow.trend_following_bucket(stocks=mock_stocks, asof_year=2025)
+
+    assert len(result) == 1
+    assert result[0].ticker == "TSLA"
+    assert result[0].score is not None
+    assert result[0].bucket is not None
+    assert len(result[0].reasons) > 0

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from api.quant.domain.entities import Quant
-from api.quant.domain.quant_type import QuantType
+from api.quant.domain.value_objects.quant_type import QuantType
 from api.quant.dual_momentum_services import get_todays_dual_momentum
 
 @dataclass

@@ -1,6 +1,8 @@
 from api import quant_api as api
 from flask_restx import fields, Resource
 
+from api.stock.controllers import stock_model
+
 trend_follow_model = api.model('TrendFollowModel', {
     'Date': fields.String(title='stock ticker'),
     'Open': fields.String(title='stock name'),
@@ -33,6 +35,14 @@ stock_info_model = api.model('StockInfoModel', {
 trend_follows_model = api.model('TrendFollowsModel', {
     'stock_history': fields.List(fields.Nested(trend_follow_model), required=True, description='stock 목록'),
     'stock_info': fields.Nested(stock_info_model),
+})
+
+# ✅ 확장 모델 (score + bucket 추가)
+trend_follow_list_model = api.inherit('StockResultModel', stock_model, {
+    'score': fields.Float(title='trend-following score'),
+    'bucket': fields.String(title='trend-following bucket'),
+    'reasons': fields.List(fields.String, title='reason logs'),
+    'ticker': fields.String(title='stock ticker'),
 })
 
 trend_follows_register_model = api.model('TrendFollowsRegisterModel', {
