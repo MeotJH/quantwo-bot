@@ -183,6 +183,55 @@ class QuantService:
         )
         return QuantService.register_quant_by_stock(momentum.recommendation, quant_data)
 
+    def check_and_notify_to_admin(self, notify_quant_type: QuantType):
+        try:
+            logger.info("check_and_notify scheduling 시작중...")
+            # notification 에서 알림 on한 객체들을 모은다.
+            notification_enabled = (
+                NotificationEntity
+                .query
+                .join(NotificationEntity.user)
+                .options(joinedload(NotificationEntity.user))
+                .filter(User.username == '김퀀트')
+                .filter(NotificationEntity.enabled == True)
+                .all()
+            )
+
+            logger.info(f"{notification_enabled}, ::::")
+            notification_enabled_set = {n.user_id for n in notification_enabled}
+
+            # quant에서 알림 on 한 객체들을 quant_type별로 가져온다.
+            quants = Quant.query.options(joinedload(Quant.user)).filter_by(notification=True,
+                                                                           quant_type=notify_quant_type.value).all()
+
+            # notification on한 quant들만 필터링한다.
+            filtered_quants = [quant for quant in quants if quant.user_id in notification_enabled_set]
+
+            # 총 몇건보내는지 누구에게 보내는지 로깅
+            filtered_mail_from_quant_entity = {n.user.email for n in filtered_quants}
+            logger.info(f"{len(filtered_quants)}개의 알림이 있는 항목을 찾았습니다")
+            logger.info(f"mail 보낼 유저 타겟 ::{filtered_mail_from_quant_entity}")
+
+            notification = Notification(
+                title=f"퀀투봇 [어드민 알람]",
+                body=f"서버 스케줄링 알람 이상 무",
+                user_mail="mallangyi@naver.com",
+                url="/main"
+            )
+
+            NotificationService().send_notification(notification)
+            logger.info(f" Quantwo Bot Logging Alarm Send :::::: {notification.to_dict}:::")
+
+            for quant in filtered_quants:
+                # 전략에 따라서 알림보낸다.
+                NotificationStrategy.calculate_strategy(quant=quant)
+
+        except Exception as e:
+            logger.error(f"Error in check_and_notify: {str(e)}")
+            logger.error(traceback.format_exc())
+        finally:
+            logger.info(f"check_and_notify {notify_quant_type} scheduling 종료 ")
+
     def find_trend_follows(self):
         trend_follow = TrendFollow(market_data_client=YFinanceApiClientImpl())
         fetched_trend_follow = trend_follow.fetch_lists()
