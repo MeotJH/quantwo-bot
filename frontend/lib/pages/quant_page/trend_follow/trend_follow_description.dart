@@ -136,7 +136,7 @@ class TrendFollowDescription extends StatelessWidget {
               Center(
                 child: CustomButton(
                     onPressed: () {
-                      context.push('/quant-form/quant/trend-follow');
+                      context.go('/quant-form/quant/trend-follow');
                     },
                     textColor: CustomColors.white,
                     backgroundColor: CustomColors.clearBlue120,

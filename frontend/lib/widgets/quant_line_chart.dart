@@ -104,7 +104,7 @@ class DualMomenTumLineChart extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildLegendItem(
-                  color: CustomColors.clearBlue120,
+                  color: CustomColors.red100,
                   label: '국제 전략 퀀트 수익률',
                 ),
                 const SizedBox(width: 10),

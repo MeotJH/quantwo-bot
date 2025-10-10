@@ -6,6 +6,7 @@ from api.quant.domain.value_objects.model import TrendFollowRequestDTO
 from api.quant.domain.value_objects.quant_type import QuantType
 from api.quant.domain.services.trend_follow import TrendFollow
 from api.quant.dual_momentum_services import get_todays_dual_momentum
+from api.quant.repository.market_data.yahoo_finance_client import YahooFinanceClient
 from util.logging_util import logger
 from util.transactional_util import transaction_scope
 
@@ -20,8 +21,9 @@ class NotificationStrategy:
              asset_type="US".upper()
             ,ticker=quant.stock.upper()
             )
-        stock_data = TrendFollow._get_stock(
-                        dto, period='1y', trend_follow_days=75
+        trend_follow = TrendFollow(market_data_client=YahooFinanceClient())
+        stock_data = trend_follow._get_stock(
+                        dto=dto, period='1y', trend_follow_days=75
                     )['stock_data']
         today_stock = stock_data.iloc[-1]
 

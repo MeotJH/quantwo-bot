@@ -6,7 +6,7 @@ import 'package:quant_bot/pages/loading_pages/skeleton_list_loading.dart';
 import 'package:quant_bot/common/colors.dart';
 import 'package:quant_bot/pages/stocks_page/stocks_page_search_bar.dart';
 import 'package:quant_bot/providers/step_form_provider.dart';
-import 'package:quant_bot/providers/stock_providers/stocks_provider.dart';
+import 'package:quant_bot/providers/trend_follow_provider.dart';
 
 class TrendFollowPage extends ConsumerStatefulWidget {
   const TrendFollowPage({super.key});
@@ -18,7 +18,7 @@ class TrendFollowPage extends ConsumerStatefulWidget {
 class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
   @override
   Widget build(BuildContext context) {
-    final stocks = ref.watch(stocksProvider);
+    final trendFollows = ref.watch(trendFollowProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('이 전략에 적용할 종목을 선택하세요',
@@ -40,12 +40,12 @@ class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
                 height: 8,
               ),
               Expanded(
-                child: stocks.when(
-                    data: (stocks) {
+                child: trendFollows.when(
+                    data: (trendFollows) {
                       return ListView.builder(
-                        itemCount: stocks.length,
+                        itemCount: trendFollows.length,
                         itemBuilder: (context, index) {
-                          final stock = stocks[index];
+                          final stock = trendFollows[index];
                           return InkWell(
                             onTap: () async {
                               if (context.mounted) {
@@ -78,12 +78,26 @@ class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          stock.ticker,
-                                          style: const TextStyle(
-                                            color: Color(0xFF222222),
-                                            fontSize: 16,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              stock.ticker,
+                                              style: const TextStyle(
+                                                color: Color(0xFF222222),
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              stock.score.toString(),
+                                              style: TextStyle(
+                                                color: CustomColors.gray50,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         SizedBox(
                                           width: 200,
@@ -153,7 +167,7 @@ class _TrendFollowPageState extends ConsumerState<TrendFollowPage> {
                                   child: CustomButton(
                                       onPressed: () async {
                                         await ref
-                                            .read(stocksProvider.notifier)
+                                            .read(trendFollowProvider.notifier)
                                             .refreshStocks();
                                       },
                                       textColor: CustomColors.white,

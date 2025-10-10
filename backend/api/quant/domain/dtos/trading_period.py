@@ -30,13 +30,12 @@ class TradingPeriod():
                          capital: float, cash_capital: float, buy_and_hold_capital: float):
         """계산을 통해 레코드 생성"""
         best_etf = monthly_returns.idxmax()
-        updated_capital = capital * (1 + monthly_returns[best_etf])
 
         return cls(
             date=date,
             best_etf=best_etf.lower(),
             six_month_return=float(returns[best_etf]),
-            capital=updated_capital,
+            capital=capital,
             cash_hold=cash_capital,
             ewy_hold=buy_and_hold_capital
         )

@@ -43,9 +43,9 @@ class DualMomentumInternationalTable extends StatelessWidget {
               ),
             ]),
             TableRow(children: [
-              _buildTableHeader('현금보유 수익률'),
-              _buildTableHeader('코스피(EWY)  보유 수익률'),
-              _buildTableHeader('한달 듀얼모멘텀 수익률'),
+              _buildTableHeader('10년 현금수익'),
+              _buildTableHeader('10년 코스피수익'),
+              _buildTableHeader('6개월 수익'),
             ]),
             TableRow(children: [
               _buildTableCell(

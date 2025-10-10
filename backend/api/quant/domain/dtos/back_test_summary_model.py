@@ -9,7 +9,9 @@ class BackTestSummaryModel:
     total_return: float
     cash_hold_return: float
     ewy_hold_return: float
+    today_best_profit: float
     final_best_etf: str = 'EMPTY'
+
 
     def to_dict(self):
         return asdict(self)
