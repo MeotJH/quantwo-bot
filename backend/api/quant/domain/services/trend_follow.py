@@ -190,5 +190,6 @@ class TrendFollow():
                 reasons=reasons
             )
             results.append(dto)
-        return results
+        # 점수가 높은 순서대로 리턴
+        return sorted(results, key=lambda r: r.score, reverse=True)
 
