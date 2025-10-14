@@ -1,11 +1,8 @@
-import json
-import yfinance as yf
+import requests
 
-btc_info = yf.Ticker("BTC-USD").info
-aapl_info = yf.Ticker("AAPL").info
-btc = yf.Ticker("BTC-USD")
-data = btc.history(period="1d")
+url = "https://financialmodelingprep.com/api/v3/stock/list?apikey=demo"
+r = requests.get(url)
+data = r.json()
 
-print(f'json btc_info :::>>>>{json.dumps(btc_info, indent=2, ensure_ascii=False)}')
-print(f'===========================================================================')
-print(f'this is aapl_info:::::>>>>>>>>{json.dumps(aapl_info, indent=2, ensure_ascii=False)}')
+tickers = [x['symbol'] for x in data]
+print(f"총 {len(tickers)}개 ticker 수집")

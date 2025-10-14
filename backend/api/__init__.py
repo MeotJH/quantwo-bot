@@ -111,14 +111,21 @@ def _setup_logger(app):
 #스케줄링 exit함수 add
 def _register_shutdown_hooks(app):
     atexit.register(lambda: app.quant_scheduler.shutdown())
+    atexit.register(lambda: app.stock_scheduler.shutdown())
 
 #스케줄링 모듈 add
 def _init_schedulers(app):
     from api.scheduler.quant_scheduler import QuantScheduler
+    from api.scheduler.stock_scheduler import StockScheduler
+
     quant_scheduler = QuantScheduler(app)
     app.quant_scheduler = quant_scheduler
+
+    stock_scheduler = StockScheduler(app)
+    app.stock_scheduler = stock_scheduler
     with app.app_context():
         quant_scheduler.start()
+        stock_scheduler.start()
 
 #캐시 모듈 add
 def _init_cache(app):

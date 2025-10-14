@@ -27,6 +27,12 @@ def find_stocks(external_api_client: ExternalApiClient = None):
 def find_crypto_currency(external_api_client: ExternalApiClient = None):
     return external_api_client.get_cryptos()
 
+def save_stocks(external_api_client: ExternalApiClient = None):
+    logger.info(f'ready to save Stocks!!')
+    external_api_client.save_stocks()
+    logger.info(f'finish to save Stocks!!')
+
+
 
 
 

@@ -11,6 +11,11 @@ class ExternalApiClient(ABC):
         """현재 주식 list 조회"""
         pass
 
+    @abstractmethod
+    def save_stocks(self) -> List[Stock]:
+        """ 주식 list 저장"""
+        pass
+
 
     @abstractmethod
     def get_cryptos(self) -> List:

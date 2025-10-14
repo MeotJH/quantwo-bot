@@ -3,18 +3,20 @@ import json
 import subprocess
 from typing import List
 import requests
-
+import pandas as pd
 from api import db
 from api.stock.domain.entities import Stocks as StockEntity
 from api.stock.models import Stock
 from api.stock.repository.external_api_client import ExternalApiClient
 from util.transactional_util import transaction_scope
 from api.stock.domain.stock_type import StockType
-from api import cache
 from util.logging_util import logger
-
+from yahooquery import Ticker
+import time
 
 class YFinanceApiClientImpl(ExternalApiClient):
+    # NASDAQ CSV 다운로드 URL
+    NASDAQ_URL = "https://www.nasdaqtrader.com/dynamic/symdir/nasdaqlisted.txt"
 
     def get_stocks(self) -> List[Stock]:
         external_api_url = "https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=25&offset=0&download=true"
@@ -51,9 +53,84 @@ class YFinanceApiClientImpl(ExternalApiClient):
             print(f"Error parsing stock data: {e}")
             return []
         
-        logger.info(f'this is logger ::::: {stocks} ')
+        logger.info(f'this is logger ::::: {len(stocks)} 개 검색완료 ')
         sorted_objects = sorted(stocks, key=lambda x: float(x.market_cap) if x.market_cap else 0.0, reverse=True)
         return sorted_objects
+
+    def save_stocks(self) -> List[Stock]:
+        stock = StockEntity.query.filter_by(stock_type=StockType.US).first()
+
+        if self._should_refresh_data(stock):
+            new_data = self._fetch_us_data()
+            now = datetime.now(timezone.utc)
+
+            with transaction_scope():
+                if stock is None:
+                    stock = StockEntity(
+                        stock_type=StockType.US,
+                        stock_infos=new_data,
+                        insert_date=now
+                    )
+                    db.session.add(stock)
+                else:
+                    stock.stock_infos = new_data
+                    stock.insert_date = now
+            return new_data
+        else:
+            # 갱신이 필요 없으면 기존 데이터 반환
+            return stock.stock_infos if stock else []
+
+    def _fetch_us_data(self):
+        """나스닥 전체 티커에서 기본 정보 + 요약 데이터 병합"""
+        try:
+            df = pd.read_csv(self.NASDAQ_URL, sep='|')
+            df = df[df['Test Issue'] == 'N']
+            df = df.dropna(subset=['Symbol'])
+        except Exception as e:
+            logger.error(f"❌ CSV 다운로드 실패: {e}")
+            return []
+
+        tickers = df['Symbol'].tolist()
+        logger.info(f"✅ {len(tickers)}개 티커 로드 완료 (Yahoo 데이터 병합 시작)")
+
+        stocks = []
+        batch_size = 200  # yahooquery는 batch로 병렬 처리 가능 (100~250개 권장)
+
+        for i in range(0, len(tickers), batch_size):
+            batch = tickers[i:i + batch_size]
+            t = Ticker(batch)
+            quotes = t.price
+            summary = t.summary_profile
+
+            for sym in batch:
+                info = quotes.get(sym, {})
+                profile = summary.get(sym, {})
+
+                # 방어 코드 추가
+                if isinstance(profile, str):
+                    profile = {}
+                stocks.append({
+                    "id": sym.lower(),
+                    "symbol": sym,
+                    "name": info.get("shortName") or df.loc[df['Symbol'] == sym, 'Security Name'].values[0],
+                    "lastsale": info.get("regularMarketPrice"),
+                    "netchange": info.get("regularMarketChange"),
+                    "pctchange": info.get("regularMarketChangePercent"),
+                    "volume": info.get("regularMarketVolume"),
+                    "market_cap": info.get("marketCap"),
+                    "country": profile.get("country"),
+                    "ipo_year": profile.get("ipoYear"),
+                    "industry": profile.get("industry"),
+                    "sector": profile.get("sector"),
+                    "url": f"https://finance.yahoo.com/quote/{sym}",
+                })
+
+            logger.info(f"📦 {i + len(batch)} / {len(tickers)} processed")
+            time.sleep(2)  # Yahoo rate limit 완화용 (필요 시 2~3초 딜레이)
+
+        logger.info(f"✅ 총 {len(stocks)}개 종목 정보 수집 완료")
+        return stocks
+
     
     def get_cryptos(self) -> List[Stock]:
         stock = StockEntity.query.filter_by(stock_type=StockType.CRYPTO).first()
