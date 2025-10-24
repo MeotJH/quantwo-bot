@@ -86,6 +86,9 @@ class YFinanceApiClientImpl(ExternalApiClient):
             df = pd.read_csv(self.NASDAQ_URL, sep='|')
             df = df[df['Test Issue'] == 'N']
             df = df.dropna(subset=['Symbol'])
+            # Strip whitespace from Symbol and Security Name
+            df['Symbol'] = df['Symbol'].str.strip()
+            df['Security Name'] = df['Security Name'].str.strip()
         except Exception as e:
             logger.error(f"❌ CSV 다운로드 실패: {e}")
             return []

@@ -273,15 +273,29 @@ class TestFetchUsData:
 
         mock_read_csv = mocker.patch('pandas.read_csv', return_value=mock_df)
 
+        # Mock Ticker to prevent actual API calls
+        mock_ticker_instance = mocker.Mock()
+        mock_ticker_instance.price = {
+            'AAPL': {},
+            'GOOGL': {},
+            'MSFT': {}
+        }
+        mock_ticker_instance.summary_profile = {
+            'AAPL': {},
+            'GOOGL': {},
+            'MSFT': {}
+        }
+        mocker.patch('api.stock.repository.yfinance_api_client_impl.Ticker', return_value=mock_ticker_instance)
+
         # When
         result = self.api._fetch_us_data()
 
         # Then
         mock_read_csv.assert_called_once_with(self.api.NASDAQ_URL, sep='|')
         assert len(result) == 3
-        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc."}
-        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc."}
-        assert result[2] == {"id": "msft", "symbol": "MSFT", "name": "Microsoft Corp."}
+        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/AAPL"}
+        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/GOOGL"}
+        assert result[2] == {"id": "msft", "symbol": "MSFT", "name": "Microsoft Corp.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/MSFT"}
 
     def test_fetch_us_data_filters_test_issues(self, mocker):
         """Test Issue가 'Y'인 항목을 필터링하는 경우"""
@@ -299,13 +313,25 @@ class TestFetchUsData:
 
         mocker.patch('pandas.read_csv', return_value=mock_df)
 
+        # Mock Ticker to prevent actual API calls
+        mock_ticker_instance = mocker.Mock()
+        mock_ticker_instance.price = {
+            'AAPL': {},
+            'GOOGL': {}
+        }
+        mock_ticker_instance.summary_profile = {
+            'AAPL': {},
+            'GOOGL': {}
+        }
+        mocker.patch('api.stock.repository.yfinance_api_client_impl.Ticker', return_value=mock_ticker_instance)
+
         # When
         result = self.api._fetch_us_data()
 
         # Then: Test Issue가 'N'인 것만 반환
         assert len(result) == 2
-        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc."}
-        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc."}
+        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/AAPL"}
+        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/GOOGL"}
 
     def test_fetch_us_data_filters_nan_symbols(self, mocker):
         """NASDAQ Symbol이 NaN인 항목을 필터링하는 경우"""
@@ -323,13 +349,25 @@ class TestFetchUsData:
 
         mocker.patch('pandas.read_csv', return_value=mock_df)
 
+        # Mock Ticker to prevent actual API calls
+        mock_ticker_instance = mocker.Mock()
+        mock_ticker_instance.price = {
+            'AAPL': {},
+            'GOOGL': {}
+        }
+        mock_ticker_instance.summary_profile = {
+            'AAPL': {},
+            'GOOGL': {}
+        }
+        mocker.patch('api.stock.repository.yfinance_api_client_impl.Ticker', return_value=mock_ticker_instance)
+
         # When
         result = self.api._fetch_us_data()
 
         # Then: NaN이 아닌 것만 반환
         assert len(result) == 2
-        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc."}
-        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc."}
+        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/AAPL"}
+        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/GOOGL"}
 
     def test_fetch_us_data_handles_csv_download_failure(self, mocker):
         """CSV 다운로드 실패 시 빈 리스트를 반환하는 경우"""
@@ -358,12 +396,25 @@ class TestFetchUsData:
 
         mocker.patch('pandas.read_csv', return_value=mock_df)
 
+        # Mock Ticker to prevent actual API calls
+        # Note: After stripping, the keys should match the stripped symbols
+        mock_ticker_instance = mocker.Mock()
+        mock_ticker_instance.price = {
+            'AAPL': {},
+            'GOOGL': {}
+        }
+        mock_ticker_instance.summary_profile = {
+            'AAPL': {},
+            'GOOGL': {}
+        }
+        mocker.patch('api.stock.repository.yfinance_api_client_impl.Ticker', return_value=mock_ticker_instance)
+
         # When
         result = self.api._fetch_us_data()
 
         # Then: 공백이 제거된 결과
-        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc."}
-        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc."}
+        assert result[0] == {"id": "aapl", "symbol": "AAPL", "name": "Apple Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/AAPL"}
+        assert result[1] == {"id": "googl", "symbol": "GOOGL", "name": "Alphabet Inc.", "lastsale": None, "netchange": None, "pctchange": None, "volume": None, "market_cap": None, "country": None, "ipo_year": None, "industry": None, "sector": None, "url": "https://finance.yahoo.com/quote/GOOGL"}
 
     def test_fetch_us_data_converts_symbol_to_lowercase_id(self, mocker):
         """Symbol을 소문자로 변환해서 id로 사용하는 경우"""
