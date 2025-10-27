@@ -158,34 +158,39 @@ class AuthStorageNotifier extends AutoDisposeAsyncNotifier<String?> {
 }
 
 // 인증과 관련된 서버와 통신하는 상태관리
-final authProvider = AsyncNotifierProvider.autoDispose
-    .family<AuthProvider, void, UserAuthModel>(AuthProvider.new);
+final authProvider =
+    AsyncNotifierProvider.autoDispose<AuthProvider, void>(AuthProvider.new);
 
-class AuthProvider extends AutoDisposeFamilyAsyncNotifier<void, UserAuthModel> {
+class AuthProvider extends AutoDisposeAsyncNotifier<void> {
   @override
-  Future<void> build(UserAuthModel arg) async {
-    final token = await ref.read(authStorageProvider.future);
-    final dio = ref.read(dioProvider);
+  FutureOr<void> build() {
+    // 초기 상태는 data(null), async 제거로 즉시 AsyncData 상태
+  }
 
-    if (token != null) {
-      ref.read(dioProvider.notifier).addAuth(token: token);
-    }
+  Future<bool> signIn(UserAuthModel arg) async {
+    state = const AsyncLoading();
 
-    final response = await dio.post(ApiEndpoints.signIn, data: arg.toJson());
+    state = await AsyncValue.guard(() async {
+      final token = await ref.read(authStorageProvider.future);
+      final dio = ref.read(dioProvider);
 
-    if (response.statusCode != ApiStatus.success) {
-      throw Exception();
-    }
+      if (token != null) {
+        ref.read(dioProvider.notifier).addAuth(token: token);
+      }
 
-    final userResponseJson = response.data as Map<String, dynamic>;
-    final userAuthResponseModel =
-        UserAuthResponseModel.fromJson(userResponseJson);
-    ref
-        .read(dioProvider.notifier)
-        .addAuth(token: userAuthResponseModel.authorization);
-    ref
-        .read(authStorageProvider.notifier)
-        .saveToken(token: userAuthResponseModel.authorization);
+      final res = await dio.post(ApiEndpoints.signIn, data: arg.toJson());
+      if (res.statusCode != ApiStatus.success) {
+        throw Exception('Sign-in failed (${res.statusCode})');
+      }
+
+      final model =
+          UserAuthResponseModel.fromJson(res.data as Map<String, dynamic>);
+      ref.read(dioProvider.notifier).addAuth(token: model.authorization);
+      ref
+          .read(authStorageProvider.notifier)
+          .saveToken(token: model.authorization);
+    });
+    return !state.hasError; // 성공 여부 반환
   }
 }
 
