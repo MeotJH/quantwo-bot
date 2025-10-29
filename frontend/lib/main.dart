@@ -35,8 +35,22 @@ void main() async {
 }
 
 Future<void> _updateFcmTokenListener() async {
+  final settings = await FirebaseMessaging.instance.requestPermission();
+  log('perm: ${settings.authorizationStatus}');
+  log('proj: ${Firebase.app().options.projectId}');
+
+  final messaging = FirebaseMessaging.instance;
+  // ① 현재 토큰 확보
+  final currentToken = await messaging.getToken();
+  if (currentToken != null) {
+    final container = ProviderContainer();
+    log('$currentToken <<<<is this');
+    container.read(authStorageProvider.notifier).updateFcmToken(currentToken);
+  }
+
   FirebaseMessaging.instance.onTokenRefresh.listen((token) {
     final container = ProviderContainer();
+    log('what?? ');
     container.read(authStorageProvider.notifier).updateFcmToken(token);
   });
 }
