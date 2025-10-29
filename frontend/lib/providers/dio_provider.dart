@@ -11,7 +11,7 @@ import 'dart:developer';
 class DioNotifier extends Notifier<Dio> {
   late String apiUrl;
   late Dio _dio;
-  static const appLocalUri = 'http://192.168.0.37:8080/api/v1';
+  static const appLocalUri = 'http://192.168.0.35:8080/api/v1';
   String resolveApiBaseUrl() {
     log('which env ::: ${Environment.env}');
     //환경이 로컬이 아니면 api서버에 요청
@@ -65,6 +65,12 @@ class DioNotifier extends Notifier<Dio> {
 
   void removeAuth() {
     _dio.options = _dio.options.copyWith(headers: {});
+  }
+
+  bool isAuth() {
+    final authHeader = _dio.options.headers['Authorization'];
+    if (authHeader is! String) return false;
+    return authHeader.startsWith('Bearer ') && authHeader.length > 7;
   }
 }
 

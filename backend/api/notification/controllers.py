@@ -81,3 +81,36 @@ class NotificationSub(Resource):
         # 구독 정보 저장
         NotificationService.save_notification_info(subscription_json)
         return {"success": True, "message": "구독 성공"}, 201
+
+
+subscription_model_v2 = api.model("SubscriptionV2", {
+    "channel": fields.String(required=True, description="푸시 서버 엔드포인트"),
+    "enabled": fields.Boolean(required=False, default=True, description="알림 활성화 여부 (true: ON, false: OFF)"),
+    "token": fields.String(required=True, description="푸시 서버 엔드포인트"),
+    "keys": fields.Nested(api.model("Keys", {
+        "p256dh": fields.String(required=False, description="Public Key"),
+        "auth": fields.String(required=False, description="Auth Key")
+    }), required=False, description="Webpush keys (web only)"),
+})
+@api.route('/subscriptions', strict_slashes=False)
+class NotificationSub(Resource):
+
+    @jwt_required()
+    @api.expect(subscription_model_v2)
+    def post(self):
+        """ 🔹 웹 푸시 구독 저장 """
+
+        """
+        알림처리 로그인 되어있어야 알림받을 수 있다.
+        알림 처리 할때 유저스토리
+        하나도 값 없다 첫 퀀트받기 클릭 -> 푸시 구독 저장
+        알림off -> 푸시 정보 삭제
+        알림on -> 푸시 구독 저장
+
+        db구조 유저 id 기준으로 -> uuid str / 유저 str / 구독 데이터 json
+        1유저당 1알림
+        """
+        subscription_json = request.get_json()
+        # 구독 정보 저장
+        NotificationService.save_notification_info_v2(subscription_json)
+        return {"success": True, "message": "구독 성공"}, 201

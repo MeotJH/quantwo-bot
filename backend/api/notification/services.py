@@ -99,6 +99,42 @@ class NotificationService:
             raise BadRequestException(f'{e}', 400)
 
     @staticmethod
+    def save_notification_info_v2(subscription_json: any):
+        jwt_user = get_jwt_identity()
+        user = User.query.filter_by(email=jwt_user).first()
+        if not user:
+            raise BadRequestException("User not found", 404)
+
+        notification = NotificationEntity.query.filter_by(user_id=user.uuid).first()
+
+        if subscription_json.get('keys') is not None:
+            keys = subscription_json.get('keys')
+            keys['endpoint'] = subscription_json['token']
+        else :
+            keys = {
+                'endpoint' : subscription_json['token']
+            }
+
+        if notification:
+            notification.notification_keys = keys
+            notification.enabled = True
+        else:
+            notification = NotificationEntity(
+                notification_keys= keys,
+                channel=subscription_json.channel,
+                user_id=user.uuid,
+                enabled=subscription_json.enabled
+            )
+            db.session.add(notification)
+
+        try:
+            db.session.commit()
+            return notification.to_dict()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            raise BadRequestException(f'{e}', 400)
+
+    @staticmethod
     def toggle_notification(notification_toggle_model: any):
         jwt_user = get_jwt_identity()
         user = User.query.filter_by(email=jwt_user).first()
