@@ -5,7 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      GOOGLE_APPLICATION_CREDENTIALS: ./backend/service-account.json
+      GOOGLE_APPLICATION_CREDENTIALS: service-account.json
       FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
     steps:
       - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "SQLALCHEMY_DATABASE_URI=sqlite:///test.db" >> backend/.env
           echo "JWT_SECRET_KEY=your_test_secret_key" >> backend/.env
-          echo "$FIREBASE_SERVICE_ACCOUNT" > backend/service-account.json
+          echo "$FIREBASE_SERVICE_ACCOUNT" > service-account.json
 
       - name: Run tests
         working-directory: backend
