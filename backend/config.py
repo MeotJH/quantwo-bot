@@ -33,8 +33,7 @@ class BaseConfig(object):
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 
     # FIREBASE-APP
-    
-    cred = credentials.Certificate(json.loads(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"), "service-account.json"))
+    cred = credentials.Certificate(os.getenv("GOOGLE_APPLICATION_CREDENTIALS","service-account.json"))
     firebase_admin.initialize_app(cred)
 
     # 환경값 가져오기
