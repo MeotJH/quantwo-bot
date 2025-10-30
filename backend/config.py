@@ -2,6 +2,8 @@ import logging
 import os
 from dotenv import load_dotenv
 from constants import SingletonInstance
+import firebase_admin
+from firebase_admin import credentials, messaging
 
 
 # JWT
@@ -29,6 +31,10 @@ class BaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     print(f'os.getenv("SQLALCHEMY_DATABASE_URI"):{os.getenv("SQLALCHEMY_DATABASE_URI")}')
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+
+    # FIREBASE-APP
+    cred = credentials.Certificate(os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "service-account.json"))
+    firebase_admin.initialize_app(cred)
 
     # 환경값 가져오기
     env = os.getenv('ENVIRONMENT', 'LOCAL').upper()

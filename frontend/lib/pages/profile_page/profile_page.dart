@@ -86,9 +86,6 @@ class ProfilePage extends ConsumerWidget {
                                 webPushService.togglePush(isToggle: false);
                                 return;
                               }
-
-                              //웹푸시 서비스 등록하는 부분 알림On 처리하면 넣는다.
-                              webPushService.doJob();
                             },
                           ),
                         ),

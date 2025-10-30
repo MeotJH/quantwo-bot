@@ -1,56 +1,24 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot/constants/enviroment_constant.dart';
-import 'package:quant_bot/providers/auth_provider.dart';
+import 'package:quant_bot/providers/notification_bootstrap_provider.dart';
 import 'package:quant_bot/providers/router_provider.dart';
 import 'package:url_strategy/url_strategy.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'dart:developer';
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // do SomeThing afeter message
-  log("백그라운드 메시지 처리: ${message.messageId}");
-  log("백그라운드 메시지 처리: ${message.data}");
-  log("백그라운드 메시지 처리: ${message.notification?.title}");
-  log("백그라운드 메시지 처리: ${message.notification?.body}");
-}
-
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Environment();
-  log('ENVIROMENT: ${Environment.env}');
+  log('ENVIRONMENT: ${Environment.env}');
   setPathUrlStrategy();
 
   if (!kIsWeb) {
     await Firebase.initializeApp();
-    await initNotifications();
-    _updateFcmTokenListener();
   }
 
   runApp(const ProviderScope(child: QuantBot()));
-}
-
-Future<void> _updateFcmTokenListener() async {
-  FirebaseMessaging.instance.onTokenRefresh.listen((token) {
-    final container = ProviderContainer();
-    container.read(authStorageProvider.notifier).updateFcmToken(token);
-  });
-}
-
-Future<void> initNotifications() async {
-  await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  const InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
 class QuantBot extends ConsumerStatefulWidget {
@@ -61,6 +29,28 @@ class QuantBot extends ConsumerStatefulWidget {
 }
 
 class _QuantBotState extends ConsumerState<QuantBot> {
+  late final ProviderSubscription<AsyncValue<void>> _notificationSub;
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationSub = ref.listenManual<AsyncValue<void>>(
+      notificationBootstrapProvider,
+      (prev, next) => next.when(
+        data: (_) => log('알림 준비 완료'),
+        error: (err, stack) => log('알림 초기화 실패: $err'),
+        loading: () {},
+      ),
+      fireImmediately: true,
+    );
+  }
+
+  @override
+  void dispose() {
+    _notificationSub.close();
+    super.dispose();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

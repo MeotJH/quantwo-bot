@@ -24,6 +24,7 @@ jobs:
         run: |
           echo "SQLALCHEMY_DATABASE_URI=sqlite:///test.db" >> backend/.env
           echo "JWT_SECRET_KEY=your_test_secret_key" >> backend/.env
+          echo "GOOGLE_APPLICATION_CREDENTIALS=./quant-bot-c9c4b-firebase-adminsdk-c83hh-318dd7e5ce.json" >> backend/.env
 
       - name: Run tests
         working-directory: backend

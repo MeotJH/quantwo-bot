@@ -72,6 +72,8 @@ user_fcm_token_model = api.model('UserFcmTokenModel', {
     'fcmToken': fields.String(required=True, title='FCM 토큰', description='FCM 토큰', example='uuid.uuid4'),
 })
 
+user_fcm_token_update_model = api.model('UserFcmTokenUpdateModel', {'isUpdated': fields.Boolean})
+
 @api.route('/', strict_slashes=False)
 class Users(Resource):
     @jwt_required()
@@ -84,8 +86,8 @@ class Users(Resource):
     
     @jwt_required()
     @api.expect(user_fcm_token_model)
-    @api.marshal_with(fields.Boolean)
+    @api.marshal_with(user_fcm_token_update_model)
     def patch(self):
         newToken = api.payload['fcmToken']
         isUpdated = update_user_fcm_token(newToken)
-        return isUpdated
+        return  {'isUpdated': isUpdated}
