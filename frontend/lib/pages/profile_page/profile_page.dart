@@ -11,6 +11,7 @@ import 'package:quant_bot/providers/dio_provider.dart';
 import 'package:quant_bot/providers/profile_provider.dart';
 import 'package:quant_bot/pages/loading_pages/skeleton_list_loading.dart';
 import 'package:quant_bot/services/push_service.dart/push_service.dart';
+import 'package:quant_bot/services/push_service.dart/webpush_service.dart';
 
 class ProfilePage extends ConsumerWidget {
   ProfilePage({super.key});

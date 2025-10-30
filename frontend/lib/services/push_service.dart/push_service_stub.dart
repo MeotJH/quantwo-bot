@@ -1,8 +1,16 @@
 import 'package:dio/dio.dart';
 
-class WebPushService {
+abstract class PushService {
+  void sendNotification(String message);
+
+  Future<void> togglePush({isToggle = bool});
+
+  Future<void> doJob();
+}
+
+class PushServiceStub {
   Dio dio;
-  WebPushService({required this.dio});
+  PushServiceStub({required this.dio});
 
   void sendNotification(String message) {
     throw UnsupportedError('Web push not supported on this platform.');

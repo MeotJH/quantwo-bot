@@ -6,11 +6,13 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:quant_bot/services/push_service.dart/push_service_stub.dart';
 
-class WebPushService {
+class WebPushService implements PushService {
   Dio dio;
   WebPushService({required this.dio});
 
+  @override
   Future<void> togglePush({isToggle = bool}) async {
     // 📌 Flask 서버로 구독 정보 전송
     final response = await dio.patch(
@@ -28,6 +30,7 @@ class WebPushService {
     }
   }
 
+  @override
   Future<void> doJob() async {
     if (kIsWeb) {
       await _unsubscribeAllPush();
@@ -148,5 +151,10 @@ class WebPushService {
 
     // 실제 Base64 디코딩을 수행합니다.
     return base64Decode(output);
+  }
+
+  @override
+  void sendNotification(String message) {
+    // TODO: implement sendNotification
   }
 }

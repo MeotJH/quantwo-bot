@@ -5,8 +5,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quant_bot/providers/auth_provider.dart';
 import 'package:quant_bot/providers/dio_provider.dart';
+import 'package:quant_bot/providers/push_provider/push_mobile_provider.dart';
 import 'package:quant_bot/services/notification_service.dart';
 import 'package:quant_bot/services/push_service.dart/push_service.dart';
+import 'package:quant_bot/services/push_service.dart/webpush_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -34,6 +36,7 @@ class NotificationBootstrap extends AutoDisposeAsyncNotifier<void> {
 
   @override
   Future<void> build() async {
+    print('111');
     final authState = ref.watch(authStorageProvider);
     final authToken = authState.valueOrNull;
     final hasAuthToken = authToken != null && authToken.isNotEmpty;
@@ -44,17 +47,17 @@ class NotificationBootstrap extends AutoDisposeAsyncNotifier<void> {
       _tokenRefreshSub = null;
       return;
     }
-
+    print('222');
+    print('aaa');
     if (_lastInitializedAuthToken == authToken) {
-      print('aaa');
       return; // 이미 현재 로그인 토큰으로 초기화 완료
     }
 
     _lastInitializedAuthToken = authToken;
 
     if (kIsWeb) {
-      final webPush = ref.watch(webPushServiceProvider);
-      await webPush?.doJob();
+      final webPush = ref.read(pushServiceProvider);
+      webPush.doJob();
       return;
     }
 
