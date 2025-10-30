@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -37,6 +39,28 @@ class DioNotifier extends Notifier<Dio> {
         return handler.next(options);
       },
       onError: (error, handler) async {
+        // 네트워크 연결 실패 (서버에 도달하지 못함)
+        if (error.type == DioExceptionType.connectionError ||
+            error.type == DioExceptionType.unknown &&
+                error.error is SocketException) {
+          CustomToast.show(
+            message: '서버에 연결할 수 없습니다. 네트워크를 확인해주세요. 🌐',
+            isWarn: true,
+          );
+          return handler.next(error);
+        }
+
+        // 타임아웃 관련
+        if (error.type == DioExceptionType.connectionTimeout ||
+            error.type == DioExceptionType.receiveTimeout ||
+            error.type == DioExceptionType.sendTimeout) {
+          CustomToast.show(
+            message: '요청이 시간 초과되었습니다. 다시 시도해주세요. ⏳',
+            isWarn: true,
+          );
+          return handler.next(error);
+        }
+
         if (error.response?.statusCode == 401) {
           CustomToast.show(message: 'mail 또는 비밀번호가 올바르지 않습니다.', isWarn: true);
         }

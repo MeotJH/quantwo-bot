@@ -4,6 +4,9 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: service-account.json
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -22,7 +25,7 @@ jobs:
         run: |
           echo "SQLALCHEMY_DATABASE_URI=sqlite:///test.db" >> backend/.env
           echo "JWT_SECRET_KEY=your_test_secret_key" >> backend/.env
-          echo "GOOGLE_APPLICATION_CREDENTIALS=./quant-bot-c9c4b-firebase-adminsdk-c83hh-318dd7e5ce.json" >> backend/.env
+          echo "$FIREBASE_SERVICE_ACCOUNT" > backend/service-account.json
 
       - name: Run tests
         working-directory: backend

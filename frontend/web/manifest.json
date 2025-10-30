@@ -1,11 +1,11 @@
 {
-    "name": "QuanTwoBot",
-    "short_name": "QuanTwoBot",
+    "name": "퀀투봇 | Quantwo Bot",
+    "short_name": "퀀투봇",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#FFFFFF",
-    "description": "Quant Bot to help you with your trading",
+    "description": "퀀투봇(Quantwo Bot) - 퀀트투자 가장 쉬운 서비스! quantwobot으로 퀀트 투자 전략을 쉽게 시작하세요.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

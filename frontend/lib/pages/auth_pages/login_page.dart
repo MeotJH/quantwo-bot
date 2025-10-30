@@ -19,6 +19,9 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final model = ref.watch(authFormProvider);
+    final authAsync = ref.watch(authProvider);
+    final authNotifier = ref.watch(authProvider.notifier);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -53,7 +56,7 @@ class LoginScreen extends ConsumerWidget {
                     const SizedBox(height: 20),
                     _buildPasswordField(ref),
                     const SizedBox(height: 30),
-                    _buildLoginButton(context, ref, model),
+                    _buildLoginButton(context, authAsync, authNotifier, model),
                     const SizedBox(height: 10),
                     _buildNaverLoginButton(),
                     const SizedBox(height: 20),
@@ -119,12 +122,17 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildLoginButton(
-      BuildContext context, WidgetRef ref, UserAuthModel model) {
+  Widget _buildLoginButton(BuildContext context, AsyncValue authAsync,
+      AuthProvider authProvider, UserAuthModel model) {
+    final isLoading = authAsync.isLoading;
     return ElevatedButton(
       onPressed: model.isValid
           ? () async {
-              await ref.read(authProvider(model).future);
+              final success = await authProvider.signIn(model);
+
+              if (!success) {
+                return;
+              }
               if (!context.mounted) return;
               context.go(RouterPath.stockListPath);
             }
@@ -137,7 +145,16 @@ class LoginScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(8),
         ),
       ),
-      child: const Text('로그인'),
+      child: isLoading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
+          : const Text('로그인'),
     );
   }
 
