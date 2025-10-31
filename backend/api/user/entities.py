@@ -23,7 +23,7 @@ class User(db.Model):
 
     def to_dict(self):
         return {
-            'uuid': self.uuid,
+            'uuid': str(self.uuid),  # UUID를 문자열로 변환
             'userName': self.username,  # username을 userName으로 변경하여 반환
             'email': self.email,
             'mobile': self.mobile,

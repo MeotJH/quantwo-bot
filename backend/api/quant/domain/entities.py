@@ -27,9 +27,9 @@ class Quant(db.Model):
 
     def to_dict(self):
         return {
-            'uuid': self.uuid,
+            'uuid': str(self.uuid),  # UUID를 문자열로 변환
             'stock': self.stock,
             'notification': self.notification,
-            'user_id': self.user_id,
+            'user_id': str(self.user_id),  # UUID를 문자열로 변환
             'quant_type': self.quant_type
         }
